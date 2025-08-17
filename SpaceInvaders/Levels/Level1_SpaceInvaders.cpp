@@ -2,14 +2,17 @@
 #include "../Core/GameManager.h"
 #include "../Actors/LaserCanon.h"
 #include "../Actors/Alien.h"
+#include "../Objects/Invader.h"
 #include "raymath.h"
 
 Level1_SpaceInvaders::Level1_SpaceInvaders(GameManager& gameManagerP)
 {
 	gameManagerP.AddActor(std::make_shared<LaserCanon>());
-
+	m_invader = std::make_unique<Invader>();
 	InitializeAliensGrid(gameManagerP);
 }
+
+Level1_SpaceInvaders::~Level1_SpaceInvaders() = default;
 
 void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP)
 {
@@ -24,11 +27,11 @@ void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP)
 		{
 			auto alien = CreateAlien(row, col, horizontalMargin);
 			gameManagerP.AddActor(alien);
-			m_aliens.emplace_back(alien);
+			m_invader->AddAlien(alien);
 		}
 	}
 
-	m_currentAlienIndex = m_aliens.size() - 1;
+	gameManagerP.AddObject(std::move(m_invader));
 }
 
 std::shared_ptr<Alien> Level1_SpaceInvaders::CreateAlien(int rowP, int colP, int horizontalMarginP)
@@ -106,66 +109,4 @@ Color Level1_SpaceInvaders::CalculateGradientColor(int rowP, float colP)
 	result.a = 255;
 
 	return result;
-}
-
-// TO DO: MOVE TO INVADER CLASS THE LOGIC FOR ALIENS MOVEMENT
-void Level1_SpaceInvaders::Update(float deltaSecP)
-{
-	m_delayMovementTimer += deltaSecP;
-
-	// We use a delay timer so the aliens move in a staggered manner
-	while (m_delayMovementTimer >= m_movementDelay)
-	{
-		m_delayMovementTimer -= m_movementDelay;
-
-		UpdateCurrentAlienPosition();
-		m_currentAlienIndex--;
-
-		if (m_currentAlienIndex < 0)
-		{
-			// TO BE REMOVED
-			// ####
-			//m_movementDelay = m_movementDelay / 1.1; // Speed up the movement
-			//if (m_movementDelay < 0.000001f) // Prevent it from going too fast
-			//{
-			//	m_movementDelay = 0.0001f;
-			//}
-			// ####
-
-			m_currentAlienIndex = m_aliens.size() - 1;
-
-			if (m_shouldChangeDirection = ShouldChangeDirection())
-			{
-				m_direction = -m_direction;
-			}
-		}
-	}
-}
-
-void Level1_SpaceInvaders::UpdateCurrentAlienPosition()
-{
-	Vector2 newPosition = m_aliens[m_currentAlienIndex]->GetPosition();
-	newPosition.x += m_distancePerStep * m_direction;
-
-	if (m_shouldChangeDirection)
-	{
-		// Move down
-		newPosition.y += m_aliens[m_currentAlienIndex]->GetSize().y + AlienGridConfig::spaceBetweenRows;
-	}
-
-	m_aliens[m_currentAlienIndex]->SetPosition(newPosition.x, newPosition.y);
-}
-
-bool Level1_SpaceInvaders::ShouldChangeDirection() const
-{
-	for (auto& alien : m_aliens)
-	{
-		int nextStepPosition = alien->GetPosition().x + m_distancePerStep * m_direction;
-		if (nextStepPosition > SCREEN_WIDTH - alien->GetSize().x || nextStepPosition < 0)
-		{
-			return true;
-		}
-	}
-
-	return false;
 }

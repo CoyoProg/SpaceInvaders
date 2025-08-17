@@ -1,10 +1,12 @@
 #pragma once
+
 #include <vector>
 #include <memory>
 #include "raylib.h"
 
 class GameManager;
 class Alien;
+class Invader;
 
 struct AlienGridConfig
 {
@@ -26,25 +28,15 @@ class Level1_SpaceInvaders
 {
 public:
 	Level1_SpaceInvaders(GameManager& gameManagerP);
-	void Update(float deltaSecP);
+	~Level1_SpaceInvaders();
 
 private:
 	void InitializeAliensGrid(GameManager& gameManagerP);
 	std::shared_ptr<Alien> CreateAlien(int rowP, int colP, int horizontalMarginP = 0);
 	Color CalculateGradientColor(int rowP, float colP);
 
-	void UpdateCurrentAlienPosition();
-	bool ShouldChangeDirection() const;
-
 private:
-	std::vector<std::shared_ptr<Alien>> m_aliens;
-
-	int m_currentAlienIndex = 0;
-	int m_direction = 1; // 1 for right, -1 for left
-	const int m_distancePerStep = 5;
-	bool m_shouldChangeDirection = false;
-	float m_movementDelay = 0.02f;
-	float m_delayMovementTimer = 0.0f;
+	std::unique_ptr<Invader> m_invader;
 
 	AwesomeColor myAwesomeColor{};
 	Color startColor = { 255, 0, 0, 255 };

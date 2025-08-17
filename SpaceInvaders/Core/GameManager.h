@@ -4,6 +4,7 @@
 #include <iostream>
 
 class Actor;
+class IUpdatable;
 class Level1_SpaceInvaders;
 
 constexpr int SCREEN_WIDTH = 1200;
@@ -23,7 +24,7 @@ public:
 	GameManager(GameManager&&) = delete;
 	GameManager& operator=(GameManager&&) = delete;
 
-	void UpdateActors();
+	void Update();
 	void CollisionCheck();
 	void CleanupActors();
 	void FlushNewActors();
@@ -35,10 +36,17 @@ public:
 		actorsToAdd.emplace_back(std::move(actorP));
 	}
 
+	void AddObject(std::unique_ptr<IUpdatable> objectP)
+	{
+		updatableObjects.emplace_back(std::move(objectP));
+	}
+
 private:
 	GameManager();
+
+	std::unique_ptr<Level1_SpaceInvaders> m_currentLevel;
+	std::vector<std::unique_ptr<IUpdatable>> updatableObjects;
 	std::vector<std::shared_ptr<Actor>> actors;
 	std::vector<std::shared_ptr<Actor>> actorsToAdd;
-	std::unique_ptr<Level1_SpaceInvaders> level1;
 };
 

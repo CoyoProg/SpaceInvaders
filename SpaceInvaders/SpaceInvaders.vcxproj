@@ -134,6 +134,7 @@
     <ClCompile Include="Actors\LaserCanon.cpp" />
     <ClCompile Include="Components\LaserComponent.cpp" />
     <ClCompile Include="Actors\LaserProjectile.cpp" />
+    <ClCompile Include="Objects\Invader.cpp" />
     <ClCompile Include="Levels\Level1_SpaceInvaders.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -146,6 +147,8 @@
     <ClInclude Include="Actors\LaserCanon.h" />
     <ClInclude Include="Components\LaserComponent.h" />
     <ClInclude Include="Actors\LaserProjectile.h" />
+    <ClInclude Include="Interfaces\IUpdatable.h" />
+    <ClInclude Include="Objects\Invader.h" />
     <ClInclude Include="Levels\Level1_SpaceInvaders.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

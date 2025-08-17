@@ -5,7 +5,7 @@
 
 GameManager::GameManager()
 {
-	level1 = std::make_unique<Level1_SpaceInvaders>(*this);
+	m_currentLevel = std::make_unique<Level1_SpaceInvaders>(*this);
 }
 
 GameManager::~GameManager() = default;
@@ -30,7 +30,7 @@ void GameManager::FlushNewActors()
 	actorsToAdd.clear();
 }
 
-void GameManager::UpdateActors()
+void GameManager::Update()
 {
 	// 1. Update positions
 	// --------------------
@@ -54,7 +54,10 @@ void GameManager::UpdateActors()
 		if(actor) actor->Update(deltaTime);
 	}
 
-	level1->Update(deltaTime);
+	for (const auto& objects : updatableObjects)
+	{
+		if (objects) objects->Update(deltaTime);
+	}
 }
 
 void GameManager::CollisionCheck()

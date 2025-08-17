@@ -1,17 +1,26 @@
+//// 
+//// The Actor Component logic comes from one of my previous projects
+//// https://github.com/CoyoProg/Ogre3D_Warhammer40k/blob/main/Warhammer40k/Actors.h
+////
+
+
+
 #pragma once
 #include "raylib.h"
+#include "../Interfaces/IUpdatable.h"
+
 #include <memory>
 
 class CollisionBoxComponent;
 
-class Actor
+class Actor : public IUpdatable
 {
 public:
 	Actor();
-	virtual ~Actor();
+	~Actor();
 
 	virtual void Draw();
-	virtual void Update(float deltaTimeP);
+	virtual void Update(float deltaTimeP) override;
 
 	Vector2 GetPosition() const { return m_position; }
 	Vector2 GetSize() const { return m_size; }
