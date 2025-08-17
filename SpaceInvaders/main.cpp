@@ -24,7 +24,7 @@ int main(void)
 
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+        DrawText("GL HF", screenWidth / 2, screenHeight / 1.5, 20, LIGHTGRAY);
 
         gameManager.DrawActors();
 

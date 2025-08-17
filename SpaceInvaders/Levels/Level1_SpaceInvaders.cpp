@@ -3,13 +3,21 @@
 #include "../Actors/LaserCanon.h"
 #include "../Actors/Alien.h"
 #include "../Objects/Invader.h"
+#include "../Actors/Shield.h"
+
 #include "raymath.h"
 
 Level1_SpaceInvaders::Level1_SpaceInvaders(GameManager& gameManagerP)
 {
 	gameManagerP.AddActor(std::make_shared<LaserCanon>());
+
 	m_invader = std::make_unique<Invader>();
+
 	InitializeAliensGrid(gameManagerP);
+	InitializeShields(gameManagerP);
+
+	// Move the Invader ownership to the GameManager when the level is initialized
+	gameManagerP.AddObject(std::move(m_invader));
 }
 
 Level1_SpaceInvaders::~Level1_SpaceInvaders() = default;
@@ -20,6 +28,7 @@ void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP)
 	int totalGridWidth = AlienGridConfig::columnNumber * AlienGridConfig::alienSize.x + (AlienGridConfig::columnNumber - 1) * AlienGridConfig::spaceBetweenCols;
 	int horizontalMargin = (SCREEN_WIDTH - totalGridWidth) / 2;
 
+	// Create the aliens in a grid pattern
 	for (int row = 0; row < AlienGridConfig::rowNumber; ++row)
 	{
 		// We reverse the order of columns so that the bottom left alien is the last one created
@@ -30,8 +39,24 @@ void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP)
 			m_invader->AddAlien(alien);
 		}
 	}
+}
 
-	gameManagerP.AddObject(std::move(m_invader));
+void Level1_SpaceInvaders::InitializeShields(GameManager& gameManagerP)
+{
+	int shieldWidth = 120;
+	int shieldHeight = 80;
+
+	// Create the Shields
+	for (int i = 0; i < 4; ++i)
+	{
+		Vector2 shieldPosition = {
+			(i + 1) * (SCREEN_WIDTH / 5) - shieldWidth /2,
+			SCREEN_HEIGHT - 175 // Position the shields near the bottom of the screen
+		};
+		auto shield = std::make_shared<Shield>(shieldPosition, shieldWidth, shieldHeight);
+		shield->SetColor(GREEN); // Semi-transparent green color
+		gameManagerP.AddActor(shield);
+	}
 }
 
 std::shared_ptr<Alien> Level1_SpaceInvaders::CreateAlien(int rowP, int colP, int horizontalMarginP)
@@ -98,13 +123,9 @@ Color Level1_SpaceInvaders::CalculateGradientColor(int rowP, float colP)
 	distFromCenter /= maxDistanceFromCenter;
 
 	Color result;
-	//result.r = (unsigned char)(255) * distanceFromBottomLeft;
-	//result.g = (unsigned char)(255) * distanceFromTopLeft;
-	//result.b = (unsigned char)(255) * distanceFromTopRight;
-
-	result.r = static_cast<unsigned char>(255);									// strong red
-	result.g = static_cast<unsigned char>(192 * (1.0f - distFromCenter));		// some green
-	result.b = static_cast<unsigned char>(64 * (1.0f - distFromCenter));		// light up with some blue
+	result.r = static_cast<unsigned char>(255);
+	result.g = static_cast<unsigned char>(192 * (1.0f - distFromCenter));
+	result.b = static_cast<unsigned char>(64 * (1.0f - distFromCenter));
 
 	result.a = 255;
 

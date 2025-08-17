@@ -137,6 +137,7 @@
     <ClCompile Include="Objects\Invader.cpp" />
     <ClCompile Include="Levels\Level1_SpaceInvaders.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Actors\Shield.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actors\Actor.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Interfaces\IUpdatable.h" />
     <ClInclude Include="Objects\Invader.h" />
     <ClInclude Include="Levels\Level1_SpaceInvaders.h" />
+    <ClInclude Include="Actors\Shield.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

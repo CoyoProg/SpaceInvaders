@@ -14,6 +14,6 @@ public:
 	Rectangle GetBounds() const { return m_rectangle; }
 
 private:
-	Rectangle m_rectangle;		 // The rectangle representing the collision box
+	Rectangle m_rectangle;
 };
 

@@ -18,12 +18,6 @@ struct AlienGridConfig
 	static constexpr int topOffset = 100; // Offset from the top of the screen
 };
 
-struct AwesomeColor
-{
-	Color previousColor{ BLUE };
-	Color nextColor{ BLUE };
-};
-
 class Level1_SpaceInvaders
 {
 public:
@@ -32,14 +26,12 @@ public:
 
 private:
 	void InitializeAliensGrid(GameManager& gameManagerP);
+	void InitializeShields(GameManager& gameManagerP);
+
 	std::shared_ptr<Alien> CreateAlien(int rowP, int colP, int horizontalMarginP = 0);
 	Color CalculateGradientColor(int rowP, float colP);
 
 private:
 	std::unique_ptr<Invader> m_invader;
-
-	AwesomeColor myAwesomeColor{};
-	Color startColor = { 255, 0, 0, 255 };
-	Color endColor = { 0, 0, 255, 255 };
 };
 

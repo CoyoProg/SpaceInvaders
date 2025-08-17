@@ -67,17 +67,10 @@ void GameManager::CollisionCheck()
 	{
 		for (size_t j = i + 1; j < actors.size(); ++j)
 		{
-			if (actors[i]->GetCollisionBoxComponent() && actors[j]->GetCollisionBoxComponent())
+			if (actors[i]->CollidesWith(*actors[j]))
 			{
-				// TO DO: Needs to be replaced with actor a->collidesWith(const actor& b) method to do advanced collision checks
-				if (CheckCollisionRecs(
-					actors[i]->GetCollisionBoxComponent()->GetBounds(),
-					actors[j]->GetCollisionBoxComponent()->GetBounds()
-				))
-				{
-					actors[i]->OnCollisionEvent(*actors[j]);
-					actors[j]->OnCollisionEvent(*actors[i]);
-				}
+				actors[i]->OnCollisionEvent(*actors[j]);
+				actors[j]->OnCollisionEvent(*actors[i]);
 			}
 		}
 	}

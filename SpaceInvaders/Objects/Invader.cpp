@@ -59,7 +59,7 @@ void Invader::UpdateCurrentAlienPosition()
 		newPosition.y += m_aliens[m_currentAlienIndex]->GetSize().y + m_spaceBetweenRows;
 	}
 
-	m_aliens[m_currentAlienIndex]->SetPosition(newPosition.x, newPosition.y);
+	m_aliens[m_currentAlienIndex]->SetPosition(newPosition);
 }
 
 bool Invader::ShouldChangeDirection() const
