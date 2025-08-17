@@ -24,6 +24,7 @@ public:
 	GameManager& operator=(GameManager&&) = delete;
 
 	void UpdateActors();
+	void CollisionCheck();
 	void CleanupActors();
 	void FlushNewActors();
 

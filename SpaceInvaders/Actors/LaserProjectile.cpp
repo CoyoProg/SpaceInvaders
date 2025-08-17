@@ -1,5 +1,6 @@
 #include "LaserProjectile.h"
 #include "../Core/GameManager.h"
+#include "../Components/CollisionBoxComponent.h"
 
 LaserProjectile::LaserProjectile(int directionP, Vector2 positionP) : m_direction(directionP)
 {
@@ -7,18 +8,33 @@ LaserProjectile::LaserProjectile(int directionP, Vector2 positionP) : m_directio
 	m_position.y = positionP.y;
 	m_size = { 5, 20 };
 	m_color = RED;
+
+	if (m_CollisionBoxComponent)
+	{
+		m_CollisionBoxComponent->SetSize(m_size);
+	}
 }
 
-void LaserProjectile::Update(float deltaTime)
+LaserProjectile::~LaserProjectile() = default;
+
+void LaserProjectile::Update(float deltaTimeP)
 {
+	Actor::Update(deltaTimeP);
+
 	if (IsSleeping) return;
 
-	m_position.y += m_direction * deltaTime * 500;
+	m_position.y += m_direction * deltaTimeP * 500;
 
-	// Mark for deletion if it goes off-screen
 	if (m_position.y < 0 - m_size.y || m_position.y > SCREEN_HEIGHT)
 	{
 		IsSleeping = true;
-		// m_markedForDeletion = true;
+		m_markedForDeletion = true; // Need to be removed when pooling is implemented
 	}
+}
+
+void LaserProjectile::OnCollisionEvent(const Actor& otherActorP)
+{
+	// TO DO: Explosion effect and sound
+
+	m_markedForDeletion = true;
 }

@@ -18,6 +18,7 @@ int main(void)
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         gameManager.UpdateActors();
+        gameManager.CollisionCheck();
         gameManager.CleanupActors();
         gameManager.FlushNewActors();
 

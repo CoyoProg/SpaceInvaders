@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClCompile Include="Actors\Actor.cpp" />
     <ClCompile Include="Actors\Alien.cpp" />
+    <ClCompile Include="Components\CollisionBoxComponent.cpp" />
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="Core\GameManager.cpp" />
     <ClCompile Include="Actors\LaserCanon.cpp" />
@@ -139,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="Actors\Actor.h" />
     <ClInclude Include="Actors\Alien.h" />
+    <ClInclude Include="Components\CollisionBoxComponent.h" />
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="Core\GameManager.h" />
     <ClInclude Include="Actors\LaserCanon.h" />

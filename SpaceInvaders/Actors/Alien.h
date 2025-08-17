@@ -1,17 +1,15 @@
 #pragma once
-
 #include "Actor.h"
 
 class Alien : public Actor
 {
 public:
+	Alien(Vector2 positionP, Vector2 sizeP);
 	virtual void Draw() override;
 
-	void SetColor(Color previousColor, Color nextColor)
-	{
-		m_previousColor = previousColor;
-		m_nextColor = nextColor;
-	}
+	void SetColor(Color previousColorP, Color nextColorP);
+
+	virtual void OnCollisionEvent(const Actor& otherActorP) override;
 
 private:
 	Color m_previousColor{ BLUE };

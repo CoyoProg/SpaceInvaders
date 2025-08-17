@@ -1,6 +1,5 @@
 #pragma once
 #include "Actor.h"
-#include <memory>
 
 class LaserComponent;
 
@@ -11,6 +10,7 @@ public:
 	~LaserCanon();
 
 	virtual void Update(float deltaTimeP) override;
+	virtual void OnCollisionEvent(const Actor& otherActorP) override;
 
 private:
 	void ProcessInput(float deltaTimeP);

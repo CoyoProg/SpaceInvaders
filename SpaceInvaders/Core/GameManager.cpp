@@ -1,15 +1,14 @@
 #include "GameManager.h"
 #include "../Actors/Actor.h"
 #include "../Levels/Level1_SpaceInvaders.h"
+#include "../Components/CollisionBoxComponent.h"
 
 GameManager::GameManager()
 {
 	level1 = std::make_unique<Level1_SpaceInvaders>(*this);
 }
 
-GameManager::~GameManager()
-{
-}
+GameManager::~GameManager() = default;
 
 void GameManager::CleanupActors()
 {
@@ -56,6 +55,29 @@ void GameManager::UpdateActors()
 	}
 
 	level1->Update(deltaTime);
+}
+
+void GameManager::CollisionCheck()
+{
+	// Iterate through actors and check for collisions
+	for (size_t i = 0; i < actors.size(); ++i)
+	{
+		for (size_t j = i + 1; j < actors.size(); ++j)
+		{
+			if (actors[i]->GetCollisionBoxComponent() && actors[j]->GetCollisionBoxComponent())
+			{
+				// TO DO: Needs to be replaced with actor a->collidesWith(const actor& b) method to do advanced collision checks
+				if (CheckCollisionRecs(
+					actors[i]->GetCollisionBoxComponent()->GetBounds(),
+					actors[j]->GetCollisionBoxComponent()->GetBounds()
+				))
+				{
+					actors[i]->OnCollisionEvent(*actors[j]);
+					actors[j]->OnCollisionEvent(*actors[i]);
+				}
+			}
+		}
+	}
 }
 
 void GameManager::DrawActors() const
