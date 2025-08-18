@@ -10,7 +10,7 @@
 class Shield : public Actor
 {
 public:
-    Shield(Vector2 positionP, float widthP, float heightP);
+    Shield(Vector2 positionP, int widthP, int heightP);
 
     virtual void Draw() override;
     virtual bool AdvancedCollidesWith(const Actor& otherActorP) const override;

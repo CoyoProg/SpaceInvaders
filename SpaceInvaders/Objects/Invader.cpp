@@ -12,14 +12,16 @@ void Invader::Update(float deltaSecP)
 {
 	m_delayMovementTimer += deltaSecP;
 
-	// We use a delay timer so the aliens move in a staggered manner
+	// We use a delay timer so the aliens move in a staggered manner 
 	while (m_delayMovementTimer >= m_movementDelay)
 	{
 		m_delayMovementTimer -= m_movementDelay;
 
-		UpdateCurrentAlienPosition();
+		// Move one alien at a time
+		UpdateAlienPosition();
 		m_currentAlienIndex--;
 
+		// If we have moved all the aliens, reset the index and check if we need to change direction
 		if (m_currentAlienIndex < 0)
 		{
 			// TO BE REMOVED
@@ -31,7 +33,7 @@ void Invader::Update(float deltaSecP)
 			//}
 			// ####
 
-			m_currentAlienIndex = m_aliens.size() - 1;
+			m_currentAlienIndex = static_cast<int>(m_aliens.size() - 1);
 
 			if (m_shouldChangeDirection = ShouldChangeDirection())
 			{
@@ -45,10 +47,10 @@ void Invader::AddAlien(std::shared_ptr<Alien> alienP)
 {
 	m_aliens.emplace_back(std::move(alienP));
 
-	m_currentAlienIndex = m_aliens.size() - 1;
+	m_currentAlienIndex = static_cast<int>(m_aliens.size() - 1);
 }
 
-void Invader::UpdateCurrentAlienPosition()
+void Invader::UpdateAlienPosition()
 {
 	Vector2 newPosition = m_aliens[m_currentAlienIndex]->GetPosition();
 	newPosition.x += m_distancePerStep * m_direction;
@@ -66,7 +68,8 @@ bool Invader::ShouldChangeDirection() const
 {
 	for (auto& alien : m_aliens)
 	{
-		int nextStepPosition = alien->GetPosition().x + m_distancePerStep * m_direction;
+		// Check if the next step will go out of bounds
+		float nextStepPosition = alien->GetPosition().x + m_distancePerStep * m_direction;
 		if (nextStepPosition > SCREEN_WIDTH - alien->GetSize().x || nextStepPosition < 0)
 		{
 			return true;

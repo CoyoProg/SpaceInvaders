@@ -29,7 +29,7 @@ private:
 	void InitializeShields(GameManager& gameManagerP);
 
 	std::shared_ptr<Alien> CreateAlien(int rowP, int colP, int horizontalMarginP = 0);
-	Color CalculateGradientColor(int rowP, float colP);
+	Color CalculateGradientColor(float rowP, float colP);
 
 private:
 	std::unique_ptr<Invader> m_invader;

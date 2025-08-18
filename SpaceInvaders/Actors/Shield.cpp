@@ -51,12 +51,13 @@ constexpr const int (*EXPLOSION_MASKS[])[EXPLOSION_SIZE] = {
 
 
 
-Shield::Shield(Vector2 positionP, float widthP, float heightP)
+Shield::Shield(Vector2 positionP, int widthP, int heightP)
 {
+	width = static_cast<float>(widthP);
+	height = static_cast<float>(heightP);
+
 	m_position = positionP;
-	m_size = { widthP, heightP };
-	width = widthP;
-	height = heightP;
+	m_size = { width, height };
 
 	cellWidth = width / (float)UPSCALED_WIDTH;
 	cellHeight = height / (float)UPSCALED_HEIGHT;
