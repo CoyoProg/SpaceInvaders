@@ -117,7 +117,7 @@ void Invader::UpdateShootProbability(float deltaSecP)
 	if (m_shootTimer >= 0.2f)
 	{
 		m_shootTimer = 0.0f;
-		float chanceRoll = GetRandomValue(0, 1);
+		int chanceRoll = GetRandomValue(0, 1);
 
 		if (chanceRoll)
 		{
@@ -125,9 +125,6 @@ void Invader::UpdateShootProbability(float deltaSecP)
 			m_aliens[index]->ShootLaser();
 		}
 	}
-
-
-
 }
 
 bool Invader::ShouldChangeDirection() const

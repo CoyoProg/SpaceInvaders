@@ -1,9 +1,9 @@
-#include "LaserCanon.h"
+#include "Player.h"
 #include "../Core/GameManager.h"
 #include "../Components/LaserComponent.h"
 #include "../Components/CollisionBoxComponent.h"
 
-LaserCanon::LaserCanon() : Actor(ActorOwner::Player)
+Player::Player() : Actor(ActorOwner::Player)
 {
 	// Move the laser canon to the bottom center of the screen
 	m_position.x = SCREEN_WIDTH / 2 - m_size.x / 2;
@@ -19,20 +19,20 @@ LaserCanon::LaserCanon() : Actor(ActorOwner::Player)
 	}
 }
 
-LaserCanon::~LaserCanon() = default;
+Player::~Player() = default;
 
-void LaserCanon::Update(float deltaTimeP)
+void Player::Update(float deltaTimeP)
 {
 	Actor::Update(deltaTimeP);
 
 	ProcessInput(deltaTimeP);
 }
 
-void LaserCanon::OnCollisionEvent(const Actor& otherActorP)
+void Player::OnCollisionEvent(const Actor& otherActorP)
 {
 }
 
-void LaserCanon::ProcessInput(float deltaTimeP)
+void Player::ProcessInput(float deltaTimeP)
 {
 	// Process input for movement
 	if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) Move(-1, deltaTimeP);
@@ -44,7 +44,7 @@ void LaserCanon::ProcessInput(float deltaTimeP)
 	}
 }
 
-void LaserCanon::Move(int directionP, float deltaTimeP)
+void Player::Move(int directionP, float deltaTimeP)
 {
 	m_position.x += directionP * deltaTimeP * m_movementSpeed;
 

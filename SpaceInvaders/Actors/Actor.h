@@ -51,6 +51,7 @@ protected:
 	std::unique_ptr<CollisionBoxComponent> m_CollisionBoxComponent;
 
 	Color m_color{ RED };
+
 	Vector2 m_position{ 0, 0 };
 	Vector2 m_size{ 50, 50 };
 

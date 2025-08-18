@@ -49,8 +49,6 @@ constexpr const int (*EXPLOSION_MASKS[])[EXPLOSION_SIZE] = {
 	EXPLOSION_MASK1, EXPLOSION_MASK2
 };
 
-
-
 Shield::Shield(Vector2 positionP, int widthP, int heightP) : Actor(ActorOwner::Neutral)
 {
 	width = static_cast<float>(widthP);
@@ -183,8 +181,6 @@ void Shield::UpdateTrianglesCells()
 
 void Shield::Draw()
 {
-	//DrawRectangle(m_position.x, m_position.y, m_size.x, m_size.y, Fade(RED, 0.5f));
-
 	for (int y = 0; y < UPSCALED_HEIGHT; y++) {
 		for (int x = 0; x < UPSCALED_WIDTH; x++)
 		{
@@ -194,7 +190,12 @@ void Shield::Draw()
 			switch (cells[y][x])
 			{
 			case 1:
-				DrawRectangle(drawX, drawY, cellWidth, cellHeight, GREEN);
+				DrawRectangle(
+					static_cast<int>(drawX),
+					static_cast<int>(drawY),
+					static_cast<int>(cellWidth),
+					static_cast<int>(cellHeight),
+					GREEN);
 				break;
 			case 2:
 				DrawTriangle(
@@ -237,12 +238,14 @@ void Shield::Draw()
 bool Shield::AdvancedCollidesWith(const Actor& otherActorP) const
 {
 	Vector2 otherPosition = otherActorP.GetPosition();
-
 	Vector2 gridCoords = ConvertWorldToGrid(otherPosition);
 
-	if (cells[gridCoords.y][gridCoords.x] != 0)
+	int toIntX = static_cast<int>(gridCoords.x);
+	int toIntY = static_cast<int>(gridCoords.y);
+
+	if (cells[toIntY][toIntX] != 0)
 	{
-		m_lastHitPosition = gridCoords;
+		m_lastHitPosition = Vector2{ gridCoords.y ,gridCoords.x };
 
 		return true;
 	}
@@ -252,7 +255,10 @@ bool Shield::AdvancedCollidesWith(const Actor& otherActorP) const
 
 void Shield::OnCollisionEvent(const Actor& otherActorP)
 {
-	ExplodeCell(m_lastHitPosition.y, m_lastHitPosition.x);
+	ExplodeCell(
+		static_cast<int>(m_lastHitPosition.x),
+		static_cast<int>(m_lastHitPosition.y)
+	);
 }
 
 void Shield::ExplodeCell(int x, int y)
@@ -269,8 +275,8 @@ void Shield::ExplodeCell(int x, int y)
 		{
 			if (mask[y][x] == 1)
 			{
-				int gx = gridPos.x + x - EXPLOSION_SIZE / 2;
-				int gy = gridPos.y + y - EXPLOSION_SIZE / 2;
+				int gx = static_cast<int>(gridPos.x + x - EXPLOSION_SIZE / 2);
+				int gy = static_cast<int>(gridPos.y + y - EXPLOSION_SIZE / 2);
 
 				if (gx >= 0 && gx < UPSCALED_WIDTH &&
 					gy >= 0 && gy < UPSCALED_HEIGHT)
@@ -310,8 +316,8 @@ void Shield::ExplodeCell(int x, int y)
 Vector2 Shield::ConvertWorldToGrid(const Vector2& worldPos) const
 {
 	static Vector2 gridPos;
-	gridPos.x = static_cast<int>((worldPos.x - m_position.x) / cellWidth);
-	gridPos.y = static_cast<int>((worldPos.y - m_position.y) / cellHeight);
+	gridPos.x = std::floor((worldPos.x - m_position.x) / cellWidth);
+	gridPos.y = std::floor((worldPos.y - m_position.y) / cellHeight);
 
 	// Clamp the grid position to the shield's internal grid
 	gridPos.x = Clamp(gridPos.x, 0, UPSCALED_WIDTH - 1);

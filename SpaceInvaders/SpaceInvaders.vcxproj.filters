@@ -24,7 +24,7 @@
     <ClCompile Include="Core\GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Actors\LaserCanon.cpp">
+    <ClCompile Include="Actors\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Actors\Alien.cpp">
@@ -59,7 +59,7 @@
     <ClInclude Include="Core\GameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Actors\LaserCanon.h">
+    <ClInclude Include="Actors\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Actors\Alien.h">

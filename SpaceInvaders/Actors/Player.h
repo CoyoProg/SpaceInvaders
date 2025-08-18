@@ -3,11 +3,11 @@
 
 class LaserComponent;
 
-class LaserCanon : public Actor
+class Player : public Actor
 {
 public:
-	LaserCanon();
-	~LaserCanon();
+	Player();
+	~Player();
 
 	virtual void Update(float deltaTimeP) override;
 	virtual void OnCollisionEvent(const Actor& otherActorP) override;

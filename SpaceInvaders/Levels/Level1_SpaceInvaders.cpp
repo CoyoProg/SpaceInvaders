@@ -1,6 +1,6 @@
 #include "Level1_SpaceInvaders.h"
 #include "../Core/GameManager.h"
-#include "../Actors/LaserCanon.h"
+#include "../Actors/Player.h"
 #include "../Actors/Alien.h"
 #include "../Objects/Invader.h"
 #include "../Actors/Shield.h"
@@ -9,7 +9,7 @@
 
 Level1_SpaceInvaders::Level1_SpaceInvaders(GameManager& gameManagerP)
 {
-	gameManagerP.AddActor(std::make_shared<LaserCanon>());
+	gameManagerP.AddActor(std::make_shared<Player>());
 
 	m_invader = std::make_shared<Invader>();
 

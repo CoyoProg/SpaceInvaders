@@ -14,7 +14,12 @@ Actor::~Actor() = default;
 
 void Actor::Draw()
 {
-	DrawRectangle(m_position.x, m_position.y, m_size.x, m_size.y, m_color); // Example drawing a red square
+	DrawRectangle(
+		static_cast<int>(m_position.x),
+		static_cast<int>(m_position.y),
+		static_cast<int>(m_size.x),
+		static_cast<int>(m_size.y),
+		m_color);
 }
 
 void Actor::Update(float deltaTimeP)

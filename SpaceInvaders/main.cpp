@@ -25,7 +25,7 @@ int main(void)
 
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawText("GL HF", screenWidth / 2, screenHeight / 1.5, 20, LIGHTGRAY);
+        DrawText("GL HF", screenWidth / 2, static_cast<int>(screenHeight / 1.5), 20, LIGHTGRAY);
 
         gameManager.DrawActors();
 

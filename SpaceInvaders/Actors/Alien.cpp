@@ -19,7 +19,13 @@ Alien::Alien(Vector2 positionP, Vector2 sizeP) : Actor(ActorOwner::Enemy)
 
 void Alien::Draw()
 {
-	DrawRectangleGradientH(m_position.x, m_position.y, m_size.x, m_size.y, m_previousColor, m_nextColor);
+	DrawRectangleGradientH(
+		static_cast<int>(m_position.x),
+		static_cast<int>(m_position.y),
+		static_cast<int>(m_size.x),
+		static_cast<int>(m_size.y), 
+		m_previousColor,
+		m_nextColor);
 }
 
 void Alien::SetColor(Color previousColorP, Color nextColorP)

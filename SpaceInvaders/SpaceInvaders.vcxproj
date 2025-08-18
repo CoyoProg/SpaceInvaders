@@ -131,7 +131,7 @@
     <ClCompile Include="Components\CollisionBoxComponent.cpp" />
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="Core\GameManager.cpp" />
-    <ClCompile Include="Actors\LaserCanon.cpp" />
+    <ClCompile Include="Actors\Player.cpp" />
     <ClCompile Include="Components\LaserComponent.cpp" />
     <ClCompile Include="Actors\LaserProjectile.cpp" />
     <ClCompile Include="Objects\Invader.cpp" />
@@ -145,7 +145,7 @@
     <ClInclude Include="Components\CollisionBoxComponent.h" />
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="Core\GameManager.h" />
-    <ClInclude Include="Actors\LaserCanon.h" />
+    <ClInclude Include="Actors\Player.h" />
     <ClInclude Include="Components\LaserComponent.h" />
     <ClInclude Include="Actors\LaserProjectile.h" />
     <ClInclude Include="Interfaces\IAlienObserver.h" />
