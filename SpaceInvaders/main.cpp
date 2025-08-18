@@ -21,6 +21,7 @@ int main(void)
         gameManager.CollisionCheck();
         gameManager.CleanupActors();
         gameManager.FlushNewActors();
+        gameManager.FlushNewObjects();
 
         BeginDrawing();
         ClearBackground(BLACK);

@@ -20,6 +20,7 @@ Level1_SpaceInvaders::Level1_SpaceInvaders(GameManager& gameManagerP)
 	gameManagerP.AddObject(std::move(m_invader));
 }
 
+// We need to define the destructor to forward declare the unique_ptr
 Level1_SpaceInvaders::~Level1_SpaceInvaders() = default;
 
 void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP)

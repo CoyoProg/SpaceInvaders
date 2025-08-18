@@ -8,79 +8,98 @@ GameManager::GameManager()
 	m_currentLevel = std::make_unique<Level1_SpaceInvaders>(*this);
 }
 
+// We need to define the destructor to forward declare the unique_ptr
 GameManager::~GameManager() = default;
+
+void GameManager::Update()
+{
+	// Get the time since the last frame
+	float deltaTime = GetFrameTime();
+	for (const std::shared_ptr<IUpdatable>& actor : m_actors)
+	{
+		if(actor) actor->Update(deltaTime);
+	}
+
+	for (const std::unique_ptr<IUpdatable>& objects : m_objects)
+	{
+		if (objects) objects->Update(deltaTime);
+	}
+}
+
+void GameManager::DrawActors() const
+{
+	for (const std::shared_ptr<Actor>& actor : m_actors)
+	{
+		actor->Draw();
+	}
+}
+
+void GameManager::CollisionCheck()
+{
+	size_t actorsCount = m_actors.size();
+
+	// Iterate through each actors and check for collisions with every other actor
+	for (size_t i = 0; i < actorsCount; ++i)
+	{
+		for (size_t j = i + 1; j < actorsCount; ++j)
+		{
+			if (m_actors[i]->CollidesWith(*m_actors[j]))
+			{
+				m_actors[i]->OnCollisionEvent(*m_actors[j]);
+				m_actors[j]->OnCollisionEvent(*m_actors[i]);
+			}
+		}
+	}
+}
 
 void GameManager::CleanupActors()
 {
-	int i = actors.size() - 1;
-	for (i; i >= 0; --i)
+	int currentIndex = static_cast<int>(m_actors.size()) - 1;
+
+	for (currentIndex; currentIndex >= 0; --currentIndex)
 	{
-		auto& actor = actors[i];
+		std::shared_ptr<Actor>& actor = m_actors[currentIndex];
 		if (actor->MarkForDeletion())
 		{
-			actors.erase(actors.begin() + i);
+			// If the actor is marked for deletion, we move the last actor into the current index position
+			// And then remove the last actor from the vector that was just moved (nullify the pointer)
+			m_actors[currentIndex] = std::move(m_actors.back());
+			m_actors.pop_back();
 		}
 	}
 }
 
 void GameManager::FlushNewActors()
 {
-	// Move all actors from actorsToAdd to actors
-	actors.insert(actors.end(), actorsToAdd.begin(), actorsToAdd.end());
-	actorsToAdd.clear();
+	// Move all m_actors from m_pendingActors to m_actors
+	// We use std::make_move_iterator to move the objects instead of copying them
+	m_actors.insert(
+		m_actors.end(),
+		std::make_move_iterator(m_pendingActors.begin()),
+		std::make_move_iterator(m_pendingActors.end())
+	);
+
+	m_pendingActors.clear();
 }
 
-void GameManager::Update()
+void GameManager::FlushNewObjects()
 {
-	// 1. Update positions
-	// --------------------
-	// Move player, bullets, aliens, etc.
-	
-	// 2. Check collisions
-	// --------------------
-	// Bullet vs alien
-	// Bullet vs shield
-	// Alien vs player or bottom of screen
-	
-	// 3. Game Logic
-	// --------------------
-	// Update scores, lives, shield health here
+	// Move all objects from objectsToAdd to objects
+	m_objects.insert(
+		m_objects.end(),
+		std::make_move_iterator(m_pendingObjects.begin()),
+		std::make_move_iterator(m_pendingObjects.end())
+	);
 
-
-
-	float deltaTime = GetFrameTime(); // Get the time elapsed since the last frame
-	for (const auto& actor : actors)
-	{
-		if(actor) actor->Update(deltaTime);
-	}
-
-	for (const auto& objects : updatableObjects)
-	{
-		if (objects) objects->Update(deltaTime);
-	}
+	m_pendingObjects.clear();
 }
 
-void GameManager::CollisionCheck()
+void GameManager::AddActor(std::shared_ptr<Actor> actorP)
 {
-	// Iterate through actors and check for collisions
-	for (size_t i = 0; i < actors.size(); ++i)
-	{
-		for (size_t j = i + 1; j < actors.size(); ++j)
-		{
-			if (actors[i]->CollidesWith(*actors[j]))
-			{
-				actors[i]->OnCollisionEvent(*actors[j]);
-				actors[j]->OnCollisionEvent(*actors[i]);
-			}
-		}
-	}
+	m_pendingActors.emplace_back(std::move(actorP));
 }
 
-void GameManager::DrawActors() const
+void GameManager::AddObject(std::unique_ptr<IUpdatable> objectP)
 {
-	// 4. Draw everything
-	for (const auto& actor :actors)
-	{
-		actor->Draw();
-	}
+	m_pendingObjects.emplace_back(std::move(objectP));
 }

@@ -61,7 +61,7 @@ bool Actor::CollidesWith(const Actor& otherActorP) const
 	}
 
 	// Note: We shoud also check if both needs advanced collision check; but it will never happen in our case
-	// Because we only use advanced collision check for the Shield actors
+	// Because we only use advanced collision check for the Shield m_actors
 
 	return false;
 }
