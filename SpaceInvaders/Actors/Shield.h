@@ -27,8 +27,6 @@ public:
 	float cellWidth, cellHeight;    
     std::vector<std::vector<int>> cells; // if 0, the the cell is empty
 
-    RenderTexture2D renderTex;
-
 private:
     Vector2 ConvertWorldToGrid(const Vector2& worldPos) const;
 	mutable Vector2 m_lastHitPosition{ 0, 0 };

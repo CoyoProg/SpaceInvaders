@@ -6,7 +6,7 @@ class CollisionBoxComponent;
 class LaserProjectile : public Actor
 {
 public:
-	LaserProjectile(int directionP, Vector2 positionP);
+	LaserProjectile(int directionP, Vector2 positionP, ActorOwner ownerP);
 	~LaserProjectile();
 
 	virtual void Update(float deltaTimeP) override;

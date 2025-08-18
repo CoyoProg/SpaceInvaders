@@ -11,7 +11,7 @@ Level1_SpaceInvaders::Level1_SpaceInvaders(GameManager& gameManagerP)
 {
 	gameManagerP.AddActor(std::make_shared<LaserCanon>());
 
-	m_invader = std::make_unique<Invader>();
+	m_invader = std::make_shared<Invader>();
 
 	InitializeAliensGrid(gameManagerP);
 	InitializeShields(gameManagerP);
@@ -19,9 +19,6 @@ Level1_SpaceInvaders::Level1_SpaceInvaders(GameManager& gameManagerP)
 	// Move the Invader ownership to the GameManager when the level is initialized
 	gameManagerP.AddObject(std::move(m_invader));
 }
-
-// We need to define the destructor to forward declare the unique_ptr
-Level1_SpaceInvaders::~Level1_SpaceInvaders() = default;
 
 void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP)
 {
@@ -51,10 +48,10 @@ void Level1_SpaceInvaders::InitializeShields(GameManager& gameManagerP)
 	for (int i = 0; i < 4; ++i)
 	{
 		float posX = static_cast<float>((i + 1) * (SCREEN_WIDTH / 5) - shieldWidth / 2);
-		float posY = static_cast<float>(SCREEN_HEIGHT - 175); // Position the shields near the bottom of the screen
+		float posY = static_cast<float>(SCREEN_HEIGHT - 175);
 
 		auto shield = std::make_shared<Shield>(Vector2{ posX ,posY }, shieldWidth, shieldHeight);
-		shield->SetColor(GREEN); // Semi-transparent green color
+		shield->SetColor(GREEN);
 		gameManagerP.AddActor(shield);
 	}
 }
@@ -79,12 +76,12 @@ std::shared_ptr<Alien> Level1_SpaceInvaders::CreateAlien(int rowP, int colP, int
 
 Color Level1_SpaceInvaders::CalculateGradientColor(float rowP, float colP)
 {
-	////
-	//// Note: The following gradient logic comes from this website:
-	//// https://happycoding.io/tutorials/processing/for-loops/corner-gradient
-	//// https://happycoding.io/tutorials/processing/for-loops/radial-gradient
-	//// We calculate the distance from each corner (or center) of the grid to create a gradient effect.
-	////
+	// ##
+	// Note: The following gradient logic comes from this website:
+	// https://happycoding.io/tutorials/processing/for-loops/corner-gradient
+	// https://happycoding.io/tutorials/processing/for-loops/radial-gradient
+	// We calculate the distance from the center of the grid to create a gradient effect.
+	// ##
 
 	if (colP < 0) colP = 0;
 	if (colP >= AlienGridConfig::columnNumber - 1) colP = AlienGridConfig::columnNumber - 1;
@@ -93,12 +90,11 @@ Color Level1_SpaceInvaders::CalculateGradientColor(float rowP, float colP)
 	float normalizeX = colP / (AlienGridConfig::columnNumber - 1);
 	float normalizeY = rowP / (AlienGridConfig::rowNumber - 1);
 
-	// The longest distance in the grid is from one corner to the opposite corner, which is sqrt(2) in a 1x1 square.
-	float maxDist = sqrt(2.0f);
+	// The longest distance in the grid is from one corner to the center, which is sqrt(0.5) in a 0.5x0.5 square.
+	float maxDistanceFromCenter = sqrt(0.5f);
 
 	// Calculate the distance from center (0.5, 0.5)
 	// sqrt((x-0.5)^2 + (y-0.5)^2)
-	float maxDistanceFromCenter = sqrt(0.5f); // The center is at (0.5, 0.5)
 	float dx = normalizeX - 0.5f;
 	float dy = normalizeY - 0.5f;
 	float distFromCenter = sqrt(dx * dx + dy * dy);

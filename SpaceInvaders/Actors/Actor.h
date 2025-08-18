@@ -3,8 +3,6 @@
 //// https://github.com/CoyoProg/Ogre3D_Warhammer40k/blob/main/Warhammer40k/Actors.h
 ////
 
-
-
 #pragma once
 #include "raylib.h"
 #include "../Interfaces/IUpdatable.h"
@@ -13,10 +11,20 @@
 
 class CollisionBoxComponent;
 
+enum class ActorOwner
+{
+	Player,
+	Enemy,
+	Neutral,
+
+	Default,
+};
+
+
 class Actor : public IUpdatable
 {
 public:
-	Actor();
+	Actor(ActorOwner ownerP = ActorOwner::Player);
 	~Actor();
 
 	virtual void Draw();
@@ -30,6 +38,8 @@ public:
 	virtual bool AdvancedCollidesWith(const Actor& otherActorP) const { return true; };
 	bool NeedsAdvancedCollisionCheck() const { return m_hasComplexCollision; }
 	virtual void OnCollisionEvent(const Actor& otherActorP) {};
+
+	ActorOwner GetOwner() const { return m_owner; }
 
 	void SetPosition(Vector2 positionP);
 	void SetSize(Vector2 sizeP);
@@ -46,5 +56,7 @@ protected:
 
 	bool m_markedForDeletion = false;
 	bool m_hasComplexCollision = false;
+
+	ActorOwner m_owner = ActorOwner::Default;
 };
 

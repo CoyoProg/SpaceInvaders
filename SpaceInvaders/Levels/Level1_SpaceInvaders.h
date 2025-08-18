@@ -22,7 +22,6 @@ class Level1_SpaceInvaders
 {
 public:
 	Level1_SpaceInvaders(GameManager& gameManagerP);
-	~Level1_SpaceInvaders();
 
 private:
 	void InitializeAliensGrid(GameManager& gameManagerP);
@@ -32,6 +31,6 @@ private:
 	Color CalculateGradientColor(float rowP, float colP);
 
 private:
-	std::unique_ptr<Invader> m_invader;
+	std::shared_ptr<Invader> m_invader;
 };
 

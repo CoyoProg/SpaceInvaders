@@ -5,13 +5,11 @@
 #include <memory>
 
 class Actor;
+enum class ActorOwner;
 
 class LaserComponent : public Component
 {
 public:
-	void Shoot(int directionP, Vector2 positionP);
-
-public:
-	std::vector<std::shared_ptr<Actor>> m_lasers; // Store active lasers
+	void Shoot(int directionP, Vector2 positionP, ActorOwner ownerP);
 };
 

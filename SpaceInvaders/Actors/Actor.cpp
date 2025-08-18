@@ -1,9 +1,13 @@
 #include "Actor.h"
 #include "../Components/CollisionBoxComponent.h"
 
-Actor::Actor()
+#include <iostream>
+
+Actor::Actor(ActorOwner ownerP)
 {
 	m_CollisionBoxComponent = std::make_unique<CollisionBoxComponent>(Rectangle{ m_position.x, m_position.y, m_size.x, m_size.y });
+
+	m_owner = ownerP;
 }
 
 Actor::~Actor() = default;
@@ -45,6 +49,8 @@ const CollisionBoxComponent* Actor::GetCollisionBoxComponent() const
 
 bool Actor::CollidesWith(const Actor& otherActorP) const
 {
+	if (otherActorP.GetOwner() == m_owner) return false;
+
 	if (!otherActorP.GetCollisionBoxComponent()) return false;
 	if (!CheckCollisionRecs(m_CollisionBoxComponent->GetBounds(), otherActorP.GetCollisionBoxComponent()->GetBounds())) return false;
 

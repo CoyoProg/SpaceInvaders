@@ -3,6 +3,9 @@
 #include "../Levels/Level1_SpaceInvaders.h"
 #include "../Components/CollisionBoxComponent.h"
 
+
+#include "../Objects/Invader.h"
+
 GameManager::GameManager()
 {
 	m_currentLevel = std::make_unique<Level1_SpaceInvaders>(*this);
@@ -20,7 +23,7 @@ void GameManager::Update()
 		if(actor) actor->Update(deltaTime);
 	}
 
-	for (const std::unique_ptr<IUpdatable>& objects : m_objects)
+	for (const std::shared_ptr<IUpdatable>& objects : m_objects)
 	{
 		if (objects) objects->Update(deltaTime);
 	}
@@ -71,6 +74,11 @@ void GameManager::CleanupActors()
 
 void GameManager::FlushNewActors()
 {
+	// ##
+	// Note: Code to insert unique_ptr into vector
+	// https://stackoverflow.com/questions/13463570/how-can-i-erase-a-shared-ptr-from-vector
+	// ##
+
 	// Move all m_actors from m_pendingActors to m_actors
 	// We use std::make_move_iterator to move the objects instead of copying them
 	m_actors.insert(
@@ -99,7 +107,7 @@ void GameManager::AddActor(std::shared_ptr<Actor> actorP)
 	m_pendingActors.emplace_back(std::move(actorP));
 }
 
-void GameManager::AddObject(std::unique_ptr<IUpdatable> objectP)
+void GameManager::AddObject(std::shared_ptr<IUpdatable> objectP)
 {
 	m_pendingObjects.emplace_back(std::move(objectP));
 }

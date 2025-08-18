@@ -51,7 +51,7 @@ constexpr const int (*EXPLOSION_MASKS[])[EXPLOSION_SIZE] = {
 
 
 
-Shield::Shield(Vector2 positionP, int widthP, int heightP)
+Shield::Shield(Vector2 positionP, int widthP, int heightP) : Actor(ActorOwner::Neutral)
 {
 	width = static_cast<float>(widthP);
 	height = static_cast<float>(heightP);

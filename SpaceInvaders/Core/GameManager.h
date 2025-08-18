@@ -47,15 +47,15 @@ public:
 	// They will be flushed at the end of the frame
 	void AddActor(std::shared_ptr<Actor> actorP);
 	// Add updatable object to the list of updatable objects
-	void AddObject(std::unique_ptr<IUpdatable> objectP);
+	void AddObject(std::shared_ptr<IUpdatable> objectP);
 
 private:
 	// Private constructor for singleton pattern
 	GameManager();
 
 	std::unique_ptr<Level1_SpaceInvaders> m_currentLevel;
-	std::vector<std::unique_ptr<IUpdatable>> m_objects;
-	std::vector<std::unique_ptr<IUpdatable>> m_pendingObjects;
+	std::vector<std::shared_ptr<IUpdatable>> m_objects;
+	std::vector<std::shared_ptr<IUpdatable>> m_pendingObjects;
 	std::vector<std::shared_ptr<Actor>> m_actors;
 	std::vector<std::shared_ptr<Actor>> m_pendingActors;
 };

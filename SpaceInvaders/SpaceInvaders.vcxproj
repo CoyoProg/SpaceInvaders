@@ -148,6 +148,7 @@
     <ClInclude Include="Actors\LaserCanon.h" />
     <ClInclude Include="Components\LaserComponent.h" />
     <ClInclude Include="Actors\LaserProjectile.h" />
+    <ClInclude Include="Interfaces\IAlienObserver.h" />
     <ClInclude Include="Interfaces\IUpdatable.h" />
     <ClInclude Include="Objects\Invader.h" />
     <ClInclude Include="Levels\Level1_SpaceInvaders.h" />
