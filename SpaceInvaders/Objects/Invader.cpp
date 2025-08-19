@@ -23,9 +23,6 @@ void Invader::Update(float deltaSecP)
 void Invader::OnAlienDied(Alien& alienP)
 {
 	CleanupAliens();
-
-	// Increment score
-	// Increment speed ?
 }
 
 void Invader::CleanupAliens()
@@ -108,28 +105,32 @@ void Invader::UpdateAlienPosition(float deltaSecP)
 void Invader::UpdateShootProbability(float deltaSecP)
 {
 	m_shootTimer += deltaSecP;
-	if (m_shootTimer >= 0.2f)
+	if (m_shootTimer >= 0.5f / (12 - m_bottomAliensCount))
 	{
 		m_shootTimer = 0.0f;
-		int chanceRoll = GetRandomValue(0, 1);
+		int chanceRoll = rand() % 100;
 
-		if (chanceRoll)
+		if (chanceRoll <= 60 / (12 - m_bottomAliensCount))
 		{
-			GetRandomBottomAlien().ShootLaser();
+			std::shared_ptr<Alien> alien = GetRandomBottomAlien();
+			if (alien)
+			{
+				alien->ShootLaser();
+			}
 		}
 	}
 }
 
-Alien& Invader::GetRandomBottomAlien() const
+std::shared_ptr<Alien> Invader::GetRandomBottomAlien() const
 {
 	if (m_aliens.empty())
 	{
 		throw std::runtime_error("No aliens available");
 	}
 
-	if (m_aliens.size() == 1) return *m_aliens[0];
+	if (m_aliens.size() == 1) return m_aliens[0];
 
-	std::unordered_map<int, Alien*> bottomsAliens;
+	std::unordered_map<int, std::shared_ptr<Alien>> bottomsAliens;
 
 	for (const auto& alien : m_aliens)
 	{
@@ -139,18 +140,32 @@ Alien& Invader::GetRandomBottomAlien() const
 		auto iterator = bottomsAliens.find(col);
 		if (iterator == bottomsAliens.end())
 		{
-			bottomsAliens[col] = alien.get();
+			bottomsAliens[col] = alien;
 		}
 		else
 		{
 			// If we already have a bottom alien for this column, check if the current one is lower
 			if (alien->GetCoordY() > iterator->second->GetCoordY())
 			{
-				iterator->second = alien.get();
+				iterator->second = alien;
 			}
 		}
 	}
 
+	for (auto it = bottomsAliens.begin(); it != bottomsAliens.end(); )
+	{
+		if (!it->second->IsLaserAvailable())
+		{
+			it = bottomsAliens.erase(it); // erase returns the next iterator
+		}
+		else 
+		{
+			++it;
+		}
+	}
+
+	if (bottomsAliens.empty()) return nullptr;
+	m_bottomAliensCount = static_cast<int>(bottomsAliens.size());
 	// DEBUG VISUALIZATION
 	//for (const auto& alien : bottomsAliens)
 	//{
@@ -162,10 +177,10 @@ Alien& Invader::GetRandomBottomAlien() const
 	// Not really optimized, but works for our case because the number of aliens is small
 	// ##
 	auto randomIterator = bottomsAliens.begin();
-	int randomIndex = rand() % bottomsAliens.size();
+ 	int randomIndex = rand() % m_bottomAliensCount;
 	std::advance(randomIterator, randomIndex);
 	
-	return *randomIterator->second;
+	return randomIterator->second;
 }
 
 bool Invader::ShouldChangeDirection() const
@@ -174,7 +189,7 @@ bool Invader::ShouldChangeDirection() const
 	{
 		// Check if the next step will go out of bounds
 		float nextStepPosition = alien->GetPosition().x + m_distancePerStep * m_direction;
-		if (nextStepPosition > SCREEN_WIDTH - alien->GetSize().x || nextStepPosition < 0)
+		if (nextStepPosition > SCREEN_WIDTH - PLAYGROUND_OFFSET - alien->GetSize().x || nextStepPosition < 0 + PLAYGROUND_OFFSET)
 		{
 			return true;
 		}

@@ -36,6 +36,7 @@ public:
 	virtual void OnCollisionEvent(const Actor& otherActorP) override;
 
 	void ShootLaser();
+	bool IsLaserAvailable() const;
 
 private:
 	std::unique_ptr<LaserComponent> m_laserComponent;

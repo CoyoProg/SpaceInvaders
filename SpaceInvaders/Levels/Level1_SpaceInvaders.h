@@ -10,12 +10,12 @@ class Invader;
 
 struct AlienGridConfig
 {
-	static constexpr Vector2 alienSize{ 64, 64 };
+	static constexpr Vector2 alienSize{ 45, 45 };
 	static constexpr int spaceBetweenRows = 30;
 	static constexpr int spaceBetweenCols = 18;
 	static constexpr int columnNumber = 11;
 	static constexpr int rowNumber = 5;
-	static constexpr int topOffset = 100; // Offset from the top of the screen
+	static constexpr int topOffset = 150; // Offset from the top of the screen
 };
 
 class Level1_SpaceInvaders

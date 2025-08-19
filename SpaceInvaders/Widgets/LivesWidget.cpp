@@ -13,9 +13,6 @@ LivesWidget::LivesWidget(int coordXP, int coordYP, int widthP, int heightP, int 
 
 void LivesWidget::Draw()
 {
-	// Draw the earth line
-	DrawRectangle(0, m_coordY - m_height - 20, 1200, 1, GREEN);
-
 	// Code from: https://www.raylib.com/examples.html
 	// Draw the number of lives
 	DrawText(TextFormat("%01i", m_lives), 10, m_coordY - m_height - 10, 20, GREEN);

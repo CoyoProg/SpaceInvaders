@@ -6,13 +6,11 @@
 
 int main(void)
 {
-    const int screenWidth = 1200;
-    const int screenHeight = 900;
+	GameManager& gameManager = GameManager::GetInstance();
 
-    InitWindow(screenWidth, screenHeight, "Space Invaders");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Space Invaders");
     SetTargetFPS(120);
 
-	GameManager& gameManager = GameManager::GetInstance();
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key

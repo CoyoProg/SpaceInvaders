@@ -11,6 +11,25 @@ HUDWidget::HUDWidget() :
 
 void HUDWidget::Draw()
 {
+	// Draw the earth line
+	DrawLine(0, SCREEN_HEIGHT - 45, SCREEN_WIDTH, SCREEN_HEIGHT - 45, GREEN);
+
+	DrawLine(
+		PLAYGROUND_OFFSET,
+		SCREEN_HEIGHT - 55,
+		PLAYGROUND_OFFSET,
+		SCREEN_HEIGHT - 45,
+		GREEN
+	);
+
+	DrawLine(
+		SCREEN_WIDTH - PLAYGROUND_OFFSET,
+		SCREEN_HEIGHT - 55,
+		SCREEN_WIDTH - PLAYGROUND_OFFSET,
+		SCREEN_HEIGHT - 45,
+		GREEN
+	);
+
 	m_scoreWidget.Draw();
 	m_livesWidget.Draw();
 }

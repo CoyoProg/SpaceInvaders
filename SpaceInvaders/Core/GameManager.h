@@ -9,7 +9,8 @@ class Object;
 class Widget;
 class Level1_SpaceInvaders;
 
-constexpr int SCREEN_WIDTH = 1200;
+constexpr int SCREEN_WIDTH = 900;
+constexpr int PLAYGROUND_OFFSET = 80;
 constexpr int SCREEN_HEIGHT = 900;
 
 /*

@@ -52,8 +52,8 @@ void Player::Move(int directionP, float deltaTimeP)
 {
 	m_position.x += directionP * deltaTimeP * m_movementSpeed;
 
-	if (m_position.x < 0)
-		m_position.x = 0; // Prevent moving off the left edge
-	else if (m_position.x + m_size.x > SCREEN_WIDTH)
-		m_position.x = SCREEN_WIDTH - m_size.x; // Prevent moving off the right edge
+	if (m_position.x < 0 + PLAYGROUND_OFFSET + 1)
+		m_position.x = PLAYGROUND_OFFSET + 1; // Prevent moving off the left edge
+	else if (m_position.x + m_size.x > SCREEN_WIDTH - PLAYGROUND_OFFSET - 1)
+		m_position.x = SCREEN_WIDTH - PLAYGROUND_OFFSET - 1 - m_size.x; // Prevent moving off the right edge
 }

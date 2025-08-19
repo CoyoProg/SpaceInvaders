@@ -27,7 +27,7 @@ private:
 	void UpdateAlienPosition(float deltaSecP);
 	// Updates the position of one alien at a time
 	void UpdateShootProbability(float deltaSecP);
-	Alien& GetRandomBottomAlien() const;
+	std::shared_ptr<Alien> GetRandomBottomAlien() const;
 
 	// Checks if any alien will reach the side of the screen at the next step
 	bool ShouldChangeDirection() const;
@@ -56,5 +56,6 @@ private:
 	// Probability of an alien shooting per second
 	int m_shootChancePerSecond = 2;
 	float m_shootTimer = 0.0f;
+	mutable int m_bottomAliensCount = 11;
 };
 

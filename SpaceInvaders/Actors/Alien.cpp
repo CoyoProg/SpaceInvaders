@@ -55,3 +55,8 @@ void Alien::ShootLaser()
 {
 	m_laserComponent->Shoot(1, Vector2{ m_position.x + m_size.x / 2, m_position.y + m_size.y + 10.f }, m_owner);
 }
+
+bool Alien::IsLaserAvailable() const
+{
+	return m_laserComponent->GetLaserCount() == 0;
+}
