@@ -32,7 +32,7 @@ void Invader::CleanupAliens()
 {
 	for (int i = 0; i < static_cast<int>(m_aliens.size()); )
 	{
-		if (m_aliens[i]->MarkForDeletion())
+		if (m_aliens[i]->IsMarkedForDeletion())
 		{
 			m_aliens.erase(m_aliens.begin() + i);
 

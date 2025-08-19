@@ -89,7 +89,7 @@ void GameManager::CleanupActors()
 	for (currentIndex; currentIndex >= 0; --currentIndex)
 	{
 		std::shared_ptr<Actor>& actor = m_actors[currentIndex];
-		if (actor->MarkForDeletion())
+		if (actor->IsMarkedForDeletion())
 		{
 			// If the actor is marked for deletion, we move the last actor into the current index position
 			// And then remove the last actor from the vector that was just moved (nullify the pointer)

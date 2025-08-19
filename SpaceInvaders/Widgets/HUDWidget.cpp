@@ -3,30 +3,26 @@
 #include "../Core/GameState.h"
 #include "raylib.h"
 
-HUDWidget::HUDWidget()
+HUDWidget::HUDWidget() : 
+	m_scoreWidget(25, 25, 20),
+	m_livesWidget(25, 895, 50, 20, 3)
 {
-	// Initialize score text
-	int score = 0;
-	scoreText = (std::string("Score: ") + std::to_string(score));
-	
-	// Initialize lives and high score
-	m_lives = 3; // Default value, can be updated later
-	m_highScore = 0; // Default value, can be updated later
 }
 
 void HUDWidget::Draw()
 {
-	char const* score = scoreText.c_str();
-	DrawText(score, 0 + 25,0 + 25, 20, GREEN);
+	m_scoreWidget.Draw();
+	m_livesWidget.Draw();
 }
 
 void HUDWidget::OnScoreUpdate(int scoreP)
 {
-	scoreText = (std::string("Score: ") + std::to_string(scoreP));
+	m_scoreWidget.SetScore(scoreP);
 }
 
-void HUDWidget::OnLifeLost()
+void HUDWidget::OnLivesUpdate(int newLivesP)
 {
+	m_livesWidget.SetLives(newLivesP);
 }
 
 

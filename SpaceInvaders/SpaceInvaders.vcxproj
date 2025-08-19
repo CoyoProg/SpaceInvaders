@@ -136,6 +136,8 @@
     <ClCompile Include="Actors\LaserProjectile.cpp" />
     <ClCompile Include="Core\GameState.cpp" />
     <ClCompile Include="Core\UIManager.cpp" />
+    <ClCompile Include="Widgets\LivesWidget.cpp" />
+    <ClCompile Include="Widgets\ScoreWidget.cpp" />
     <ClCompile Include="Widgets\HUDWidget.cpp" />
     <ClCompile Include="Objects\Object.cpp" />
     <ClCompile Include="Objects\Invader.cpp" />
@@ -155,6 +157,8 @@
     <ClInclude Include="Core\GameState.h" />
     <ClInclude Include="Interfaces\IGameStateObserver.h" />
     <ClInclude Include="Core\UIManager.h" />
+    <ClInclude Include="Widgets\LivesWidget.h" />
+    <ClInclude Include="Widgets\ScoreWidget.h" />
     <ClInclude Include="Widgets\HUDWidget.h" />
     <ClInclude Include="Interfaces\IDrawable.h" />
     <ClInclude Include="Interfaces\IAlienObserver.h" />

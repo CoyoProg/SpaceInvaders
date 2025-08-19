@@ -43,10 +43,11 @@ public:
 	ActorAffiliation GetOwner() const { return m_owner; }
 
 	void SetPosition(Vector2 positionP);
+	void SetForDeletion(bool markedForDeletionP = true) { m_markedForDeletion = markedForDeletionP; }
 	void SetSize(Vector2 sizeP);
 	void SetColor(Color colorP) { m_color = colorP; }
 
-	bool MarkForDeletion() const { return m_markedForDeletion; }
+	bool IsMarkedForDeletion() const { return m_markedForDeletion; }
 
 protected:
 	std::unique_ptr<CollisionBoxComponent> m_CollisionBoxComponent;

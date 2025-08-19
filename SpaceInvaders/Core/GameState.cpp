@@ -17,9 +17,11 @@ void GameState::AddScore(int scoreP)
 
 void GameState::OnPlayerDied()
 {
+	m_lives--;
+
 	for (const auto& observer : m_observers)
 	{
-		observer->OnLifeLost();
+		observer->OnLivesUpdate(m_lives);
 	}
 }
 

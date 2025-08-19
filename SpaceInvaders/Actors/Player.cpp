@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "../Core/GameManager.h"
+#include "../Core/GameState.h"
 #include "../Components/LaserComponent.h"
 #include "../Components/CollisionBoxComponent.h"
 
@@ -30,6 +31,7 @@ void Player::Update(float deltaTimeP)
 
 void Player::OnCollisionEvent(const Actor& otherActorP)
 {
+	GameState::GetInstance().OnPlayerDied();
 }
 
 void Player::ProcessInput(float deltaTimeP)
@@ -39,8 +41,10 @@ void Player::ProcessInput(float deltaTimeP)
 	if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) Move(1, deltaTimeP);
 	if(IsKeyPressed(KEY_SPACE))
 	{
+		if (m_laserComponent->GetLaserCount() > 0) return;
+
 		// Fire a laser (this is just a placeholder, actual firing logic would go here)
-		m_laserComponent->Shoot(-1, Vector2{ m_position.x + m_size.x / 2, m_position.y - m_size.y - 1.0f}, m_owner);
+		m_laserComponent->Shoot(-1, Vector2{ m_position.x + m_size.x / 2, m_position.y - m_size.y - 1.0f }, m_owner, 800);
 	}
 }
 

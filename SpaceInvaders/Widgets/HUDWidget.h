@@ -1,8 +1,8 @@
 #pragma once
 #include "Widget.h"
 #include "../Interfaces/IGameStateObserver.h"
-
-#include <string>
+#include "ScoreWidget.h"
+#include "LivesWidget.h"
 
 class HUDWidget : public Widget, public IGameStateObserver
 {
@@ -11,11 +11,10 @@ public:
 
 	virtual void Draw() override;
 	virtual void OnScoreUpdate(int scoreP) override;
-	virtual void OnLifeLost() override;
+	virtual void OnLivesUpdate(int newLivesP) override;
 
 private:
-	std::string scoreText{ "Score: 0" };
-	int m_lives{ 3 };
-	int m_highScore{ 0 };
+	ScoreWidget m_scoreWidget;
+	LivesWidget m_livesWidget;
 };
 
