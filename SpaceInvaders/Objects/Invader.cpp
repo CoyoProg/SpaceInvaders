@@ -4,6 +4,7 @@
 
 #include "raymath.h"
 #include <unordered_map>
+#include <iostream>
 
 Invader::Invader(int spaceBetweenRowsP)
 {
@@ -59,7 +60,7 @@ void Invader::CleanupAliens()
 
 void Invader::AddAlien(std::shared_ptr<Alien> alienP)
 {
-	alienP->AddObersver(shared_from_this());
+	alienP->AddObserver(shared_from_this());
 	m_aliens.emplace_back(std::move(alienP));
 
 	m_currentAlienIndex = static_cast<int>(m_aliens.size() - 1);
@@ -150,10 +151,11 @@ Alien& Invader::GetRandomBottomAlien() const
 		}
 	}
 
-	for(auto& alien : bottomsAliens)
-	{
-		alien.second->SetColor(WHITE, WHITE);
-	}
+	// DEBUG VISUALIZATION
+	//for (const auto& alien : bottomsAliens)
+	//{
+	//	alien.second->SetColor(WHITE, WHITE);
+	//}
 
 	// ##
 	// Code source: https://stackoverflow.com/questions/27024269/select-random-element-in-an-unordered-map

@@ -2,7 +2,7 @@
 #include "../Actors/LaserProjectile.h"
 #include "../Core/GameManager.h"
 
-void LaserComponent::Shoot(int directionP, Vector2 positionP, ActorOwner ownerP)
+void LaserComponent::Shoot(int directionP, Vector2 positionP, ActorAffiliation ownerP)
 {
 	// TO DO:
 	// OBSERVER PATTERN TO CHECK WHEN A LASER GOES SLEEPING

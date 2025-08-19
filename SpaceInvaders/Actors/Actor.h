@@ -6,12 +6,13 @@
 #pragma once
 #include "raylib.h"
 #include "../Interfaces/IUpdatable.h"
+#include "../Interfaces/IDrawable.h"
 
 #include <memory>
 
 class CollisionBoxComponent;
 
-enum class ActorOwner
+enum class ActorAffiliation
 {
 	Player,
 	Enemy,
@@ -21,13 +22,13 @@ enum class ActorOwner
 };
 
 
-class Actor : public IUpdatable
+class Actor : public IUpdatable, public IDrawable
 {
 public:
-	Actor(ActorOwner ownerP = ActorOwner::Player);
+	Actor(ActorAffiliation ownerP = ActorAffiliation::Player);
 	~Actor();
 
-	virtual void Draw();
+	virtual void Draw() override;
 	virtual void Update(float deltaTimeP) override;
 
 	Vector2 GetPosition() const { return m_position; }
@@ -39,7 +40,7 @@ public:
 	bool NeedsAdvancedCollisionCheck() const { return m_hasComplexCollision; }
 	virtual void OnCollisionEvent(const Actor& otherActorP) {};
 
-	ActorOwner GetOwner() const { return m_owner; }
+	ActorAffiliation GetOwner() const { return m_owner; }
 
 	void SetPosition(Vector2 positionP);
 	void SetSize(Vector2 sizeP);
@@ -58,6 +59,6 @@ protected:
 	bool m_markedForDeletion = false;
 	bool m_hasComplexCollision = false;
 
-	ActorOwner m_owner = ActorOwner::Default;
+	ActorAffiliation m_owner = ActorAffiliation::Default;
 };
 

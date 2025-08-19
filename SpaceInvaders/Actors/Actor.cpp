@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-Actor::Actor(ActorOwner ownerP)
+Actor::Actor(ActorAffiliation ownerP)
 {
 	m_CollisionBoxComponent = std::make_unique<CollisionBoxComponent>(Rectangle{ m_position.x, m_position.y, m_size.x, m_size.y });
 

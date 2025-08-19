@@ -2,9 +2,10 @@
 #include "../Components/CollisionBoxComponent.h"
 #include "../Components/LaserComponent.h"
 #include "../Interfaces/IAlienObserver.h"
+#include "../Core/GameState.h"
 
-Alien::Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoordY) : 
-	Actor(ActorOwner::Enemy),
+Alien::Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoordY, int scoreValueP) :
+	Actor(ActorAffiliation::Enemy),
 	m_initialCoordsX(initialCoordX),
 	m_initialCoordsY(initialCoordY)
 {
@@ -39,6 +40,8 @@ void Alien::SetColor(Color previousColorP, Color nextColorP)
 
 void Alien::OnCollisionEvent(const Actor& otherActorP)
 {
+	GameState::GetInstance().AddScore(10);
+
 	m_markedForDeletion = true;
 
 	// TO DO: Explosion effect and sound

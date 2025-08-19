@@ -91,13 +91,13 @@ Color Level1_SpaceInvaders::CalculateGradientColor(float rowP, float colP)
 	float normalizeY = rowP / (AlienGridConfig::rowNumber - 1);
 
 	// The longest distance in the grid is from one corner to the center, which is sqrt(0.5) in a 0.5x0.5 square.
-	float maxDistanceFromCenter = sqrt(0.5f);
+	float maxDistanceFromCenter = static_cast<float>(sqrt(0.5f));
 
 	// Calculate the distance from center (0.5, 0.5)
 	// sqrt((x-0.5)^2 + (y-0.5)^2)
 	float dx = normalizeX - 0.5f;
 	float dy = normalizeY - 0.5f;
-	float distFromCenter = sqrt(dx * dx + dy * dy);
+	float distFromCenter = static_cast<float>(sqrt(dx * dx + dy * dy));
 	distFromCenter /= maxDistanceFromCenter;
 
 	Color result;

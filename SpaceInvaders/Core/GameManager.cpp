@@ -1,14 +1,22 @@
 #include "GameManager.h"
+#include "GameState.h"
+#include "UIManager.h"
 #include "../Actors/Actor.h"
+#include "../Objects/Object.h"
+#include "../Widgets/Widget.h"
 #include "../Levels/Level1_SpaceInvaders.h"
 #include "../Components/CollisionBoxComponent.h"
 
-
-#include "../Objects/Invader.h"
+#include "../Interfaces/IGameStateObserver.h"
+#include "../Widgets/HUDWidget.h"
 
 GameManager::GameManager()
 {
 	m_currentLevel = std::make_unique<Level1_SpaceInvaders>(*this);
+	m_uiManager = std::make_unique<UIManager>(*this);
+
+	// Initialize the GameState singleton
+	GameState::GetInstance().AddObserver(m_uiManager->GetHUD());
 }
 
 // We need to define the destructor to forward declare the unique_ptr
@@ -18,22 +26,41 @@ void GameManager::Update()
 {
 	// Get the time since the last frame
 	float deltaTime = GetFrameTime();
+
+	// Update all actors
 	for (const std::shared_ptr<IUpdatable>& actor : m_actors)
 	{
 		if(actor) actor->Update(deltaTime);
 	}
 
+	// Update all objects
 	for (const std::shared_ptr<IUpdatable>& objects : m_objects)
 	{
 		if (objects) objects->Update(deltaTime);
 	}
+
+	// Update widgets if tick is enabled
+	for (const std::shared_ptr<Widget>& widget : m_widgets)
+	{
+		if (widget->m_IsUpdateEnabled)
+		{
+			widget->Update(deltaTime);
+		}
+	}
 }
 
-void GameManager::DrawActors() const
+void GameManager::Draw() const
 {
+	// Draw all actors
 	for (const std::shared_ptr<Actor>& actor : m_actors)
 	{
 		actor->Draw();
+	}
+
+	// Draw all widgets
+	for (const std::shared_ptr<Widget>& widget : m_widgets)
+	{
+		widget->Draw();
 	}
 }
 
@@ -72,14 +99,23 @@ void GameManager::CleanupActors()
 	}
 }
 
+void GameManager::FlushPendingLists()
+{
+	FlushNewActors();
+	FlushNewObjects();
+	FlushNewWidgets();
+}
+
 void GameManager::FlushNewActors()
 {
+	if(m_pendingActors.empty()) return;
+
 	// ##
 	// Note: Code to insert unique_ptr into vector
 	// https://stackoverflow.com/questions/13463570/how-can-i-erase-a-shared-ptr-from-vector
 	// ##
 
-	// Move all m_actors from m_pendingActors to m_actors
+	// Move all pending actors to the main actor list
 	// We use std::make_move_iterator to move the objects instead of copying them
 	m_actors.insert(
 		m_actors.end(),
@@ -92,7 +128,9 @@ void GameManager::FlushNewActors()
 
 void GameManager::FlushNewObjects()
 {
-	// Move all objects from objectsToAdd to objects
+	if (m_pendingObjects.empty()) return;
+
+	// Move all pending objects to the main object list
 	m_objects.insert(
 		m_objects.end(),
 		std::make_move_iterator(m_pendingObjects.begin()),
@@ -102,12 +140,31 @@ void GameManager::FlushNewObjects()
 	m_pendingObjects.clear();
 }
 
+void GameManager::FlushNewWidgets()
+{
+	if (m_pendingWidgets.empty()) return;
+
+	// Move all pending widgets to the main widget list
+	m_widgets.insert(
+		m_widgets.end(),
+		std::make_move_iterator(m_pendingWidgets.begin()),
+		std::make_move_iterator(m_pendingWidgets.end())
+	);
+
+	m_pendingWidgets.clear();
+}
+
 void GameManager::AddActor(std::shared_ptr<Actor> actorP)
 {
 	m_pendingActors.emplace_back(std::move(actorP));
 }
 
-void GameManager::AddObject(std::shared_ptr<IUpdatable> objectP)
+void GameManager::AddObject(std::shared_ptr<Object> objectP)
 {
 	m_pendingObjects.emplace_back(std::move(objectP));
+}
+
+void GameManager::AddWidget(std::shared_ptr<Widget> WidgetP)
+{
+	m_pendingWidgets.emplace_back(std::move(WidgetP));
 }

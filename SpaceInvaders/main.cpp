@@ -20,14 +20,12 @@ int main(void)
         gameManager.Update();
         gameManager.CollisionCheck();
         gameManager.CleanupActors();
-        gameManager.FlushNewActors();
-        gameManager.FlushNewObjects();
+        gameManager.FlushPendingLists();
 
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawText("GL HF", screenWidth / 2, static_cast<int>(screenHeight / 1.5), 20, LIGHTGRAY);
 
-        gameManager.DrawActors();
+        gameManager.Draw();
 
         EndDrawing();
     }

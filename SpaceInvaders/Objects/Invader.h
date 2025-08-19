@@ -1,4 +1,5 @@
 #pragma once
+#include "../Objects/Object.h"
 #include "../Interfaces/IUpdatable.h"
 #include "../Interfaces/IAlienObserver.h"
 #include <vector>
@@ -11,18 +12,13 @@ class Alien;
  * @brief Invader class manages all the aliens in the game. 
  * It handles their movement and when an alien shoot.
  */
-class Invader : public IUpdatable, public IAlienObserver, public std::enable_shared_from_this<Invader>
+class Invader : public Object, public IAlienObserver, public std::enable_shared_from_this<Invader>
 {
 public:
 	Invader(int spaceBetweenRowsP = 30);
 
-	// IUpdatable interface implementation
 	virtual void Update(float deltaSecP) override;
-	// IUpdatable interface
-
-	// IAlienObserver interface implementation
 	virtual void OnAlienDied(Alien& alienP) override;
-	// IAlienObserver interface
 
 	void AddAlien(std::shared_ptr<Alien> alienP);
 

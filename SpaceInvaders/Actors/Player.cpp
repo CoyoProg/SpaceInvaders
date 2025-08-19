@@ -3,7 +3,7 @@
 #include "../Components/LaserComponent.h"
 #include "../Components/CollisionBoxComponent.h"
 
-Player::Player() : Actor(ActorOwner::Player)
+Player::Player() : Actor(ActorAffiliation::Player)
 {
 	// Move the laser canon to the bottom center of the screen
 	m_position.x = SCREEN_WIDTH / 2 - m_size.x / 2;

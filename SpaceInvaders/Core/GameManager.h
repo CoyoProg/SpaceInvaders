@@ -1,10 +1,12 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include <iostream>
 
+class GameState;
+class UIManager;
 class Actor;
-class IUpdatable;
+class Object;
+class Widget;
 class Level1_SpaceInvaders;
 
 constexpr int SCREEN_WIDTH = 1200;
@@ -33,29 +35,41 @@ public:
 	// Update all m_actors and objects
 	void Update();
 	// Draw all m_actors to the screen
-	void DrawActors() const;
+	void Draw() const;
 	// Check for collisions between all m_actors
 	void CollisionCheck();
 	// Destroy m_actors that are marked for deletion
 	void CleanupActors();
-	// Flush new m_actors that have been added since the last update
-	void FlushNewActors();
-	// Flush new objects that have been added since the last update
-	void FlushNewObjects();
+	// Flush all pending lists at the end of the frame
+	void FlushPendingLists();
 
 	// Add actor to the list of m_actors to be added
 	// They will be flushed at the end of the frame
 	void AddActor(std::shared_ptr<Actor> actorP);
-	// Add updatable object to the list of updatable objects
-	void AddObject(std::shared_ptr<IUpdatable> objectP);
+	// Add object to the list of pending objects
+	void AddObject(std::shared_ptr<Object> objectP);
+	// Add widget to the list of pending widgets
+	void AddWidget(std::shared_ptr<Widget> WidgetP);
 
 private:
 	// Private constructor for singleton pattern
 	GameManager();
 
+	// Flush new actors that have been added since the last update
+	void FlushNewActors();
+	// Flush new objects that have been added since the last update
+	void FlushNewObjects();
+	// Flush new widgts that have been added since the last update
+	void FlushNewWidgets();
+
+private:
 	std::unique_ptr<Level1_SpaceInvaders> m_currentLevel;
-	std::vector<std::shared_ptr<IUpdatable>> m_objects;
-	std::vector<std::shared_ptr<IUpdatable>> m_pendingObjects;
+	std::unique_ptr<UIManager> m_uiManager;
+
+	std::vector<std::shared_ptr<Object>> m_objects;
+	std::vector<std::shared_ptr<Object>> m_pendingObjects;
+	std::vector<std::shared_ptr<Widget>> m_widgets;
+	std::vector<std::shared_ptr<Widget>> m_pendingWidgets;
 	std::vector<std::shared_ptr<Actor>> m_actors;
 	std::vector<std::shared_ptr<Actor>> m_pendingActors;
 };

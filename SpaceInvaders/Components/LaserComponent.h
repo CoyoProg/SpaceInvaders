@@ -5,11 +5,11 @@
 #include <memory>
 
 class Actor;
-enum class ActorOwner;
+enum class ActorAffiliation;
 
 class LaserComponent : public Component
 {
 public:
-	void Shoot(int directionP, Vector2 positionP, ActorOwner ownerP);
+	void Shoot(int directionP, Vector2 positionP, ActorAffiliation ownerP);
 };
 

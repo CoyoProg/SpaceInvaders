@@ -2,7 +2,7 @@
 #include "../Core/GameManager.h"
 #include "../Components/CollisionBoxComponent.h"
 
-LaserProjectile::LaserProjectile(int directionP, Vector2 positionP, ActorOwner ownerP) : 
+LaserProjectile::LaserProjectile(int directionP, Vector2 positionP, ActorAffiliation ownerP) : 
 	Actor(ownerP),
 	m_direction(directionP)
 {

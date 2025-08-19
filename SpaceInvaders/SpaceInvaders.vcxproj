@@ -134,6 +134,10 @@
     <ClCompile Include="Actors\Player.cpp" />
     <ClCompile Include="Components\LaserComponent.cpp" />
     <ClCompile Include="Actors\LaserProjectile.cpp" />
+    <ClCompile Include="Core\GameState.cpp" />
+    <ClCompile Include="Core\UIManager.cpp" />
+    <ClCompile Include="Widgets\HUDWidget.cpp" />
+    <ClCompile Include="Objects\Object.cpp" />
     <ClCompile Include="Objects\Invader.cpp" />
     <ClCompile Include="Levels\Level1_SpaceInvaders.cpp" />
     <ClCompile Include="main.cpp" />
@@ -148,11 +152,18 @@
     <ClInclude Include="Actors\Player.h" />
     <ClInclude Include="Components\LaserComponent.h" />
     <ClInclude Include="Actors\LaserProjectile.h" />
+    <ClInclude Include="Core\GameState.h" />
+    <ClInclude Include="Interfaces\IGameStateObserver.h" />
+    <ClInclude Include="Core\UIManager.h" />
+    <ClInclude Include="Widgets\HUDWidget.h" />
+    <ClInclude Include="Interfaces\IDrawable.h" />
     <ClInclude Include="Interfaces\IAlienObserver.h" />
     <ClInclude Include="Interfaces\IUpdatable.h" />
+    <ClInclude Include="Objects\Object.h" />
     <ClInclude Include="Objects\Invader.h" />
     <ClInclude Include="Levels\Level1_SpaceInvaders.h" />
     <ClInclude Include="Actors\Shield.h" />
+    <ClInclude Include="Widgets\Widget.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
