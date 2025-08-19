@@ -1,7 +1,9 @@
 #include "Invader.h"
 #include "../Actors/Alien.h"
 #include "../Core/GameManager.h"
+
 #include "raymath.h"
+#include <unordered_map>
 
 Invader::Invader(int spaceBetweenRowsP)
 {
@@ -92,15 +94,6 @@ void Invader::UpdateAlienPosition(float deltaSecP)
 		// If we have moved all the aliens, reset the index and check if we need to change direction
 		if (m_currentAlienIndex < 0)
 		{
-			// TO BE REMOVED
-			// ####
-			//m_movementDelay = m_movementDelay / 1.1; // Speed up the movement
-			//if (m_movementDelay < 0.000001f) // Prevent it from going too fast
-			//{
-			//	m_movementDelay = 0.0001f;
-			//}
-			// ####
-
 			m_currentAlienIndex = static_cast<int>(m_aliens.size() - 1);
 
 			if (m_shouldChangeDirection = ShouldChangeDirection())
@@ -121,10 +114,56 @@ void Invader::UpdateShootProbability(float deltaSecP)
 
 		if (chanceRoll)
 		{
-			int index = GetRandomValue(0, static_cast<int>(m_aliens.size()) - 1);
-			m_aliens[index]->ShootLaser();
+			GetRandomBottomAlien().ShootLaser();
 		}
 	}
+}
+
+Alien& Invader::GetRandomBottomAlien() const
+{
+	if (m_aliens.empty())
+	{
+		throw std::runtime_error("No aliens available");
+	}
+
+	if (m_aliens.size() == 1) return *m_aliens[0];
+
+	std::unordered_map<int, Alien*> bottomsAliens;
+
+	for (const auto& alien : m_aliens)
+	{
+		int col = alien->GetCoordX();
+
+		// Check if we already have a bottom alien for this column
+		auto iterator = bottomsAliens.find(col);
+		if (iterator == bottomsAliens.end())
+		{
+			bottomsAliens[col] = alien.get();
+		}
+		else
+		{
+			// If we already have a bottom alien for this column, check if the current one is lower
+			if (alien->GetCoordY() > iterator->second->GetCoordY())
+			{
+				iterator->second = alien.get();
+			}
+		}
+	}
+
+	for(auto& alien : bottomsAliens)
+	{
+		alien.second->SetColor(WHITE, WHITE);
+	}
+
+	// ##
+	// Code source: https://stackoverflow.com/questions/27024269/select-random-element-in-an-unordered-map
+	// Not really optimized, but works for our case because the number of aliens is small
+	// ##
+	auto randomIterator = bottomsAliens.begin();
+	int randomIndex = rand() % bottomsAliens.size();
+	std::advance(randomIterator, randomIndex);
+	
+	return *randomIterator->second;
 }
 
 bool Invader::ShouldChangeDirection() const

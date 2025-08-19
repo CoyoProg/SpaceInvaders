@@ -3,7 +3,10 @@
 #include "../Components/LaserComponent.h"
 #include "../Interfaces/IAlienObserver.h"
 
-Alien::Alien(Vector2 positionP, Vector2 sizeP) : Actor(ActorOwner::Enemy)
+Alien::Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoordY) : 
+	Actor(ActorOwner::Enemy),
+	m_initialCoordsX(initialCoordX),
+	m_initialCoordsY(initialCoordY)
 {
 	m_position.x = positionP.x;
 	m_position.y = positionP.y;

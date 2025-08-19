@@ -1,5 +1,7 @@
 ////
-//// Some source code for the Shield construction and destruction
+//// Logic for the Shield destruction
+//// https://gamedev.stackexchange.com/questions/96404/space-invader-barrier-implementation-algorithm
+//// https://gamedev.stackexchange.com/questions/117739/how-could-i-implement-destruction-of-bases-in-space-invaders-type-game
 //// https://ronjeffries.com/articles/020-invaders/i-20/
 ////
 

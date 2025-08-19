@@ -64,7 +64,7 @@ std::shared_ptr<Alien> Level1_SpaceInvaders::CreateAlien(int rowP, int colP, int
 	};
 
 	Vector2 size = AlienGridConfig::alienSize;
-	auto alien = std::make_shared<Alien>(position, size);
+	auto alien = std::make_shared<Alien>(position, size, colP, rowP);
 
 	Color previousColor = CalculateGradientColor(static_cast<float>(rowP), (colP + colP - 1) / 2.0f);
 	Color nextColor = CalculateGradientColor(static_cast<float>(rowP), (colP + colP + 1) / 2.0f);

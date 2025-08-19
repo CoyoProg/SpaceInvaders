@@ -9,7 +9,7 @@ class IAlienObserver;
 class Alien : public Actor
 {
 public:
-	Alien(Vector2 positionP, Vector2 sizeP);
+	Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoordY);
 
 	virtual void Draw() override;
 
@@ -29,6 +29,9 @@ public:
 		);
 	}
 
+	int GetCoordX() const { return m_initialCoordsX; }
+	int GetCoordY() const { return m_initialCoordsY; }
+
 	void SetColor(Color previousColorP, Color nextColorP);
 	virtual void OnCollisionEvent(const Actor& otherActorP) override;
 
@@ -40,5 +43,7 @@ private:
 
 	Color m_previousColor{ BLUE };
 	Color m_nextColor{ BLUE };
+	int m_initialCoordsX{ 0 };
+	int m_initialCoordsY{ 0 };
 };
 

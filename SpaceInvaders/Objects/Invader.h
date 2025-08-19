@@ -31,6 +31,8 @@ private:
 	void UpdateAlienPosition(float deltaSecP);
 	// Updates the position of one alien at a time
 	void UpdateShootProbability(float deltaSecP);
+	Alien& GetRandomBottomAlien() const;
+
 	// Checks if any alien will reach the side of the screen at the next step
 	bool ShouldChangeDirection() const;
 
