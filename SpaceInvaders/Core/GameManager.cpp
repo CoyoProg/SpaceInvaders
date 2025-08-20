@@ -18,13 +18,13 @@ GameManager::GameManager()
 
 void GameManager::InitializeGame()
 {
-	//m_currentLevel = std::make_unique<Level1_SpaceInvaders>(*this);
-	//m_uiManager = std::make_unique<UIManager>(*this);
+	m_currentLevel = std::make_unique<Level1_SpaceInvaders>(*this);
+	m_uiManager = std::make_unique<UIManager>(*this);
 
 	// Initialize the GameState singleton
-	//GameState::GetInstance().AddObserver(m_uiManager->GetHUD());
+	GameState::GetInstance().AddObserver(m_uiManager->GetHUD());
 
-	AddWidget(std::move(std::make_unique<StartMenuWidget>()));
+	//AddWidget(std::move(std::make_unique<StartMenuWidget>()));
 }
 
 void GameManager::LoadRessources()

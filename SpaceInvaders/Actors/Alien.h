@@ -17,7 +17,7 @@ public:
 	void AddObserver(const std::shared_ptr<IAlienObserver> observerP);
 	void RemoveObserver(const std::shared_ptr<IAlienObserver> observerP);
 
-	void SetupSpriteAnimationComponent(Texture2D spriteSheetP, float spriteWidthP, float spriteHeightP = 84.0f, float spriteOffsetP = 0.0f, float spritePaddingP = 10.0f, int maxFramesP = 1, int scaleFactorP = 1);
+	void SetupSpriteAnimationComponent(Texture2D spriteSheetP, float spriteWidthP, float spriteHeightP = 84.0f, float spriteOffsetP = 0.0f, float spritePaddingP = 10.0f, int maxFramesP = 1, float scaleFactorP = 1.0f);
 	int GetCoordX() const { return m_initialCoordsX; }
 	int GetCoordY() const { return m_initialCoordsY; }
 

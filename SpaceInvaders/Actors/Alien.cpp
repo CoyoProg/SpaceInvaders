@@ -38,7 +38,7 @@ void Alien::RemoveObserver(const std::shared_ptr<IAlienObserver> observerP)
 	);
 }
 
-void Alien::SetupSpriteAnimationComponent(Texture2D spriteSheetP, float spriteWidthP, float spriteHeightP, float spriteOffsetP, float spritePaddingP, int maxFramesP, int scaleFactorP)
+void Alien::SetupSpriteAnimationComponent(Texture2D spriteSheetP, float spriteWidthP, float spriteHeightP, float spriteOffsetP, float spritePaddingP, int maxFramesP, float scaleFactorP)
 {
 	m_SpriteAnimationComponent.SetupSpriteAnimation(spriteSheetP, spriteWidthP, spriteHeightP, spriteOffsetP, spritePaddingP, maxFramesP, scaleFactorP);
 }
