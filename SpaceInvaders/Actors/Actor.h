@@ -21,11 +21,13 @@ enum class ActorAffiliation
 	Default,
 };
 
-
+/*
+ * @brief Actor is the base class for all game actors. It implements the IUpdatable and IDrawable interfaces.
+ */
 class Actor : public IUpdatable, public IDrawable
 {
 public:
-	Actor(ActorAffiliation ownerP = ActorAffiliation::Player);
+	Actor(ActorAffiliation ownerP = ActorAffiliation::Player, Color colorP = RED);
 	~Actor();
 
 	virtual void Draw() override;
@@ -35,16 +37,18 @@ public:
 	Vector2 GetSize() const { return m_size; }
 	const CollisionBoxComponent* GetCollisionBoxComponent() const; // Note: We could use a template to get any component, but we only need to access CollisionBoxComponent
 
+	// Check if the actor collides with another actor
 	bool CollidesWith(const Actor& otherActorP) const;
+	// Do an advanced collision check with the other actor, for complex shapes
 	virtual bool AdvancedCollidesWith(const Actor& otherActorP) const { return true; };
+	// Check if the actor needs an advanced collision check
 	bool NeedsAdvancedCollisionCheck() const { return m_hasComplexCollision; }
 	virtual void OnCollisionEvent(const Actor& otherActorP) {};
 
-	ActorAffiliation GetOwner() const { return m_owner; }
+	ActorAffiliation GetActorAffiliation() const { return m_actorAffiliation; }
 
 	void SetPosition(Vector2 positionP);
 	void SetSize(Vector2 sizeP);
-	void SetTexture(const Texture2D& textureP) { m_texture = textureP; }
 	void SetColor(Color colorP) { m_color = colorP; }
 	void SetForDeletion(bool markedForDeletionP = true) { m_markedForDeletion = markedForDeletionP; }
 
@@ -52,7 +56,6 @@ public:
 
 protected:
 	std::unique_ptr<CollisionBoxComponent> m_CollisionBoxComponent;
-	Texture2D m_texture{};
 
 	Color m_color{ RED };
 	Vector2 m_position{ 0, 0 };
@@ -61,6 +64,6 @@ protected:
 	bool m_markedForDeletion = false;
 	bool m_hasComplexCollision = false;
 
-	ActorAffiliation m_owner = ActorAffiliation::Default;
+	ActorAffiliation m_actorAffiliation = ActorAffiliation::Default;
 };
 

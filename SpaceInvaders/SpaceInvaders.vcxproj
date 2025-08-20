@@ -131,7 +131,6 @@
     <ClCompile Include="Widgets\Buttons\StartButtonWidget.cpp" />
     <ClCompile Include="Widgets\BackgroundWidget.cpp" />
     <ClCompile Include="Components\CollisionBoxComponent.cpp" />
-    <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="Core\GameManager.cpp" />
     <ClCompile Include="Actors\Player.cpp" />
     <ClCompile Include="Components\LaserComponent.cpp" />
@@ -143,7 +142,6 @@
     <ClCompile Include="Widgets\LivesWidget.cpp" />
     <ClCompile Include="Widgets\ScoreWidget.cpp" />
     <ClCompile Include="Widgets\HUDWidget.cpp" />
-    <ClCompile Include="Objects\Object.cpp" />
     <ClCompile Include="Objects\Invader.cpp" />
     <ClCompile Include="Levels\Level1_SpaceInvaders.cpp" />
     <ClCompile Include="main.cpp" />

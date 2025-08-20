@@ -3,6 +3,9 @@
 #include "Component.h"
 #include "raylib.h"
 
+/*
+ * @brief CollisionBoxComponent defines a rectangular collision box for an actor.
+ */
 class CollisionBoxComponent : public Component
 {
 public:

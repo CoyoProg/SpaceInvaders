@@ -1,19 +1,21 @@
 #include "HUDWidget.h"
 #include "../Core/GameManager.h"
-#include "../Core/GameState.h"
-#include "raylib.h"
 
 HUDWidget::HUDWidget() : 
-	m_scoreWidget(25, 25, 20),
-	m_livesWidget(25, 895, 50, 20, 3)
+	m_scoreWidget(Vector2{25.0f,25.0f}, 20),
+	m_livesWidget(Vector2{ 25.0f,895.0f }, Vector2{ 50.0f,20.0f }, 3)
 {
 }
 
 void HUDWidget::Draw()
 {
+	// ##
+	// TO DO: Replace with a kill zone actor
 	// Draw the earth line
 	DrawLine(0, SCREEN_HEIGHT - 45, SCREEN_WIDTH, SCREEN_HEIGHT - 45, GREEN);
+	// ##
 
+	// Draw the playground boundaries
 	DrawLine(
 		PLAYGROUND_OFFSET,
 		SCREEN_HEIGHT - 55,

@@ -15,6 +15,7 @@ class Level1_SpaceInvaders;
 constexpr int SCREEN_WIDTH = 900;
 constexpr int PLAYGROUND_OFFSET = 60;
 constexpr int SCREEN_HEIGHT = 900;
+constexpr int SPRITE_SHEET_PADDING = 10;
 
 enum class SpriteID
 {
@@ -33,18 +34,19 @@ struct SpriteProperties
 	float width;
 	float height;
 	int maxFrameIndex;
+	float spriteOffset = 0.0f;
 };
 
 static const std::unordered_map<SpriteID, SpriteProperties> SPRITE_PROPERTIES
 {
-	{ SpriteID::AlienSmall, { 81.0f, 84.0f, 1 } },
-	{ SpriteID::AlienMedium, { 112.0f, 84.0f, 1 } },
-	{ SpriteID::AlienLarge, { 122.0f, 84.0f, 1 } },
-	{ SpriteID::Explosion, { 64, 64.0f, 16 } },
-	{ SpriteID::Laser, { 10, 30.0f, 1 } },
+	{ SpriteID::AlienSmall, { 81.0f, 84.0f, 1, 244.0f } },
+	{ SpriteID::AlienMedium, { 112.0f, 84.0f, 1, 0.0f} },
+	{ SpriteID::AlienLarge, { 122.0f, 84.0f, 1, 426.0f} },
+	{ SpriteID::Explosion, { 64.0f, 64.0f, 16 } },
+	{ SpriteID::Laser, { 10.0f, 30.0f, 1 } },
 	{ SpriteID::Star, { 76.0f, 76.0f, 3 } },
 	{ SpriteID::StartButton, { 220.0f, 120.0f, 2 } },
-	{ SpriteID::Player, { 50, 50.0f, 1 } }
+	{ SpriteID::Player, { 50.0f, 50.0f, 1 } }
 };
 
 /*
@@ -58,12 +60,16 @@ public:
 		static GameManager instance;
 		return instance;
 	}
+	~GameManager();
 
-	void InitializeGame();
+	// Load all the textures needed for the game
 	void LoadRessources();
 	void UnloadTextures();
 
-	~GameManager();
+	// Load the start menu
+	void LoadStartMenu();
+	// Load the first level
+	void StartLevel();
 
 	// Delete copy and move constructors and assignment operators to prevent copying
 	GameManager(const GameManager& other) = delete;
@@ -71,19 +77,18 @@ public:
 	GameManager(GameManager&&) = delete;
 	GameManager& operator=(GameManager&&) = delete;
 
-	// Update all m_actors and objects
+	// Update all actors and objects
 	void Update(float deltaTimeP);
-	// Draw all m_actors to the screen
+	// Draw all actors to the screen
 	void Draw();
-	// Check for collisions between all m_actors
+	// Check for collisions between all actors
 	void CollisionCheck();
-	// Destroy m_actors that are marked for deletion
+	// Destroy actors that are marked for deletion
 	void CleanupActors();
 	// Flush all pending lists at the end of the frame
 	void FlushPendingLists();
 
-	// Add actor to the list of m_actors to be added
-	// They will be flushed at the end of the frame
+	// Add actor to the list of pending actors
 	void AddActor(std::shared_ptr<Actor> actorP);
 	// Add object to the list of pending objects
 	void AddObject(std::shared_ptr<Object> objectP);

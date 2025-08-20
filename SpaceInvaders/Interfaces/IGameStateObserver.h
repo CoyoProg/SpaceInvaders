@@ -1,5 +1,8 @@
 #pragma once
 
+/*
+ * @brief Interface for classes that observe changes in the game state
+ */
 class IGameStateObserver
 {
 public:

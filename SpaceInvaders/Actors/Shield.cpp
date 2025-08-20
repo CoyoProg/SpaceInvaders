@@ -18,47 +18,38 @@ static constexpr int SHIELD_PATTERN[PATTERN_HEIGHT][PATTERN_WIDTH] = {
 	{1,1,1,1,0,0,0,0,1,1,1,1},
 };
 
-// We scale up the pattern to have a better collision detection
+// We want to scale up the pattern to have a better collision detection
 static constexpr int UPSCALED_WIDTH = 24;
 static constexpr int UPSCALED_HEIGHT = 16;
 
-
-
 constexpr int EXPLOSION_SIZE = 6;
-
-constexpr int EXPLOSION_MASK1[EXPLOSION_SIZE][EXPLOSION_SIZE] = {
-	{0,0,1,1,0,0},
-	{0,1,1,1,0,0},
-	{0,1,1,1,1,0},
-	{0,0,1,1,1,0},
-	{0,0,1,1,0,0},
-	{0,0,1,1,0,0},
+constexpr int EXPLOSION_MASKS_COUNT = 2;
+constexpr int EXPLOSION_MASKS[EXPLOSION_MASKS_COUNT][EXPLOSION_SIZE][EXPLOSION_SIZE] = {
+	{
+		{0,0,1,1,0,0},
+		{0,1,1,1,0,0},
+		{0,1,1,1,1,0},
+		{0,0,1,1,1,0},
+		{0,0,1,1,0,0},
+		{0,0,1,1,0,0},
+	},
+	{
+		{0,0,1,1,1,1},
+		{0,1,1,1,1,1},
+		{1,1,1,1,1,1},
+		{1,1,1,1,1,0},
+		{1,1,1,1,1,0},
+		{1,1,1,1,0,1},
+	}
 };
 
-constexpr int EXPLOSION_MASK2[EXPLOSION_SIZE][EXPLOSION_SIZE] = {
-	{0,0,1,1,1,1},
-	{0,1,1,1,1,1},
-	{1,1,1,1,1,1},
-	{1,1,1,1,1,0},
-	{1,1,1,1,1,0},
-	{1,1,1,1,0,1},
-};
-
-// Store them in a list
-constexpr const int (*EXPLOSION_MASKS[])[EXPLOSION_SIZE] = {
-	EXPLOSION_MASK1, EXPLOSION_MASK2
-};
-
-Shield::Shield(Vector2 positionP, int widthP, int heightP) : Actor(ActorAffiliation::Neutral)
+Shield::Shield(Vector2 positionP, Vector2 sizeP) : Actor(ActorAffiliation::Neutral)
 {
-	width = static_cast<float>(widthP);
-	height = static_cast<float>(heightP);
-
 	m_position = positionP;
-	m_size = { width, height };
+	m_size =sizeP;
 
-	cellWidth = width / (float)UPSCALED_WIDTH;
-	cellHeight = height / (float)UPSCALED_HEIGHT;
+	m_cellSize.x = m_size.x / static_cast<float>(UPSCALED_WIDTH);
+	m_cellSize.y = m_size.y / static_cast<float>(UPSCALED_HEIGHT);
 
 	ResizePatternToCells();
 	RemoveExtraCells();
@@ -75,9 +66,14 @@ Shield::Shield(Vector2 positionP, int widthP, int heightP) : Actor(ActorAffiliat
 
 void Shield::ResizePatternToCells()
 {
+	// Scale the shield pattern to fit the upscaled grid
 	int scaleX = UPSCALED_WIDTH / PATTERN_WIDTH;
 	int scaleY = UPSCALED_HEIGHT / PATTERN_HEIGHT;
 
+	// ## 
+	// Source code: 
+	// https://stackoverflow.com/questions/32846846/quick-way-to-upsample-numpy-array-by-nearest-neighbor-tiling
+	// ##
 	cells.resize(UPSCALED_HEIGHT, std::vector<int>(UPSCALED_WIDTH, 0));
 	for (int py = 0; py < PATTERN_HEIGHT; ++py)
 	{
@@ -85,14 +81,13 @@ void Shield::ResizePatternToCells()
 		{
 			if (SHIELD_PATTERN[py][px] != 0)
 			{
-				// Scale up each pattern cell into a block of cells
 				for (int iy = 0; iy < scaleY; ++iy)
 				{
 					for (int ix = 0; ix < scaleX; ++ix)
 					{
 						int y = py * scaleY + iy;
 						int x = px * scaleX + ix;
-
+	
 						cells[y][x] = SHIELD_PATTERN[py][px];
 					}
 				}
@@ -107,31 +102,27 @@ void Shield::RemoveExtraCells()
 	{
 		for (int x = 0; x < UPSCALED_WIDTH; ++x)
 		{
-			if (cells[y][x] == 1)
+			if (cells[y][x] != 1) continue;
+
+			bool topLeft = y > 0 && cells[y - 1][x] == 0 && x > 0 && cells[y][x - 1] == 0
+				|| y > 0 && cells[y - 1][x] == 0 && x <= 0
+				|| x > 0 && cells[y][x - 1] == 0 && y <= 0;
+
+			bool topRight = y > 0 && cells[y - 1][x] == 0 && x < UPSCALED_WIDTH - 1 && cells[y][x + 1] == 0
+				|| y > 0 && cells[y - 1][x] == 0 && x >= UPSCALED_WIDTH - 1
+				|| x < UPSCALED_WIDTH - 1 && cells[y][x + 1] == 0 && y <= 0;
+
+			bool bottomLeft = y < UPSCALED_HEIGHT - 1 && cells[y + 1][x] == 0 && x < UPSCALED_WIDTH - 1 && cells[y][x + 1] == 0
+				|| y < UPSCALED_HEIGHT - 1 && cells[y + 1][x] == 0 && x >= UPSCALED_WIDTH - 1
+				|| x < UPSCALED_WIDTH - 1 && cells[y][x + 1] == 0 && y >= UPSCALED_HEIGHT - 1;
+
+			bool bottomRight = y < UPSCALED_HEIGHT - 1 && cells[y + 1][x] == 0 && x > 0 && cells[y][x - 1] == 0
+				|| x > 0 && cells[y][x - 1] == 0 && y >= UPSCALED_HEIGHT - 1
+				|| y < UPSCALED_HEIGHT - 1 && cells[y + 1][x] == 0 && x <= 0;
+
+			if (topLeft || topRight || bottomLeft || bottomRight)
 			{
-				// Remove the excessive cells so we can smooth the edges
-				if (cells[y][x] != 1) continue;
-
-				bool topLeft = y > 0 && cells[y - 1][x] == 0 && x > 0 && cells[y][x - 1] == 0
-					|| y > 0 && cells[y - 1][x] == 0 && x <= 0
-					|| x > 0 && cells[y][x - 1] == 0 && y <= 0;
-
-				bool topRight = y > 0 && cells[y - 1][x] == 0 && x < UPSCALED_WIDTH - 1 && cells[y][x + 1] == 0
-					|| y > 0 && cells[y - 1][x] == 0 && x >= UPSCALED_WIDTH - 1
-					|| x < UPSCALED_WIDTH - 1 && cells[y][x + 1] == 0 && y <= 0;
-
-				bool bottomLeft = y < UPSCALED_HEIGHT - 1 && cells[y + 1][x] == 0 && x < UPSCALED_WIDTH - 1 && cells[y][x + 1] == 0
-					|| y < UPSCALED_HEIGHT - 1 && cells[y + 1][x] == 0 && x >= UPSCALED_WIDTH - 1
-					|| x < UPSCALED_WIDTH - 1 && cells[y][x + 1] == 0 && y >= UPSCALED_HEIGHT - 1;
-
-				bool bottomRight = y < UPSCALED_HEIGHT - 1 && cells[y + 1][x] == 0 && x > 0 && cells[y][x - 1] == 0
-					|| x > 0 && cells[y][x - 1] == 0 && y >= UPSCALED_HEIGHT - 1
-					|| y < UPSCALED_HEIGHT - 1 && cells[y + 1][x] == 0 && x <= 0;
-
-				if (topLeft || topRight || bottomLeft || bottomRight)
-				{
-					cells[y][x] = -1;
-				}
+				cells[y][x] = -1;
 			}
 		}
 	}
@@ -167,7 +158,7 @@ void Shield::UpdateTrianglesCells()
 
 				if (topLeft + bottomRight + topRight + bottomLeft > 1)
 				{
-					// If more than one diagonal is true, we need to keep the cell as a square
+					// If more than one diagonal is true, we want to keep the cell as a square
 					cells[y][x] = 1;
 				}
 				else if (topLeft) cells[y][x] = 2;
@@ -184,8 +175,8 @@ void Shield::Draw()
 	for (int y = 0; y < UPSCALED_HEIGHT; y++) {
 		for (int x = 0; x < UPSCALED_WIDTH; x++)
 		{
-			float drawX = m_position.x + x * cellWidth;
-			float drawY = m_position.y + y * cellHeight;
+			float drawX = m_position.x + x * m_cellSize.x;
+			float drawY = m_position.y + y * m_cellSize.y;
 
 			switch (cells[y][x])
 			{
@@ -193,30 +184,30 @@ void Shield::Draw()
 				DrawRectangle(
 					static_cast<int>(drawX),
 					static_cast<int>(drawY),
-					static_cast<int>(cellWidth),
-					static_cast<int>(cellHeight),
+					static_cast<int>(m_cellSize.x),
+					static_cast<int>(m_cellSize.y),
 					GREEN);
 				break;
 			case 2:
 				DrawTriangle(
-					{ drawX, drawY + cellHeight },
-					{ drawX + cellWidth, drawY + cellHeight },
-					{ drawX + cellWidth, drawY },
+					{ drawX, drawY + m_cellSize.y },
+					{ drawX + m_cellSize.x, drawY + m_cellSize.y },
+					{ drawX + m_cellSize.x, drawY },
 					GREEN
 				);
 				break;
 			case 3:
 				DrawTriangle(
 					{ drawX, drawY },
-					{ drawX, drawY + cellHeight },
-					{ drawX + cellWidth, drawY },
+					{ drawX, drawY + m_cellSize.y },
+					{ drawX + m_cellSize.x, drawY },
 					GREEN
 				);
 				break;
 			case 4:
 				DrawTriangle(
-					{ drawX, drawY + cellHeight },
-					{ drawX + cellWidth, drawY + cellHeight },
+					{ drawX, drawY + m_cellSize.y },
+					{ drawX + m_cellSize.x, drawY + m_cellSize.y },
 					{ drawX, drawY },
 					GREEN
 				);
@@ -224,8 +215,8 @@ void Shield::Draw()
 
 			case 5:
 				DrawTriangle(
-					{ drawX + cellWidth, drawY + cellHeight },
-					{ drawX + cellWidth, drawY },
+					{ drawX + m_cellSize.x, drawY + m_cellSize.y },
+					{ drawX + m_cellSize.x, drawY },
 					{ drawX, drawY },
 					GREEN
 				);
@@ -237,17 +228,28 @@ void Shield::Draw()
 
 bool Shield::AdvancedCollidesWith(const Actor& otherActorP) const
 {
-	Vector2 otherPosition = otherActorP.GetPosition();
-	Vector2 gridCoords = ConvertWorldToGrid(otherPosition);
+	Vector2 actorPosition = otherActorP.GetPosition();
+	Vector2 actorSize = otherActorP.GetSize();
+	Vector2 gridCoords = ConvertWorldToGrid(actorPosition);
 
-	int toIntX = static_cast<int>(gridCoords.x);
-	int toIntY = static_cast<int>(gridCoords.y);
+	int minX = static_cast<int>(gridCoords.x);
+	int maxX = static_cast<int>(gridCoords.x + actorSize.x / m_cellSize.x);
+	int minY = static_cast<int>(gridCoords.y);
+	int maxY = static_cast<int>(gridCoords.y + actorSize.y / m_cellSize.y);
 
-	if (cells[toIntY][toIntX] != 0)
+	// Check if the actor is colliding with cells that are not empty
+	for(int y = minY; y <= maxY; ++y)
 	{
-		m_lastHitPosition = Vector2{ gridCoords.y ,gridCoords.x };
+		for (int x = minX; x <= maxX; ++x)
+		{
+			if (x < 0 || x >= UPSCALED_WIDTH || y < 0 || y >= UPSCALED_HEIGHT) continue;
 
-		return true;
+			if (cells[y][x] != 0)
+			{
+				m_lastHitLocation = Vector2{ static_cast<float>(y), static_cast<float>(x) };
+				return true;
+			}
+		}
 	}
 
 	return false;
@@ -255,25 +257,28 @@ bool Shield::AdvancedCollidesWith(const Actor& otherActorP) const
 
 void Shield::OnCollisionEvent(const Actor& otherActorP)
 {
-	ExplodeCell(
-		static_cast<int>(m_lastHitPosition.x),
-		static_cast<int>(m_lastHitPosition.y)
-	);
+	ExplodeCell(m_lastHitLocation);
 }
 
-void Shield::ExplodeCell(int x, int y)
+void Shield::ExplodeCell(Vector2 hitPositionP)
 {
-	Vector2 gridPos = { static_cast<float>(y), static_cast<float>(x) };
+	// ##
+	// TO DO: Refactor
+	// Random pattern cell explosion (different patterns of different sizes)
+	// Random outer radius cell explosion (break the pattern on the edges)
+	// Random outer radius jitter explosion
+	// Reverse pattern depending on the hit direction
+	// ##
+
+	Vector2 gridPos = { hitPositionP.y, hitPositionP.x };
 
 	// Pick a random mask
-	int maskIndex = rand() % (sizeof(EXPLOSION_MASKS) / sizeof(EXPLOSION_MASKS[0]));
-	const int (*mask)[EXPLOSION_SIZE] = EXPLOSION_MASKS[maskIndex];
-
+	int maskIndex = rand() % EXPLOSION_MASKS_COUNT;
 	for (int y = 0; y < EXPLOSION_SIZE; ++y)
 	{
 		for (int x = 0; x < EXPLOSION_SIZE; ++x)
 		{
-			if (mask[y][x] == 1)
+			if (EXPLOSION_MASKS[maskIndex][y][x] == 1)
 			{
 				int gx = static_cast<int>(gridPos.x + x - EXPLOSION_SIZE / 2);
 				int gy = static_cast<int>(gridPos.y + y - EXPLOSION_SIZE / 2);
@@ -287,37 +292,36 @@ void Shield::ExplodeCell(int x, int y)
 		}
 	}
 
-
-	//int radius = rand()% 2 + 2;
-	//
-	//for (int dy = -radius; dy <= radius; ++dy)
-	//{
-	//	for (int dx = -radius; dx <= radius; ++dx)
-	//	{
-	//		int x = gridPos.x + dx;
-	//		int y = gridPos.y + dy;
-	//
-	//		if (x < 0 || x >= UPSCALED_WIDTH || y < 0 || y >= UPSCALED_HEIGHT)
-	//			continue;
-	//
-	//		// Circle check
-	//		if (dx * dx + dy * dy <= radius * radius)
-	//		{
-	//			// Random jitter to make irregular edges
-	//			if (rand() % 100 < 80) // 80% chance to destroy
-	//			{
-	//				cells[y][x] = 0;
-	//			}
-	//		}
-	//	}
-	//}
+	int radius = 4;
+	
+	for (int dy = -radius; dy <= radius; ++dy)
+	{
+		for (int dx = -radius; dx <= radius; ++dx)
+		{
+			int x = gridPos.x + dx;
+			int y = gridPos.y + dy;
+	
+			if (x < 0 || x >= UPSCALED_WIDTH || y < 0 || y >= UPSCALED_HEIGHT)
+				continue;
+	
+			// Circle check
+			if (dx * dx + dy * dy <= radius * radius && dx * dx + dy * dy > 10)
+			{
+				// Random jitter to make irregular edges
+				if (rand() % 100 < 30) // 80% chance to destroy
+				{
+					cells[y][x] = 0;
+				}
+			}
+		}
+	}
 }
 
 Vector2 Shield::ConvertWorldToGrid(const Vector2& worldPos) const
 {
 	static Vector2 gridPos;
-	gridPos.x = std::floor((worldPos.x - m_position.x) / cellWidth);
-	gridPos.y = std::floor((worldPos.y - m_position.y) / cellHeight);
+	gridPos.x = std::floor((worldPos.x - m_position.x) / m_cellSize.x);
+	gridPos.y = std::floor((worldPos.y - m_position.y) / m_cellSize.y);
 
 	// Clamp the grid position to the shield's internal grid
 	gridPos.x = Clamp(gridPos.x, 0, UPSCALED_WIDTH - 1);

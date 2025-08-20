@@ -1,21 +1,20 @@
 #pragma once
 #include "Widget.h"
 
+/*
+ * @brief Widget that displays the number of lives remaining in the game.
+ */
 class LivesWidget : public Widget
 {
 public:
-	LivesWidget(int coordXP = 25, int coordYP = 890, int widthP = 100, int heightP = 30, int livesP = 3);
+	LivesWidget(Vector2 positionP = { 25.0f, 890.f }, Vector2 sizeP = { 100.0f, 30.0f }, int livesP = 3);
 	virtual void Draw() override;
 
 	void SetLives(int livesP) { m_lives = livesP; }
 
 private:
-	int m_coordX{ 25 };
-	int m_coordY{ 850 };
-	int m_width{ 100 };
-	int m_height{ 30 };
+	const Vector2 m_size{ 100.0f, 30.0f };
 	int m_lives{ 3 };
-
-	int m_livesOffset{ 5 }; // Offset between lives
+	int m_livesOffset{ 5 };
 };
 

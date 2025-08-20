@@ -2,9 +2,7 @@
 #include "../Actors/Alien.h"
 #include "../Core/GameManager.h"
 
-#include "raymath.h"
 #include <unordered_map>
-#include <iostream>
 
 Invader::Invader(int spaceBetweenRowsP)
 {
@@ -28,71 +26,69 @@ void Invader::CleanupAliens()
 {
 	for (int i = 0; i < static_cast<int>(m_aliens.size()); )
 	{
-		if (m_aliens[i]->IsMarkedForDeletion())
-		{
-			m_aliens.erase(m_aliens.begin() + i);
-
-			// If the removed alien is before or at the current index,
-			// decrement the current index to keep it pointing to the same "next to move" alien
-			if (i <= m_currentAlienIndex)
-			{
-				--m_currentAlienIndex;
-			}
-
-			// Don't increment i because elements shifted left
-		}
-		else
+		if (!m_aliens[i]->IsMarkedForDeletion())
 		{
 			++i;
+			continue;
+		}
+
+		m_aliens.erase(m_aliens.begin() + i);
+
+		// If an alien that was removed was before (or at) the moving alien,
+		// Decrement the alien moving index to keep moving to the same alien
+		if (i <= m_alienToMoveIndex)
+		{
+			--m_alienToMoveIndex;
 		}
 	}
 
-	// Wrap around if currentAlienIndex goes negative
-	if (m_currentAlienIndex < 0 && !m_aliens.empty())
+	// If the first alien in the list was removed, reset to the last alien index
+	if (m_alienToMoveIndex < 0 && !m_aliens.empty())
 	{
-		m_currentAlienIndex = static_cast<int>(m_aliens.size() - 1);
+		m_alienToMoveIndex = static_cast<int>(m_aliens.size() - 1);
 	}
 }
 
 void Invader::AddAlien(std::shared_ptr<Alien> alienP)
 {
+	// Keep track when an alien dies by observing it
 	alienP->AddObserver(shared_from_this());
 	m_aliens.emplace_back(std::move(alienP));
 
-	m_currentAlienIndex = static_cast<int>(m_aliens.size() - 1);
+	m_alienToMoveIndex = static_cast<int>(m_aliens.size() - 1);
 }
 
 void Invader::UpdateAlienPosition(float deltaSecP)
 {
 	m_delayMovementTimer += deltaSecP;
 
-	// We only update the position of the aliens when the timer exceeds the movement delay
-	// This is to stagger the movement of the aliens so they don't all move at the same time
+	// Update the position of only one alien at a time after the movement delay
+	// This staggers their movement, making the aliens appear to move like a wave
 	while (m_delayMovementTimer >= m_movementDelay)
 	{
 		m_delayMovementTimer -= m_movementDelay;
 
-		Vector2 newPosition = m_aliens[m_currentAlienIndex]->GetPosition();
+		Vector2 newPosition = m_aliens[m_alienToMoveIndex]->GetPosition();
 
+		// Move the alien horizontally in one direction
+		// But if he's changing direction, move down instead
 		if (!m_shouldChangeDirection)
 		{
-			// Move the current alien horizontally
 			newPosition.x += m_distancePerStep * m_direction;
 		}
 		else
 		{
-			// Move down if we are changing direction during this step
-			newPosition.y += m_aliens[m_currentAlienIndex]->GetSize().y;
+			newPosition.y += m_aliens[m_alienToMoveIndex]->GetSize().y;
 		}
 
-		m_aliens[m_currentAlienIndex]->OnAlienMoved();
-		m_aliens[m_currentAlienIndex]->SetPosition(newPosition);
-		m_currentAlienIndex--;
+		m_aliens[m_alienToMoveIndex]->OnAlienMoved();
+		m_aliens[m_alienToMoveIndex]->SetPosition(newPosition);
+		m_alienToMoveIndex--;
 
-		// If we have moved all the aliens, reset the index and check if we need to change direction
-		if (m_currentAlienIndex < 0)
+		// If all the aliens have moved, reset the index and check if we need to change direction the next step
+		if (m_alienToMoveIndex < 0)
 		{
-			m_currentAlienIndex = static_cast<int>(m_aliens.size() - 1);
+			m_alienToMoveIndex = static_cast<int>(m_aliens.size() - 1);
 
 			if (m_shouldChangeDirection = ShouldChangeDirection())
 			{
@@ -105,12 +101,15 @@ void Invader::UpdateAlienPosition(float deltaSecP)
 void Invader::UpdateShootProbability(float deltaSecP)
 {
 	m_shootTimer += deltaSecP;
-	if (m_shootTimer >= 0.5f / (12 - m_bottomAliensCount))
+
+	if (m_shootTimer >= m_shootCooldown)
 	{
 		m_shootTimer = 0.0f;
-		int chanceRoll = rand() % 100;
 
-		if (chanceRoll <= 70 / (12 - m_bottomAliensCount))
+		// 70% chance of an alien shooting every m_shootCooldown
+		// The chance increases when there are fewer aliens left
+		int chanceRoll = rand() % 100;
+		if (chanceRoll <= 70 + (11 - m_bottomAliensCount))
 		{
 			std::shared_ptr<Alien> alien = GetRandomBottomAlien();
 			if (alien)
@@ -125,52 +124,53 @@ std::shared_ptr<Alien> Invader::GetRandomBottomAlien() const
 {
 	if (m_aliens.empty()) return nullptr;
 
+	// An alien is added to the list only if it has a laser available
 	if (m_aliens.size() == 1)
 	{
 		return m_aliens[0]->IsLaserAvailable() ? m_aliens[0] : nullptr;
 	}
 
 	std::unordered_map<int, std::shared_ptr<Alien>> bottomsAliens;
-
-	for (const auto& alien : m_aliens)
+	for (const std::shared_ptr<Alien>& alien : m_aliens)
 	{
 		int col = alien->GetCoordX();
 
-		// Check if we already have a bottom alien for this column
+		// Check if a bottommost alien already exists in this column
 		auto iterator = bottomsAliens.find(col);
-		if (iterator == bottomsAliens.end())
+		if (iterator != bottomsAliens.end())
 		{
-			bottomsAliens[col] = alien;
-		}
-		else
-		{
-			// If we already have a bottom alien for this column, check if the current one is lower
 			if (alien->GetCoordY() > iterator->second->GetCoordY())
 			{
 				iterator->second = alien;
+				continue;
 			}
 		}
+
+		// Register this alien as the bottommost in its column
+		bottomsAliens[col] = alien;
 	}
 
 	for (auto it = bottomsAliens.begin(); it != bottomsAliens.end(); )
 	{
-		if (!it->second->IsLaserAvailable())
-		{
-			it = bottomsAliens.erase(it); // erase returns the next iterator
-		}
-		else 
+		if (it->second->IsLaserAvailable())
 		{
 			++it;
+			continue;
 		}
+
+		// erase() returns an iterator to the next element
+		it = bottomsAliens.erase(it);
 	}
 
 	if (bottomsAliens.empty()) return nullptr;
+
+	// Update the count of bottom aliens
 	m_bottomAliensCount = static_cast<int>(bottomsAliens.size());
 
 	// DEBUG VISUALIZATION
 	//for (const auto& alien : bottomsAliens)
 	//{
-	//	alien.second->SetColor(WHITE, WHITE);
+	//	alien.second->SetColor(WWHITE);
 	//}
 
 	// ##
@@ -178,15 +178,15 @@ std::shared_ptr<Alien> Invader::GetRandomBottomAlien() const
 	// Not really optimized, but works for our case because the number of aliens is small
 	// ##
 	auto randomIterator = bottomsAliens.begin();
- 	int randomIndex = rand() % m_bottomAliensCount;
+	int randomIndex = rand() % m_bottomAliensCount;
 	std::advance(randomIterator, randomIndex);
-	
+
 	return randomIterator->second;
 }
 
 bool Invader::ShouldChangeDirection() const
 {
-	for (auto& alien : m_aliens)
+	for (const std::shared_ptr<Alien>& alien : m_aliens)
 	{
 		// Check if the next step will go out of bounds
 		// Aliens can go slightly out of playground bounds

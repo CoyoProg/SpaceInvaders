@@ -8,53 +8,59 @@
 #include "../Components/CollisionBoxComponent.h"
 #include "../Interfaces/IGameStateObserver.h"
 #include "../Widgets/HUDWidget.h"
-
 #include "../Widgets/StartMenuWidget.h"
 
-GameManager::GameManager()
-{
+GameManager::GameManager() = default;
 
+// We need to define the destructor to forward declare the unique_ptr
+GameManager::~GameManager() = default;
+
+void GameManager::LoadStartMenu()
+{
+	AddWidget(std::move(std::make_unique<StartMenuWidget>()));
 }
 
-void GameManager::InitializeGame()
+void GameManager::StartLevel()
 {
+	// ##
+	// TO DO: Implement and Move to Reset current Level
+	m_widgets.clear();
+	// ##
+
 	m_currentLevel = std::make_unique<Level1_SpaceInvaders>(*this);
 	m_uiManager = std::make_unique<UIManager>(*this);
 
 	// Initialize the GameState singleton
 	GameState::GetInstance().AddObserver(m_uiManager->GetHUD());
-
-	//AddWidget(std::move(std::make_unique<StartMenuWidget>()));
 }
 
 void GameManager::LoadRessources()
 {
 	m_textures["alienSheet"] = LoadTexture("../Resources/invadersSpriteSheet.png");
-	m_textures["starSheet"] = LoadTexture("../Resources/starSpriteSheet.png");
 	m_textures["buttonSheet"] = LoadTexture("../Resources/startButtonSpriteSheet.png");
-	Image title = LoadImage("../Resources/spaceInvadersTitle.png");
+	m_textures["starSheet"] = LoadTexture("../Resources/starSpriteSheet.png");
 
-	ImageResize(&title, title.width*2, title.height*2);
+	Image title = LoadImage("../Resources/spaceInvadersTitle.png");
+	ImageResize(&title, static_cast<int>(title.width * 0.5f), static_cast<int>(title.height * 0.5f));
 	m_textures["title"] = LoadTextureFromImage(title);
+
+	UnloadImage(title);
 }
 
 void GameManager::UnloadTextures()
 {
-	for (const auto& texturePair : m_textures)
+	for (const std::pair<std::string, Texture2D>& texturePair : m_textures)
 	{
 		UnloadTexture(texturePair.second);
 	}
 }
-
-// We need to define the destructor to forward declare the unique_ptr
-GameManager::~GameManager() = default;
 
 void GameManager::Update(float deltaTimeP)
 {
 	// Update all actors
 	for (const std::shared_ptr<IUpdatable>& actor : m_actors)
 	{
-		if(actor) actor->Update(deltaTimeP);
+		if (actor) actor->Update(deltaTimeP);
 	}
 
 	// Update all objects
@@ -132,7 +138,7 @@ void GameManager::FlushPendingLists()
 
 void GameManager::FlushNewActors()
 {
-	if(m_pendingActors.empty()) return;
+	if (m_pendingActors.empty()) return;
 
 	// ##
 	// Note: Code to insert unique_ptr into vector

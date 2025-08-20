@@ -4,6 +4,9 @@
 class HUDWidget;
 class GameManager;
 
+/*
+ * @brief UIManager manages the UI components of the game when the level and the player are loaded
+ */
 class UIManager
 {
 public:

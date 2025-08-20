@@ -1,13 +1,14 @@
 #pragma once
 #include "Actor.h"
+#include "../Components/LaserComponent.h"
 
-class LaserComponent;
-
+/*
+ * @brief Player controls the laser canon
+ */
 class Player : public Actor
 {
 public:
 	Player();
-	~Player();
 
 	virtual void Update(float deltaTimeP) override;
 	virtual void OnCollisionEvent(const Actor& otherActorP) override;
@@ -17,11 +18,12 @@ private:
 	void Move(int directionP, float deltaTimeP);
 
 private:
-	std::unique_ptr<LaserComponent> m_laserComponent;
+	LaserComponent m_laserComponent;
 
-	static constexpr int m_movementSpeed = 300;
-	static constexpr float m_shootCooldown = 1.0f;
-	double m_shootTimer = -1.0f;
-	bool doOnce = false;
+	static constexpr int m_movementSpeed{ 200 };
+	static constexpr int m_maxLaserCount{ 0 };
+	static constexpr float m_shootCooldown{ 1.0f };
+	double m_shootTimer{ -1.0 };
+	bool doOnce{ false };
 };
 

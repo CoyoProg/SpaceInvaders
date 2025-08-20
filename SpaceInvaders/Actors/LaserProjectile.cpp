@@ -18,8 +18,6 @@ LaserProjectile::LaserProjectile(int directionP, Vector2 positionP, ActorAffilia
 	}
 }
 
-LaserProjectile::~LaserProjectile() = default;
-
 void LaserProjectile::Draw()
 {
 	if (m_markedForDeletion) return;
@@ -35,14 +33,14 @@ void LaserProjectile::Update(float deltaTimeP)
 
 	m_position.y += m_direction * deltaTimeP * m_movementSpeed;
 
+	// We mark it for deletion but it will not be deleted, it will only freeze its state until set back to false
 	if (m_position.y < 0 - m_size.y || m_position.y > SCREEN_HEIGHT)
 	{
-		m_markedForDeletion = true; // Need to be removed when pooling is implemented
+		m_markedForDeletion = true;
 	}
 }
 
 void LaserProjectile::OnCollisionEvent(const Actor& otherActorP)
 {
-	// TO DO: Explosion effect and sound
 	m_markedForDeletion = true;
 }

@@ -8,7 +8,7 @@ int main(void)
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Space Invaders");
 
     gameManager.LoadRessources();
-    gameManager.InitializeGame();
+    gameManager.LoadStartMenu();
 
     // The background widget is persistent across all levels
     // And needs to be draw first

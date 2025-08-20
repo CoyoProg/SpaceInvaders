@@ -7,6 +7,9 @@
 class LaserProjectile;
 enum class ActorAffiliation;
 
+/*
+ * @brief Component to shoot lasers
+ */
 class LaserComponent : public Component
 {
 public:

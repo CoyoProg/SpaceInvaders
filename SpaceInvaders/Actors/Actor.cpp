@@ -3,36 +3,24 @@
 
 #include <iostream>
 
-Actor::Actor(ActorAffiliation ownerP)
+Actor::Actor(ActorAffiliation ownerP, Color colorP) :
+	m_actorAffiliation(ownerP),
+	m_color(colorP)
 {
 	m_CollisionBoxComponent = std::make_unique<CollisionBoxComponent>(Rectangle{ m_position.x, m_position.y, m_size.x, m_size.y });
-
-	m_owner = ownerP;
 }
 
+// We need to define the destructor here to be able to forward declare the unique_ptr
 Actor::~Actor() = default;
 
 void Actor::Draw()
 {
-	if(m_texture.id != 0)
-	{
-		// If the texture is set, draw it
-		DrawTexture(m_texture,
-			static_cast<int>(m_position.x),
-			static_cast<int>(m_position.y),
-			m_color
-		);
-	}
-	else
-	{
-		DrawRectangle(
-			static_cast<int>(m_position.x),
-			static_cast<int>(m_position.y),
-			static_cast<int>(m_size.x),
-			static_cast<int>(m_size.y),
-			m_color);
-	}
-
+	DrawRectangle(
+		static_cast<int>(m_position.x),
+		static_cast<int>(m_position.y),
+		static_cast<int>(m_size.x),
+		static_cast<int>(m_size.y),
+		m_color);
 }
 
 void Actor::Update(float deltaTimeP)
@@ -67,13 +55,15 @@ const CollisionBoxComponent* Actor::GetCollisionBoxComponent() const
 
 bool Actor::CollidesWith(const Actor& otherActorP) const
 {
-	if (otherActorP.GetOwner() == m_owner) return false;
-
+	// If the actor have the same affiliation, they don't collide (Aliens doesn't collide with their lasers)
+	if (otherActorP.GetActorAffiliation() == m_actorAffiliation) return false;
 	if (!otherActorP.GetCollisionBoxComponent()) return false;
-	if (!CheckCollisionRecs(m_CollisionBoxComponent->GetBounds(), otherActorP.GetCollisionBoxComponent()->GetBounds())) return false;
 
+	// If the two actors collides, we check if one of them needs an advanced collision check
+	if (!CheckCollisionRecs(m_CollisionBoxComponent->GetBounds(), otherActorP.GetCollisionBoxComponent()->GetBounds())) return false;
 	if (!otherActorP.NeedsAdvancedCollisionCheck() && !m_hasComplexCollision) return true;
 
+	// Do an advanced collision check if needed
 	if (otherActorP.NeedsAdvancedCollisionCheck())
 	{
 		return otherActorP.AdvancedCollidesWith(*this);
@@ -85,7 +75,7 @@ bool Actor::CollidesWith(const Actor& otherActorP) const
 	}
 
 	// Note: We shoud also check if both needs advanced collision check; but it will never happen in our case
-	// Because we only use advanced collision check for the Shield m_actors
+	// Because we only use advanced collision for the Shields
 
 	return false;
 }
