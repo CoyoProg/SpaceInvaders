@@ -110,7 +110,7 @@ void Invader::UpdateShootProbability(float deltaSecP)
 		m_shootTimer = 0.0f;
 		int chanceRoll = rand() % 100;
 
-		if (chanceRoll <= 60 / (12 - m_bottomAliensCount))
+		if (chanceRoll <= 70 / (12 - m_bottomAliensCount))
 		{
 			std::shared_ptr<Alien> alien = GetRandomBottomAlien();
 			if (alien)
@@ -125,7 +125,10 @@ std::shared_ptr<Alien> Invader::GetRandomBottomAlien() const
 {
 	if (m_aliens.empty()) return nullptr;
 
-	if (m_aliens.size() == 1) return m_aliens[0];
+	if (m_aliens.size() == 1)
+	{
+		return m_aliens[0]->IsLaserAvailable() ? m_aliens[0] : nullptr;
+	}
 
 	std::unordered_map<int, std::shared_ptr<Alien>> bottomsAliens;
 
@@ -186,8 +189,9 @@ bool Invader::ShouldChangeDirection() const
 	for (auto& alien : m_aliens)
 	{
 		// Check if the next step will go out of bounds
+		// Aliens can go slightly out of playground bounds
 		float nextStepPosition = alien->GetPosition().x + m_distancePerStep * m_direction;
-		if (nextStepPosition > SCREEN_WIDTH - PLAYGROUND_OFFSET - alien->GetSize().x || nextStepPosition < 0 + PLAYGROUND_OFFSET)
+		if (nextStepPosition > SCREEN_WIDTH - PLAYGROUND_OFFSET / 2 - alien->GetSize().x || nextStepPosition < 0 + PLAYGROUND_OFFSET / 2)
 		{
 			return true;
 		}

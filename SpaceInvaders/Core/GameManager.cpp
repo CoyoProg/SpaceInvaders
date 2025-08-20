@@ -9,29 +9,58 @@
 #include "../Interfaces/IGameStateObserver.h"
 #include "../Widgets/HUDWidget.h"
 
+#include "../Widgets/StartMenuWidget.h"
+
 GameManager::GameManager()
 {
 
 }
 
+void GameManager::InitializeGame()
+{
+	//m_currentLevel = std::make_unique<Level1_SpaceInvaders>(*this);
+	//m_uiManager = std::make_unique<UIManager>(*this);
+
+	// Initialize the GameState singleton
+	//GameState::GetInstance().AddObserver(m_uiManager->GetHUD());
+
+	AddWidget(std::move(std::make_unique<StartMenuWidget>()));
+}
+
+void GameManager::LoadRessources()
+{
+	m_textures["alienSheet"] = LoadTexture("../Resources/invadersSpriteSheet.png");
+	m_textures["starSheet"] = LoadTexture("../Resources/starSpriteSheet.png");
+	m_textures["buttonSheet"] = LoadTexture("../Resources/startButtonSpriteSheet.png");
+	Image title = LoadImage("../Resources/spaceInvadersTitle.png");
+
+	ImageResize(&title, title.width*2, title.height*2);
+	m_textures["title"] = LoadTextureFromImage(title);
+}
+
+void GameManager::UnloadTextures()
+{
+	for (const auto& texturePair : m_textures)
+	{
+		UnloadTexture(texturePair.second);
+	}
+}
+
 // We need to define the destructor to forward declare the unique_ptr
 GameManager::~GameManager() = default;
 
-void GameManager::Update()
+void GameManager::Update(float deltaTimeP)
 {
-	// Get the time since the last frame
-	float deltaTime = GetFrameTime();
-
 	// Update all actors
 	for (const std::shared_ptr<IUpdatable>& actor : m_actors)
 	{
-		if(actor) actor->Update(deltaTime);
+		if(actor) actor->Update(deltaTimeP);
 	}
 
 	// Update all objects
 	for (const std::shared_ptr<IUpdatable>& objects : m_objects)
 	{
-		if (objects) objects->Update(deltaTime);
+		if (objects) objects->Update(deltaTimeP);
 	}
 
 	// Update widgets if tick is enabled
@@ -39,23 +68,23 @@ void GameManager::Update()
 	{
 		if (widget->m_IsUpdateEnabled)
 		{
-			widget->Update(deltaTime);
+			widget->Update(deltaTimeP);
 		}
 	}
 }
 
-void GameManager::Draw() const
+void GameManager::Draw()
 {
-	// Draw all actors
-	for (const std::shared_ptr<Actor>& actor : m_actors)
-	{
-		actor->Draw();
-	}
-
 	// Draw all widgets
 	for (const std::shared_ptr<Widget>& widget : m_widgets)
 	{
 		widget->Draw();
+	}
+
+	// Draw all actors
+	for (const std::shared_ptr<Actor>& actor : m_actors)
+	{
+		actor->Draw();
 	}
 }
 
@@ -167,35 +196,10 @@ void GameManager::AddWidget(std::shared_ptr<Widget> WidgetP)
 Texture2D GameManager::GetTexture(const std::string& textureName) const
 {
 	// Check if the texture exists in the map
-	auto it = textures.find(textureName);
-	if (it != textures.end())
+	auto it = m_textures.find(textureName);
+	if (it != m_textures.end())
 	{
 		return it->second;
 	}
 	else return Texture2D(); // Return an empty texture if not found
-}
-
-void GameManager::InitializeGame()
-{
-	m_currentLevel = std::make_unique<Level1_SpaceInvaders>(*this);
-	m_uiManager = std::make_unique<UIManager>(*this);
-
-	// Initialize the GameState singleton
-	GameState::GetInstance().AddObserver(m_uiManager->GetHUD());
-}
-
-void GameManager::LoadRessources()
-{
-	Image image = LoadImage("../Resources/invadersSpriteSheet.png");     // Loaded in CPU memory (RAM)
-	//ImageResize(&image, 45, 33);
-	textures["alienSheet"] = LoadTextureFromImage(image);          // Image converted to texture, GPU memory (VRAM)
-	UnloadImage(image);   // Once image has been converted to texture and uploaded to VRAM, it can be unloaded 
-}
-
-void GameManager::UnloadTextures()
-{
-	for(const auto& texturePair : textures)
-	{
-		UnloadTexture(texturePair.second);
-	}
 }

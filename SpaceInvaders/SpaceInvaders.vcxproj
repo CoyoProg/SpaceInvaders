@@ -128,6 +128,8 @@
   <ItemGroup>
     <ClCompile Include="Actors\Actor.cpp" />
     <ClCompile Include="Actors\Alien.cpp" />
+    <ClCompile Include="Widgets\Buttons\StartButtonWidget.cpp" />
+    <ClCompile Include="Widgets\BackgroundWidget.cpp" />
     <ClCompile Include="Components\CollisionBoxComponent.cpp" />
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="Core\GameManager.cpp" />
@@ -137,6 +139,7 @@
     <ClCompile Include="Core\GameState.cpp" />
     <ClCompile Include="Core\UIManager.cpp" />
     <ClCompile Include="Components\SpriteAnimationComponent.cpp" />
+    <ClCompile Include="Widgets\StartMenuWidget.cpp" />
     <ClCompile Include="Widgets\LivesWidget.cpp" />
     <ClCompile Include="Widgets\ScoreWidget.cpp" />
     <ClCompile Include="Widgets\HUDWidget.cpp" />
@@ -149,6 +152,8 @@
   <ItemGroup>
     <ClInclude Include="Actors\Actor.h" />
     <ClInclude Include="Actors\Alien.h" />
+    <ClInclude Include="Widgets\Buttons\StartButtonWidget.h" />
+    <ClInclude Include="Widgets\BackgroundWidget.h" />
     <ClInclude Include="Components\CollisionBoxComponent.h" />
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="Core\GameManager.h" />
@@ -159,6 +164,7 @@
     <ClInclude Include="Interfaces\IGameStateObserver.h" />
     <ClInclude Include="Core\UIManager.h" />
     <ClInclude Include="Components\SpriteAnimationComponent.h" />
+    <ClInclude Include="Widgets\StartMenuWidget.h" />
     <ClInclude Include="Widgets\LivesWidget.h" />
     <ClInclude Include="Widgets\ScoreWidget.h" />
     <ClInclude Include="Widgets\HUDWidget.h" />

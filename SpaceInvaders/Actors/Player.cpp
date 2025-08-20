@@ -41,7 +41,8 @@ void Player::ProcessInput(float deltaTimeP)
 	if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) Move(1, deltaTimeP);
 	if(IsKeyPressed(KEY_SPACE))
 	{
-		if (m_laserComponent->GetLaserCount() > 0) return;
+		if (m_laserComponent->GetLaserCount() > 0 || GetTime() - m_shootTimer < m_shootCooldown) return;
+		m_shootTimer = GetTime();
 
 		// Fire a laser (this is just a placeholder, actual firing logic would go here)
 		m_laserComponent->Shoot(-1, Vector2{ m_position.x + m_size.x / 2, m_position.y - m_size.y - 1.0f }, m_owner, 800);

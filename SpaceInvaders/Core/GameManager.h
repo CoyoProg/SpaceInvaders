@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include <memory>
 #include <unordered_map>
@@ -12,7 +13,7 @@ class Widget;
 class Level1_SpaceInvaders;
 
 constexpr int SCREEN_WIDTH = 900;
-constexpr int PLAYGROUND_OFFSET = 80;
+constexpr int PLAYGROUND_OFFSET = 60;
 constexpr int SCREEN_HEIGHT = 900;
 
 enum class SpriteID
@@ -22,6 +23,8 @@ enum class SpriteID
 	AlienLarge,
 	Explosion,
 	Laser,
+	Star,
+	StartButton,
 	Player
 };
 
@@ -29,7 +32,7 @@ struct SpriteProperties
 {
 	float width;
 	float height;
-	int frameCount;
+	int maxFrameIndex;
 };
 
 static const std::unordered_map<SpriteID, SpriteProperties> SPRITE_PROPERTIES
@@ -39,6 +42,8 @@ static const std::unordered_map<SpriteID, SpriteProperties> SPRITE_PROPERTIES
 	{ SpriteID::AlienLarge, { 122.0f, 84.0f, 1 } },
 	{ SpriteID::Explosion, { 64, 64.0f, 16 } },
 	{ SpriteID::Laser, { 10, 30.0f, 1 } },
+	{ SpriteID::Star, { 76.0f, 76.0f, 3 } },
+	{ SpriteID::StartButton, { 220.0f, 120.0f, 2 } },
 	{ SpriteID::Player, { 50, 50.0f, 1 } }
 };
 
@@ -67,9 +72,9 @@ public:
 	GameManager& operator=(GameManager&&) = delete;
 
 	// Update all m_actors and objects
-	void Update();
+	void Update(float deltaTimeP);
 	// Draw all m_actors to the screen
-	void Draw() const;
+	void Draw();
 	// Check for collisions between all m_actors
 	void CollisionCheck();
 	// Destroy m_actors that are marked for deletion
@@ -109,6 +114,6 @@ private:
 	std::vector<std::shared_ptr<Actor>> m_actors;
 	std::vector<std::shared_ptr<Actor>> m_pendingActors;
 
-	std::unordered_map<std::string, Texture2D> textures;
+	std::unordered_map<std::string, Texture2D> m_textures;
 };
 

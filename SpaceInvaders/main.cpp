@@ -1,8 +1,5 @@
-#include "raylib.h"
-#include <memory>
-
 #include "Core/GameManager.h"
-#include "Actors/Actor.h"
+#include "Widgets/BackgroundWidget.h"
 
 int main(void)
 {
@@ -13,18 +10,28 @@ int main(void)
     gameManager.LoadRessources();
     gameManager.InitializeGame();
 
+    // The background widget is persistent across all levels
+    // And needs to be draw first
+    BackgroundWidget m_backgroundWidget(GameManager::GetInstance().GetTexture("starSheet"));
+
     SetTargetFPS(120);
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        gameManager.Update();
+        // Get the time since the last frame
+        float deltaTime = GetFrameTime();
+
+        m_backgroundWidget.Update(deltaTime);
+        gameManager.Update(deltaTime);
         gameManager.CollisionCheck();
         gameManager.CleanupActors();
         gameManager.FlushPendingLists();
 
-        BeginDrawing();
-        ClearBackground(BLACK);
 
+        BeginDrawing();
+
+        ClearBackground(BLACK);
+        m_backgroundWidget.Draw();
         gameManager.Draw();
 
         EndDrawing();

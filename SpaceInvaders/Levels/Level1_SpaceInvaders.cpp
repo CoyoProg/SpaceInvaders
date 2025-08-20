@@ -11,8 +11,8 @@
 Level1_SpaceInvaders::Level1_SpaceInvaders(GameManager& gameManagerP)
 {
 	gameManagerP.AddActor(std::make_shared<Player>());
-
 	m_invader = std::make_shared<Invader>();
+	m_alienSheet = gameManagerP.GetTexture("alienSheet");
 
 	InitializeAliensGrid(gameManagerP);
 	InitializeShields(gameManagerP);
@@ -67,7 +67,7 @@ std::shared_ptr<Alien> Level1_SpaceInvaders::CreateAlien(int rowP, int colP, int
 	{
 	case 0:
 		alienType = SpriteID::AlienSmall;
-		offSetX = (SPRITE_PROPERTIES.at(SpriteID::AlienMedium).frameCount + 1) * (padding + SPRITE_PROPERTIES.at(SpriteID::AlienMedium).width);
+		offSetX = (SPRITE_PROPERTIES.at(SpriteID::AlienMedium).maxFrameIndex + 1) * (padding + SPRITE_PROPERTIES.at(SpriteID::AlienMedium).width);
 		break;
 	case 1:
 	case 2:
@@ -77,12 +77,10 @@ std::shared_ptr<Alien> Level1_SpaceInvaders::CreateAlien(int rowP, int colP, int
 	case 4:
 		alienType = SpriteID::AlienLarge;
 		offSetX =
-			(SPRITE_PROPERTIES.at(SpriteID::AlienMedium).frameCount + 1) * (padding + SPRITE_PROPERTIES.at(SpriteID::AlienMedium).width) +
-			(SPRITE_PROPERTIES.at(SpriteID::AlienSmall).frameCount + 1) * (padding + SPRITE_PROPERTIES.at(SpriteID::AlienSmall).width);
+			(SPRITE_PROPERTIES.at(SpriteID::AlienMedium).maxFrameIndex + 1) * (padding + SPRITE_PROPERTIES.at(SpriteID::AlienMedium).width) +
+			(SPRITE_PROPERTIES.at(SpriteID::AlienSmall).maxFrameIndex + 1) * (padding + SPRITE_PROPERTIES.at(SpriteID::AlienSmall).width);
 		break;
 	}
-
-
 
 	Vector2 position = {
 		horizontalMarginP + colP * (AlienGridConfig::alienSize.x + AlienGridConfig::spaceBetweenCols),
@@ -102,17 +100,15 @@ std::shared_ptr<Alien> Level1_SpaceInvaders::CreateAlien(int rowP, int colP, int
 
 	auto alien = std::make_shared<Alien>(position, size, colP, rowP);
 
-	Color previousColor = CalculateGradientColor(static_cast<float>(rowP), (colP + colP - 1) / 2.0f);
-	Color nextColor = CalculateGradientColor(static_cast<float>(rowP), (colP + colP + 1) / 2.0f);
-
-	alien->SetColor(previousColor, nextColor);
-	alien->GetSpriteAnimationComponent().SetupSpriteAnimation(
-		GameManager::GetInstance().GetTexture("alienSheet"),
+	alien->SetColor(CalculateGradientColor(static_cast<float>(rowP), static_cast<float>(colP)));
+	alien->SetupSpriteAnimationComponent(
+		m_alienSheet,
 		SPRITE_PROPERTIES.at(alienType).width,
 		SPRITE_PROPERTIES.at(alienType).height,
 		offSetX,
 		10.0f,
-		1
+		1,
+		2.7f
 	);
 	return alien;
 }

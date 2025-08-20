@@ -10,7 +10,6 @@ ScoreWidget::ScoreWidget(int coordXP, int coordYP, int fontSizeP) :
 
 void ScoreWidget::Draw()
 {
-	// Code from: https://www.raylib.com/examples.html
 	// Draw the score
 	DrawText(TextFormat("Score: %01i", m_score), m_coordX, m_coordY, m_fontSize, GREEN);
 }

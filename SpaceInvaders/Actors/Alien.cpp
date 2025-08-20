@@ -15,7 +15,6 @@ Alien::Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoo
 	m_size = sizeP;
 
 	m_laserComponent = std::make_unique<LaserComponent>();
-	m_SpriteAnimationComponent = std::make_unique<SpriteAnimationComponent>();
 
 	if (m_CollisionBoxComponent)
 	{
@@ -39,20 +38,19 @@ void Alien::RemoveObserver(const std::shared_ptr<IAlienObserver> observerP)
 	);
 }
 
+void Alien::SetupSpriteAnimationComponent(Texture2D spriteSheetP, float spriteWidthP, float spriteHeightP, float spriteOffsetP, float spritePaddingP, int maxFramesP, int scaleFactorP)
+{
+	m_SpriteAnimationComponent.SetupSpriteAnimation(spriteSheetP, spriteWidthP, spriteHeightP, spriteOffsetP, spritePaddingP, maxFramesP, scaleFactorP);
+}
+
 void Alien::Draw()
 {
-	m_SpriteAnimationComponent->Draw(m_position, m_previousColor);
+	m_SpriteAnimationComponent.Draw(m_position, m_color);
 }
 
 void Alien::OnAlienMoved()
 {
-	m_SpriteAnimationComponent->NextAnimationFrame();
-}
-
-void Alien::SetColor(Color previousColorP, Color nextColorP)
-{
-	m_previousColor = previousColorP;
-	m_nextColor = nextColorP;
+	m_SpriteAnimationComponent.NextAnimationFrame();
 }
 
 void Alien::OnCollisionEvent(const Actor& otherActorP)

@@ -19,8 +19,9 @@ private:
 private:
 	std::unique_ptr<LaserComponent> m_laserComponent;
 
-	const int m_movementSpeed = 300;
-	const float m_shootCooldown = 0.5f;
+	static constexpr int m_movementSpeed = 300;
+	static constexpr float m_shootCooldown = 1.0f;
+	double m_shootTimer = -1.0f;
 	bool doOnce = false;
 };
 

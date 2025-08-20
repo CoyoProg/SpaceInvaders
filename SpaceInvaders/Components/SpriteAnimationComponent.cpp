@@ -15,15 +15,15 @@ void SpriteAnimationComponent::Draw(Vector2 positionP, Color colorP)
 		Rectangle destRec = {
 			positionP.x,
 			positionP.y,
-			sourceRec.width / 2.7f,
-			sourceRec.height / 2.7f
-		}; // Scale downed by 2.7
+			sourceRec.width / m_scaleFactor,
+			sourceRec.height / m_scaleFactor
+		};
 
 		DrawTexturePro(m_spriteSheet, sourceRec, destRec, Vector2{ 0,0 }, 0.0f, colorP);
 	}
 }
 
-void SpriteAnimationComponent::SetupSpriteAnimation(Texture2D spriteSheetP, float spriteWidthP, float spriteHeightP, float spriteOffsetP, float spritePaddingP, int maxFramesP)
+void SpriteAnimationComponent::SetupSpriteAnimation(Texture2D spriteSheetP, float spriteWidthP, float spriteHeightP, float spriteOffsetP, float spritePaddingP, int maxFramesP, float scaleFactorP)
 {
 	m_spriteSheet = spriteSheetP;
 	m_spriteOffset = spriteOffsetP;
@@ -31,9 +31,15 @@ void SpriteAnimationComponent::SetupSpriteAnimation(Texture2D spriteSheetP, floa
 	m_spriteWidth = spriteWidthP;
 	m_spriteHeight = spriteHeightP;
 	m_maxFrames = maxFramesP;
+	m_scaleFactor = scaleFactorP;
 }
 
 void SpriteAnimationComponent::NextAnimationFrame()
 {
 	m_currentFrame = m_currentFrame == m_maxFrames ? 0 : m_currentFrame + 1;
+}
+
+void SpriteAnimationComponent::SetFrame(int frameIndexP)
+{
+	m_currentFrame = frameIndexP;
 }

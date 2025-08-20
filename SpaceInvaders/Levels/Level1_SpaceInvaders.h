@@ -31,6 +31,7 @@ private:
 	Color CalculateGradientColor(float rowP, float colP);
 
 private:
+	Texture2D m_alienSheet;
 	std::shared_ptr<Invader> m_invader;
 };
 
