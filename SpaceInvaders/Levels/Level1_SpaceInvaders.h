@@ -10,7 +10,7 @@ class Invader;
 
 struct AlienGridConfig
 {
-	static constexpr Vector2 alienSize{ 45, 45 };
+	static constexpr Vector2 alienSize{ 45, 33 };
 	static constexpr int spaceBetweenRows = 30;
 	static constexpr int spaceBetweenCols = 18;
 	static constexpr int columnNumber = 11;

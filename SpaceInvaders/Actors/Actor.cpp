@@ -14,12 +14,25 @@ Actor::~Actor() = default;
 
 void Actor::Draw()
 {
-	DrawRectangle(
-		static_cast<int>(m_position.x),
-		static_cast<int>(m_position.y),
-		static_cast<int>(m_size.x),
-		static_cast<int>(m_size.y),
-		m_color);
+	if(m_texture.id != 0)
+	{
+		// If the texture is set, draw it
+		DrawTexture(m_texture,
+			static_cast<int>(m_position.x),
+			static_cast<int>(m_position.y),
+			m_color
+		);
+	}
+	else
+	{
+		DrawRectangle(
+			static_cast<int>(m_position.x),
+			static_cast<int>(m_position.y),
+			static_cast<int>(m_size.x),
+			static_cast<int>(m_size.y),
+			m_color);
+	}
+
 }
 
 void Actor::Update(float deltaTimeP)

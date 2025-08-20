@@ -4,7 +4,7 @@
 #include "../Interfaces/IAlienObserver.h"
 #include <vector>
 #include <memory>
-#include "raylib.h"
+
 
 class Alien;
 

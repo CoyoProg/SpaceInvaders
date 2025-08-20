@@ -2,8 +2,9 @@
 #include "../Core/GameManager.h"
 #include "../Actors/Player.h"
 #include "../Actors/Alien.h"
-#include "../Objects/Invader.h"
 #include "../Actors/Shield.h"
+#include "../Objects/Invader.h"
+#include "../Components/SpriteAnimationComponent.h"
 
 #include "raymath.h"
 
@@ -58,19 +59,61 @@ void Level1_SpaceInvaders::InitializeShields(GameManager& gameManagerP)
 
 std::shared_ptr<Alien> Level1_SpaceInvaders::CreateAlien(int rowP, int colP, int horizontalMarginP)
 {
+	SpriteID alienType = SpriteID::AlienMedium;
+	float offSetX = 0.0f;
+	float padding = 10.0f;
+
+	switch (rowP)
+	{
+	case 0:
+		alienType = SpriteID::AlienSmall;
+		offSetX = (SPRITE_PROPERTIES.at(SpriteID::AlienMedium).frameCount + 1) * (padding + SPRITE_PROPERTIES.at(SpriteID::AlienMedium).width);
+		break;
+	case 1:
+	case 2:
+		alienType = SpriteID::AlienMedium;
+		break;
+	case 3:
+	case 4:
+		alienType = SpriteID::AlienLarge;
+		offSetX =
+			(SPRITE_PROPERTIES.at(SpriteID::AlienMedium).frameCount + 1) * (padding + SPRITE_PROPERTIES.at(SpriteID::AlienMedium).width) +
+			(SPRITE_PROPERTIES.at(SpriteID::AlienSmall).frameCount + 1) * (padding + SPRITE_PROPERTIES.at(SpriteID::AlienSmall).width);
+		break;
+	}
+
+
+
 	Vector2 position = {
 		horizontalMarginP + colP * (AlienGridConfig::alienSize.x + AlienGridConfig::spaceBetweenCols),
 		AlienGridConfig::topOffset + rowP * (AlienGridConfig::alienSize.y + AlienGridConfig::spaceBetweenRows)
 	};
 
-	Vector2 size = AlienGridConfig::alienSize;
+	if (alienType == SpriteID::AlienSmall)
+	{
+		// Slightly adjust the x position because there is some pixel missing in the sprite sheet
+		position.x += 3.0f;
+	}
+
+	Vector2 size = Vector2{
+		SPRITE_PROPERTIES.at(alienType).width / 2.7f,
+		SPRITE_PROPERTIES.at(alienType).height / 2.7f
+	};
+
 	auto alien = std::make_shared<Alien>(position, size, colP, rowP);
 
 	Color previousColor = CalculateGradientColor(static_cast<float>(rowP), (colP + colP - 1) / 2.0f);
 	Color nextColor = CalculateGradientColor(static_cast<float>(rowP), (colP + colP + 1) / 2.0f);
 
 	alien->SetColor(previousColor, nextColor);
-
+	alien->GetSpriteAnimationComponent().SetupSpriteAnimation(
+		GameManager::GetInstance().GetTexture("alienSheet"),
+		SPRITE_PROPERTIES.at(alienType).width,
+		SPRITE_PROPERTIES.at(alienType).height,
+		offSetX,
+		10.0f,
+		1
+	);
 	return alien;
 }
 

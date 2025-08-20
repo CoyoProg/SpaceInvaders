@@ -6,17 +6,12 @@
 #include "../Widgets/Widget.h"
 #include "../Levels/Level1_SpaceInvaders.h"
 #include "../Components/CollisionBoxComponent.h"
-
 #include "../Interfaces/IGameStateObserver.h"
 #include "../Widgets/HUDWidget.h"
 
 GameManager::GameManager()
 {
-	m_currentLevel = std::make_unique<Level1_SpaceInvaders>(*this);
-	m_uiManager = std::make_unique<UIManager>(*this);
 
-	// Initialize the GameState singleton
-	GameState::GetInstance().AddObserver(m_uiManager->GetHUD());
 }
 
 // We need to define the destructor to forward declare the unique_ptr
@@ -167,4 +162,40 @@ void GameManager::AddObject(std::shared_ptr<Object> objectP)
 void GameManager::AddWidget(std::shared_ptr<Widget> WidgetP)
 {
 	m_pendingWidgets.emplace_back(std::move(WidgetP));
+}
+
+Texture2D GameManager::GetTexture(const std::string& textureName) const
+{
+	// Check if the texture exists in the map
+	auto it = textures.find(textureName);
+	if (it != textures.end())
+	{
+		return it->second;
+	}
+	else return Texture2D(); // Return an empty texture if not found
+}
+
+void GameManager::InitializeGame()
+{
+	m_currentLevel = std::make_unique<Level1_SpaceInvaders>(*this);
+	m_uiManager = std::make_unique<UIManager>(*this);
+
+	// Initialize the GameState singleton
+	GameState::GetInstance().AddObserver(m_uiManager->GetHUD());
+}
+
+void GameManager::LoadRessources()
+{
+	Image image = LoadImage("../Resources/invadersSpriteSheet.png");     // Loaded in CPU memory (RAM)
+	//ImageResize(&image, 45, 33);
+	textures["alienSheet"] = LoadTextureFromImage(image);          // Image converted to texture, GPU memory (VRAM)
+	UnloadImage(image);   // Once image has been converted to texture and uploaded to VRAM, it can be unloaded 
+}
+
+void GameManager::UnloadTextures()
+{
+	for(const auto& texturePair : textures)
+	{
+		UnloadTexture(texturePair.second);
+	}
 }

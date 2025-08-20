@@ -136,6 +136,7 @@
     <ClCompile Include="Actors\LaserProjectile.cpp" />
     <ClCompile Include="Core\GameState.cpp" />
     <ClCompile Include="Core\UIManager.cpp" />
+    <ClCompile Include="Components\SpriteAnimationComponent.cpp" />
     <ClCompile Include="Widgets\LivesWidget.cpp" />
     <ClCompile Include="Widgets\ScoreWidget.cpp" />
     <ClCompile Include="Widgets\HUDWidget.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="Core\GameState.h" />
     <ClInclude Include="Interfaces\IGameStateObserver.h" />
     <ClInclude Include="Core\UIManager.h" />
+    <ClInclude Include="Components\SpriteAnimationComponent.h" />
     <ClInclude Include="Widgets\LivesWidget.h" />
     <ClInclude Include="Widgets\ScoreWidget.h" />
     <ClInclude Include="Widgets\HUDWidget.h" />

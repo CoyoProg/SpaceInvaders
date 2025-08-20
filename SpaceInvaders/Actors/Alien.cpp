@@ -1,5 +1,6 @@
 #include "Alien.h"
 #include "../Components/CollisionBoxComponent.h"
+#include "../Components/SpriteAnimationComponent.h"
 #include "../Components/LaserComponent.h"
 #include "../Interfaces/IAlienObserver.h"
 #include "../Core/GameState.h"
@@ -14,6 +15,7 @@ Alien::Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoo
 	m_size = sizeP;
 
 	m_laserComponent = std::make_unique<LaserComponent>();
+	m_SpriteAnimationComponent = std::make_unique<SpriteAnimationComponent>();
 
 	if (m_CollisionBoxComponent)
 	{
@@ -21,15 +23,30 @@ Alien::Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoo
 	}
 }
 
+void Alien::AddObserver(const std::shared_ptr<IAlienObserver> observerP)
+{
+	m_observers.push_back(observerP);
+}
+
+void Alien::RemoveObserver(const std::shared_ptr<IAlienObserver> observerP)
+{
+	m_observers.erase(
+		std::remove(
+			m_observers.begin(),
+			m_observers.end(),
+			observerP),
+		m_observers.end()
+	);
+}
+
 void Alien::Draw()
 {
-	DrawRectangleGradientH(
-		static_cast<int>(m_position.x),
-		static_cast<int>(m_position.y),
-		static_cast<int>(m_size.x),
-		static_cast<int>(m_size.y), 
-		m_previousColor,
-		m_nextColor);
+	m_SpriteAnimationComponent->Draw(m_position, m_previousColor);
+}
+
+void Alien::OnAlienMoved()
+{
+	m_SpriteAnimationComponent->NextAnimationFrame();
 }
 
 void Alien::SetColor(Color previousColorP, Color nextColorP)

@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <unordered_map>
+#include "raylib.h"
 
 class GameState;
 class UIManager;
@@ -13,6 +15,33 @@ constexpr int SCREEN_WIDTH = 900;
 constexpr int PLAYGROUND_OFFSET = 80;
 constexpr int SCREEN_HEIGHT = 900;
 
+enum class SpriteID
+{
+	AlienSmall,
+	AlienMedium,
+	AlienLarge,
+	Explosion,
+	Laser,
+	Player
+};
+
+struct SpriteProperties
+{
+	float width;
+	float height;
+	int frameCount;
+};
+
+static const std::unordered_map<SpriteID, SpriteProperties> SPRITE_PROPERTIES
+{
+	{ SpriteID::AlienSmall, { 81.0f, 84.0f, 1 } },
+	{ SpriteID::AlienMedium, { 112.0f, 84.0f, 1 } },
+	{ SpriteID::AlienLarge, { 122.0f, 84.0f, 1 } },
+	{ SpriteID::Explosion, { 64, 64.0f, 16 } },
+	{ SpriteID::Laser, { 10, 30.0f, 1 } },
+	{ SpriteID::Player, { 50, 50.0f, 1 } }
+};
+
 /*
  * @brief GameManager is a singleton class that updates and manages all game actors and objects.
  */
@@ -24,6 +53,10 @@ public:
 		static GameManager instance;
 		return instance;
 	}
+
+	void InitializeGame();
+	void LoadRessources();
+	void UnloadTextures();
 
 	~GameManager();
 
@@ -52,6 +85,8 @@ public:
 	// Add widget to the list of pending widgets
 	void AddWidget(std::shared_ptr<Widget> WidgetP);
 
+	Texture2D GetTexture(const std::string& textureName) const;
+
 private:
 	// Private constructor for singleton pattern
 	GameManager();
@@ -73,5 +108,7 @@ private:
 	std::vector<std::shared_ptr<Widget>> m_pendingWidgets;
 	std::vector<std::shared_ptr<Actor>> m_actors;
 	std::vector<std::shared_ptr<Actor>> m_pendingActors;
+
+	std::unordered_map<std::string, Texture2D> textures;
 };
 

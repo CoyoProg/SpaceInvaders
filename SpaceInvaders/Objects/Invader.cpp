@@ -16,7 +16,6 @@ void Invader::Update(float deltaSecP)
 	if (m_aliens.empty()) return;
 
 	UpdateAlienPosition(deltaSecP);
-
 	UpdateShootProbability(deltaSecP);
 }
 
@@ -86,6 +85,7 @@ void Invader::UpdateAlienPosition(float deltaSecP)
 			newPosition.y += m_aliens[m_currentAlienIndex]->GetSize().y;
 		}
 
+		m_aliens[m_currentAlienIndex]->OnAlienMoved();
 		m_aliens[m_currentAlienIndex]->SetPosition(newPosition);
 		m_currentAlienIndex--;
 
@@ -123,10 +123,7 @@ void Invader::UpdateShootProbability(float deltaSecP)
 
 std::shared_ptr<Alien> Invader::GetRandomBottomAlien() const
 {
-	if (m_aliens.empty())
-	{
-		throw std::runtime_error("No aliens available");
-	}
+	if (m_aliens.empty()) return nullptr;
 
 	if (m_aliens.size() == 1) return m_aliens[0];
 
@@ -166,6 +163,7 @@ std::shared_ptr<Alien> Invader::GetRandomBottomAlien() const
 
 	if (bottomsAliens.empty()) return nullptr;
 	m_bottomAliensCount = static_cast<int>(bottomsAliens.size());
+
 	// DEBUG VISUALIZATION
 	//for (const auto& alien : bottomsAliens)
 	//{

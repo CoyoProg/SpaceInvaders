@@ -1,8 +1,8 @@
 #pragma once
 #include "Component.h"
-#include "raylib.h"
 #include <vector>
 #include <memory>
+#include "raylib.h"
 
 class LaserProjectile;
 enum class ActorAffiliation;
