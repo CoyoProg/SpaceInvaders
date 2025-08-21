@@ -34,6 +34,7 @@ public:
 	void LoadStartMenu();
 	// Load the first level
 	void StartLevel();
+	void NextLevel();
 	void ResetLevel();
 	void OnGameOver();
 	void OnCountdownFinished();

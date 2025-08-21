@@ -30,7 +30,7 @@ void GameMessageWidget::Draw()
 			SCREEN_WIDTH / 2 - MeasureText("PRESS SPACE TO RESTAR", 40) / 2,
 			static_cast<int>(SCREEN_HEIGHT / 1.5f - m_fontSize / 2.f),
 			40,
-			GREEN
+			LIGHTGRAY
 		);
 	}
 }

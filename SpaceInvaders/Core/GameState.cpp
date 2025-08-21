@@ -35,6 +35,7 @@ void GameState::HandleTransitionTimer(float deltaSecP)
 			ResetLevel();
 			m_isGameOver = false;
 			m_freezeMovement = false;
+			m_freezeMovementTimer = 0.0f;
 		}
 	}
 	else
@@ -76,8 +77,37 @@ void GameState::StartLevel()
 	}
 }
 
+void GameState::NextLevel()
+{
+	GameManager::GetInstance().ResetAllActors();
+
+	m_currentLevel->InitializeLevel(GameManager::GetInstance(), *this);
+	// Setup Alien movement speed
+	// Setup Alien shoot probability
+	// Setup Alien projectile speed
+
+	// Level 3: do not reset the shields
+
+
+	// Notify all observers about the score update
+	for (auto it = m_observers.begin(); it != m_observers.end(); )
+	{
+		// Check if the observer is still valid and erase it if not
+		std::shared_ptr<IGameStateObserver>  observerPtr = it->lock();
+		if (!observerPtr)
+		{
+			it = m_observers.erase(it);
+			continue;
+		}
+
+		observerPtr->NotifyLevelStart();
+		++it;
+	}
+}
+
 void GameState::OnGameOver()
 {
+	m_isGameOver = true;
 	GameManager::GetInstance().SetPauseGame(true);
 	m_highestScore = m_score > m_highestScore ? m_score : m_highestScore;
 
@@ -157,14 +187,6 @@ void GameState::OnPlayerDied()
 	if (m_lives <= 5)
 	{
 		OnGameOver();
-
-		m_isGameOver = true;
-		//ResetLevel();
-		//for (const std::shared_ptr<IGameStateObserver>& observer : m_observers)
-		//{
-		//	observer->NotifyGameOver();
-		//}
-
 		return;
 	}
 
