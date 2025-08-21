@@ -50,7 +50,7 @@ public:
 	void SetPosition(Vector2 positionP);
 	void SetSize(Vector2 sizeP);
 	void SetColor(Color colorP) { m_color = colorP; }
-	void SetForDeletion(bool markedForDeletionP = true) { m_markedForDeletion = markedForDeletionP; }
+	virtual void SetForDeletion(bool markedForDeletionP = true);
 
 	bool IsMarkedForDeletion() const { return m_markedForDeletion; }
 

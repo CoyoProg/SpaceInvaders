@@ -34,7 +34,7 @@ public:
 
 private:
 	// Initialize the aliens on the grid
-	void InitializeAliensGrid(GameManager& gameManagerP);
+	void InitializeAliensGrid(GameManager& gameManagerP, Invader& invaderP);
 	// Initialize the shields at the bottom of the screen
 	void InitializeShields(GameManager& gameManagerP);
 
@@ -44,8 +44,5 @@ private:
 	Color ComputeAlienRadialColor(float rowP, float colP);
 	// Assign the alien type and score based on its row
 	void AssignAlienType(AlienInfo& alienInfoP, int row);
-
-private:
-	std::shared_ptr<Invader> m_invader;
 };
 

@@ -38,7 +38,7 @@ private:
 	void CleanupAliens();
 
 private:
-	std::vector<std::shared_ptr<Alien>> m_aliens;
+	std::vector<std::weak_ptr<Alien>> m_aliens;
 	int m_alienToMoveIndex{ 0 };
 
 	// 1 for right, -1 for left

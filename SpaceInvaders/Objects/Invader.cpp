@@ -3,7 +3,7 @@
 #include "../Core/GameManager.h"
 
 #include <unordered_map>
-
+#include <iostream>
 Invader::Invader(int spaceBetweenRowsP)
 {
 	m_spaceBetweenRows = spaceBetweenRowsP;
@@ -26,20 +26,23 @@ void Invader::CleanupAliens()
 {
 	for (int i = 0; i < static_cast<int>(m_aliens.size()); )
 	{
-		if (!m_aliens[i]->IsMarkedForDeletion())
+		std::shared_ptr<Alien> alienPtr = m_aliens[i].lock();
+
+		if (m_aliens[i].expired() || alienPtr->IsMarkedForDeletion())
 		{
-			++i;
+			m_aliens.erase(m_aliens.begin() + i);
+
+			// If an alien that was removed was before (or at) the moving alien,
+			// Decrement the alien moving index to keep moving to the same alien
+			if (i <= m_alienToMoveIndex)
+			{
+				--m_alienToMoveIndex;
+			}
+
 			continue;
 		}
 
-		m_aliens.erase(m_aliens.begin() + i);
-
-		// If an alien that was removed was before (or at) the moving alien,
-		// Decrement the alien moving index to keep moving to the same alien
-		if (i <= m_alienToMoveIndex)
-		{
-			--m_alienToMoveIndex;
-		}
+		++i;
 	}
 
 	// If the first alien in the list was removed, reset to the last alien index
@@ -71,9 +74,10 @@ void Invader::UpdateAlienPosition(float deltaSecP)
 	// This staggers their movement, making the aliens appear to move like a wave
 	while (m_delayMovementTimer >= m_movementDelay)
 	{
+		std::shared_ptr<Alien> alienPtr = m_aliens[m_alienToMoveIndex].lock();
 		m_delayMovementTimer -= m_movementDelay;
 
-		Vector2 newPosition = m_aliens[m_alienToMoveIndex]->GetPosition();
+		Vector2 newPosition = alienPtr->GetPosition();
 
 		// Move the alien horizontally in one direction
 		// But if he's changing direction, move down instead
@@ -83,11 +87,11 @@ void Invader::UpdateAlienPosition(float deltaSecP)
 		}
 		else
 		{
-			newPosition.y += m_aliens[m_alienToMoveIndex]->GetSize().y;
+			newPosition.y += alienPtr->GetSize().y;
 		}
 
-		m_aliens[m_alienToMoveIndex]->OnAlienMoved();
-		m_aliens[m_alienToMoveIndex]->SetPosition(newPosition);
+		alienPtr->OnAlienMoved();
+		alienPtr->SetPosition(newPosition);
 		m_alienToMoveIndex--;
 
 		// If all the aliens have moved, reset the index and check if we need to change direction the next step
@@ -132,27 +136,28 @@ std::shared_ptr<Alien> Invader::GetRandomBottomAlien() const
 	// An alien is added to the list only if it has a laser available
 	if (m_aliens.size() == 1)
 	{
-		return m_aliens[0]->IsLaserAvailable() ? m_aliens[0] : nullptr;
+		return m_aliens[0].lock()->IsLaserAvailable() ? m_aliens[0].lock() : nullptr;
 	}
 
 	std::unordered_map<int, std::shared_ptr<Alien>> bottomsAliens;
-	for (const std::shared_ptr<Alien>& alien : m_aliens)
+	for (const std::weak_ptr<Alien>& alien : m_aliens)
 	{
-		int col = alien->GetCoordX();
+		std::shared_ptr<Alien> alienPtr = alien.lock();
+		int col = alienPtr->GetCoordX();
 
 		// Check if a bottommost alien already exists in this column
 		auto iterator = bottomsAliens.find(col);
 		if (iterator != bottomsAliens.end())
 		{
-			if (alien->GetCoordY() > iterator->second->GetCoordY())
+			if (alienPtr->GetCoordY() > iterator->second->GetCoordY())
 			{
-				iterator->second = alien;
+				iterator->second = alienPtr;
 				continue;
 			}
 		}
 
 		// Register this alien as the bottommost in its column
-		bottomsAliens[col] = alien;
+		bottomsAliens[col] = alienPtr;
 	}
 
 	for (auto it = bottomsAliens.begin(); it != bottomsAliens.end(); )
@@ -191,12 +196,14 @@ std::shared_ptr<Alien> Invader::GetRandomBottomAlien() const
 
 bool Invader::ShouldChangeDirection() const
 {
-	for (const std::shared_ptr<Alien>& alien : m_aliens)
+	for (const std::weak_ptr<Alien>& alien : m_aliens)
 	{
+		std::shared_ptr<Alien> alienPtr = alien.lock();
+
 		// Check if the next step will go out of bounds
 		// Aliens can go slightly out of playground bounds
-		float nextStepPosition = alien->GetPosition().x + m_distancePerStep * m_direction;
-		if (nextStepPosition > SCREEN_WIDTH - PLAYGROUND_OFFSET / 2 - alien->GetSize().x || nextStepPosition < 0 + PLAYGROUND_OFFSET / 2)
+		float nextStepPosition = alienPtr->GetPosition().x + m_distancePerStep * m_direction;
+		if (nextStepPosition > SCREEN_WIDTH - PLAYGROUND_OFFSET / 2 - alienPtr->GetSize().x || nextStepPosition < 0 + PLAYGROUND_OFFSET / 2)
 		{
 			return true;
 		}

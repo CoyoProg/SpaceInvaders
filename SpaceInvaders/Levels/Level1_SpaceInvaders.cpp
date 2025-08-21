@@ -8,21 +8,20 @@
 Level1_SpaceInvaders::Level1_SpaceInvaders(GameManager& gameManagerP)
 {
 	gameManagerP.AddActor(std::make_shared<Player>());
-	m_invader = std::make_shared<Invader>();
+	std::shared_ptr<Invader> invader = std::make_shared<Invader>();
 
-	InitializeAliensGrid(gameManagerP);
+	InitializeAliensGrid(gameManagerP, *invader);
 	InitializeShields(gameManagerP);
 
 	// Move the Invader ownership to the GameManager when the level is fully initialized
-	gameManagerP.AddObject(m_invader);
+	gameManagerP.AddObject(invader);
 }
 
 void Level1_SpaceInvaders::OnGameOver()
 {
-	m_invader->RemoveAllAliens();
 }
 
-void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP)
+void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP, Invader& invaderP)
 {
 	// The grid is centered horizontally based on the total m_width of the aliens and the spaces between columns
 	int totalGridWidth = AlienGridConfig::COLUMN_NUMBER * static_cast<int>(AlienGridConfig::ALIEN_SIZE.x) + (AlienGridConfig::COLUMN_NUMBER - 1) * AlienGridConfig::SPACE_BETWEEN_COLS;
@@ -36,7 +35,7 @@ void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP)
 		{
 			std::shared_ptr<Alien> alien = CreateAlien(row, col, horizontalMargin);
 			gameManagerP.AddActor(alien);
-			m_invader->AddAlien(alien);
+			invaderP.AddAlien(alien);
 		}
 	}
 }

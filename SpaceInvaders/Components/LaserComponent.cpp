@@ -6,17 +6,27 @@
 void LaserComponent::Shoot(int directionP, Vector2 positionP, ActorAffiliation ownerP, int movementSpeedP)
 {
 	// Check if there is a sleeping laser
-	for (const std::shared_ptr<LaserProjectile>& laser : m_lasers)
+	for (auto it = m_lasers.begin(); it != m_lasers.end(); )
 	{
-		if (laser->IsMarkedForDeletion())
+		std::shared_ptr<LaserProjectile> laserPtr = it->lock();
+		if (!laserPtr)
 		{
-			laser->SetPosition(positionP);
-			laser->SetSize({ 5, 20 });
-			laser->SetColor(RED);
-			laser->SetForDeletion(false);
-			GameManager::GetInstance().AddActor(laser);
+			it = m_lasers.erase(it);
+			continue;
+		}
+
+		// Check if the laser is marked for deletion (sleeping) and reuse it
+		if (laserPtr->IsMarkedForDeletion())
+		{
+			laserPtr->SetPosition(positionP);
+			laserPtr->SetSize({ 5, 20 });
+			laserPtr->SetColor(RED);
+			laserPtr->SetForDeletion(false);
+			GameManager::GetInstance().AddActor(laserPtr);
 			return;
 		}
+
+		++it;
 	}
 
 	// If no sleeping laser was found, create a new one
@@ -28,9 +38,11 @@ void LaserComponent::Shoot(int directionP, Vector2 positionP, ActorAffiliation o
 const int LaserComponent::GetLaserCount() const
 {
 	int count = 0;
-	for (const std::shared_ptr<LaserProjectile>& laser : m_lasers)
+	for (const std::weak_ptr<LaserProjectile>& laser : m_lasers)
 	{
-		if (!laser->IsMarkedForDeletion()) count++;
+		std::shared_ptr<LaserProjectile> laserPtr = laser.lock();
+		if (!laserPtr) continue;
+		if (!laserPtr->IsMarkedForDeletion()) count++;
 	}
 
 	return count;

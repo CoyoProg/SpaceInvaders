@@ -30,18 +30,24 @@ Alien::Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoo
 	}
 }
 
-void Alien::AddObserver(const std::shared_ptr<IAlienObserver> observerP)
+void Alien::AddObserver(const std::weak_ptr<IAlienObserver> observerP)
 {
 	m_observers.push_back(observerP);
 }
 
-void Alien::RemoveObserver(const std::shared_ptr<IAlienObserver> observerP)
+void Alien::RemoveObserver(const std::weak_ptr<IAlienObserver> observerP)
 {
+	if (observerP.expired()) return;
+	std::shared_ptr<IAlienObserver> observerPtr = observerP.lock();
+
 	m_observers.erase(
-		std::remove(
+		std::remove_if(
 			m_observers.begin(),
 			m_observers.end(),
-			observerP),
+			[&observerPtr](const std::weak_ptr<IAlienObserver>& wptr) {
+				auto sp = wptr.lock();
+				return sp == observerPtr; // compare shared_ptrs
+			}),
 		m_observers.end()
 	);
 }
@@ -49,6 +55,28 @@ void Alien::RemoveObserver(const std::shared_ptr<IAlienObserver> observerP)
 void Alien::Draw()
 {
 	m_SpriteAnimationComponent.Draw(m_position, m_color);
+}
+
+void Alien::SetForDeletion(bool markedForDeletionP)
+{
+	m_markedForDeletion = markedForDeletionP;
+
+	if (!markedForDeletionP) return;
+
+	// Notify all observers about the alien's death
+	for (auto it = m_observers.begin(); it != m_observers.end(); )
+	{
+		// Check if the observer is still valid and erase it if not
+		std::shared_ptr<IAlienObserver>  observerPtr = it->lock();
+		if (!observerPtr)
+		{
+			it = m_observers.erase(it);
+			continue;
+		}
+
+		observerPtr->OnAlienDied(*this);
+		++it;
+	}
 }
 
 void Alien::OnAlienMoved()
@@ -59,12 +87,21 @@ void Alien::OnAlienMoved()
 void Alien::OnCollisionEvent(const Actor& otherActorP)
 {
 	GameState::GetInstance().AddScore(m_scoreValue);
-
 	m_markedForDeletion = true;
 
-	for (const std::shared_ptr<IAlienObserver>& observer : m_observers)
+	// Notify all observers about the alien's death
+	for (auto it = m_observers.begin(); it != m_observers.end(); )
 	{
-		observer->OnAlienDied(*this);
+		// Check if the observer is still valid and erase it if not
+		std::shared_ptr<IAlienObserver>  observerPtr = it->lock();
+		if (!observerPtr)
+		{
+			it = m_observers.erase(it);
+			continue;
+		}
+	
+		observerPtr->OnAlienDied(*this);
+		++it;
 	}
 }
 

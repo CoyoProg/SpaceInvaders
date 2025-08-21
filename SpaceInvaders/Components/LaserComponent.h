@@ -18,6 +18,6 @@ public:
 	const int GetLaserCount() const;
 
 private:
-	std::vector<std::shared_ptr<LaserProjectile>> m_lasers;
+	std::vector<std::weak_ptr<LaserProjectile>> m_lasers;
 };
 

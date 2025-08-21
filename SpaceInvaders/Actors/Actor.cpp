@@ -48,6 +48,11 @@ void Actor::SetSize(Vector2 sizeP)
 	}
 }
 
+void Actor::SetForDeletion(bool markedForDeletionP)
+{
+	m_markedForDeletion = markedForDeletionP;
+}
+
 const CollisionBoxComponent* Actor::GetCollisionBoxComponent() const
 {
 	return m_CollisionBoxComponent.get();

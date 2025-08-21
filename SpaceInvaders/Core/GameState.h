@@ -24,8 +24,8 @@ public:
 
 	// The score is updated everytime the player destroys an enemy
 	void AddScore(int scoreP);
-	void AddObserver(const std::shared_ptr<IGameStateObserver> observerP);
-	void RemoveObserver(const std::shared_ptr<IGameStateObserver> observerP);
+	void AddObserver(const std::weak_ptr<IGameStateObserver> observerP);
+	void RemoveObserver(const std::weak_ptr<IGameStateObserver> observerP);
 
 	void OnPlayerDied();
 
@@ -33,7 +33,7 @@ private:
 	GameState() = default;
 
 private:
-	std::vector<std::shared_ptr<IGameStateObserver>> m_observers;
+	std::vector<std::weak_ptr<IGameStateObserver>> m_observers;
 
 	int m_score{ 0 };
 	int m_lives{ 3 };
