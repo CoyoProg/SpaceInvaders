@@ -9,12 +9,6 @@ HUDWidget::HUDWidget() :
 
 void HUDWidget::Draw()
 {
-	// ##
-	// TO DO: Replace with a kill zone actor
-	// Draw the earth line
-	DrawLine(0, SCREEN_HEIGHT - 45, SCREEN_WIDTH, SCREEN_HEIGHT - 45, GREEN);
-	// ##
-
 	// Draw the playground boundaries
 	DrawLine(
 		PLAYGROUND_OFFSET,

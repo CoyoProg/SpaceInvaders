@@ -44,6 +44,12 @@ BackgroundWidget::BackgroundWidget(Texture2D starSheetP) :
 
 void BackgroundWidget::Draw()
 {
+	// ##
+	// TO DO: Replace with a kill zone actor
+	// Draw the earth line
+	DrawLine(0, SCREEN_HEIGHT - 45, SCREEN_WIDTH, SCREEN_HEIGHT - 45, GREEN);
+	// ##
+
 	// Draw the stars from the stars table
 	for (int i = 0; i < m_starsTable.size(); ++i)
 	{

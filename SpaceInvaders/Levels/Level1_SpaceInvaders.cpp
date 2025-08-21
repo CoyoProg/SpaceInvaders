@@ -14,7 +14,12 @@ Level1_SpaceInvaders::Level1_SpaceInvaders(GameManager& gameManagerP)
 	InitializeShields(gameManagerP);
 
 	// Move the Invader ownership to the GameManager when the level is fully initialized
-	gameManagerP.AddObject(std::move(m_invader));
+	gameManagerP.AddObject(m_invader);
+}
+
+void Level1_SpaceInvaders::OnGameOver()
+{
+	m_invader->RemoveAllAliens();
 }
 
 void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP)

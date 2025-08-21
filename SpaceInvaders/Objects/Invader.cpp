@@ -58,6 +58,11 @@ void Invader::AddAlien(std::shared_ptr<Alien> alienP)
 	m_alienToMoveIndex = static_cast<int>(m_aliens.size() - 1);
 }
 
+void Invader::RemoveAllAliens()
+{
+	CleanupAliens();
+}
+
 void Invader::UpdateAlienPosition(float deltaSecP)
 {
 	m_delayMovementTimer += deltaSecP;

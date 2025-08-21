@@ -41,7 +41,7 @@ Rectangle StartButtonWidget::GetBoundingBox() const
 
 void StartButtonWidget::OnHover()
 {
-	if (m_state != ButtonState::Idle) return;
+	if (m_state != ButtonState::Idle || m_state == ButtonState::Disabled) return;
 
 	m_state = ButtonState::Hovered;
 	m_spriteAnimationComponent.SetFrame(1);
@@ -49,7 +49,7 @@ void StartButtonWidget::OnHover()
 
 void StartButtonWidget::OnPress()
 {
-	if (m_state != ButtonState::Hovered) return;
+	if (m_state != ButtonState::Hovered || m_state == ButtonState::Disabled) return;
 
 	m_state = ButtonState::Pressed;
 	m_spriteAnimationComponent.SetFrame(2);
@@ -57,9 +57,9 @@ void StartButtonWidget::OnPress()
 
 void StartButtonWidget::OnRelease()
 {
-	if (m_state != ButtonState::Pressed) return;
+	if (m_state != ButtonState::Pressed || m_state == ButtonState::Disabled) return;
 
-	m_state = ButtonState::Idle;
+	m_state = ButtonState::Disabled;
 	m_spriteAnimationComponent.SetFrame(0);
 	m_shouldStartGame = true;
 	m_IsUpdateEnabled = true;
@@ -67,6 +67,8 @@ void StartButtonWidget::OnRelease()
 
 void StartButtonWidget::OnLooseFocus()
 {
+	if (m_state == ButtonState::Disabled) return;
+
 	m_state = ButtonState::Idle;
 	m_spriteAnimationComponent.SetFrame(0);
 }

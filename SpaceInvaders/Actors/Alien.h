@@ -4,6 +4,7 @@
 #include "../Components/LaserComponent.h"
 
 #include <vector>
+#include <iostream>
 
 enum class SpriteID;
 class IAlienObserver;
@@ -15,7 +16,7 @@ class Alien : public Actor
 {
 public:
 	Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoordY, SpriteID spriteTypeP, Color colorP, int scoreValueP = 50);
-
+	~Alien() { std::cout << "Alien destroyed" << std::endl; }
 	virtual void Draw() override;
 
 	void AddObserver(const std::shared_ptr<IAlienObserver> observerP);

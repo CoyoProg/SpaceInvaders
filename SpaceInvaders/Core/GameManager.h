@@ -70,6 +70,7 @@ public:
 	void LoadStartMenu();
 	// Load the first level
 	void StartLevel();
+	void ResetLevel();
 
 	// Delete copy and move constructors and assignment operators to prevent copying
 	GameManager(const GameManager& other) = delete;
@@ -96,6 +97,7 @@ public:
 	void AddWidget(std::shared_ptr<Widget> WidgetP);
 
 	Texture2D GetTexture(const std::string& textureName) const;
+	Level1_SpaceInvaders& GetCurrentLevel() const { return *m_currentLevel; }
 
 private:
 	// Private constructor for singleton pattern
@@ -109,7 +111,7 @@ private:
 	void FlushNewWidgets();
 
 private:
-	std::unique_ptr<Level1_SpaceInvaders> m_currentLevel;
+	std::shared_ptr<Level1_SpaceInvaders> m_currentLevel;
 	std::unique_ptr<UIManager> m_uiManager;
 
 	std::vector<std::shared_ptr<Object>> m_objects;

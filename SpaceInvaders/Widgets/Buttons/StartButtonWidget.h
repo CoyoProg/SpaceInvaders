@@ -6,7 +6,9 @@ enum class ButtonState
 {
 	Idle,
 	Hovered,
-	Pressed
+	Pressed,
+
+	Disabled
 };
 
 /*
@@ -32,7 +34,7 @@ private:
 	SpriteAnimationComponent m_spriteAnimationComponent;
 
 	bool m_shouldStartGame{ false };
-	const float m_startLevelDelay{ 1.0f };
+	const float m_startLevelDelay{ 0.0f };
 	float m_startLevelTimer{ 0.0f };
 };
 

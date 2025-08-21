@@ -27,11 +27,20 @@ void GameManager::StartLevel()
 	m_widgets.clear();
 	// ##
 
-	m_currentLevel = std::make_unique<Level1_SpaceInvaders>(*this);
+	m_currentLevel = std::make_shared<Level1_SpaceInvaders>(*this);
 	m_uiManager = std::make_unique<UIManager>(*this);
 
 	// Initialize the GameState singleton
 	GameState::GetInstance().AddObserver(m_uiManager->GetHUD());
+	GameState::GetInstance().AddObserver(m_currentLevel);
+}
+
+void GameManager::ResetLevel()
+{
+	for(const std::shared_ptr<Actor>& actor : m_actors)
+	{
+		if (actor) actor->SetForDeletion();
+	}
 }
 
 void GameManager::LoadRessources()

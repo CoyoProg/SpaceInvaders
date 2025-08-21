@@ -298,8 +298,8 @@ void Shield::ExplodeCell(Vector2 hitPositionP)
 	{
 		for (int dx = -radius; dx <= radius; ++dx)
 		{
-			int x = gridPos.x + dx;
-			int y = gridPos.y + dy;
+			int x = static_cast<int>(gridPos.x + dx);
+			int y = static_cast<int>(gridPos.y + dy);
 	
 			if (x < 0 || x >= UPSCALED_WIDTH || y < 0 || y >= UPSCALED_HEIGHT)
 				continue;

@@ -1,5 +1,6 @@
 #include "GameState.h"
 #include "../Interfaces/IGameStateObserver.h"
+#include "GameManager.h"
 
 void GameState::AddScore(int scoreP)
 {
@@ -18,6 +19,16 @@ void GameState::OnPlayerDied()
 	for (const std::shared_ptr<IGameStateObserver>& observer : m_observers)
 	{
 		observer->OnLivesUpdate(m_lives);
+	}
+
+	if (m_lives <= 5)
+	{
+		m_isGameOver = true;
+		GameManager::GetInstance().ResetLevel();
+		for (const std::shared_ptr<IGameStateObserver>& observer : m_observers)
+		{
+			observer->OnGameOver();
+		}
 	}
 }
 

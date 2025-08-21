@@ -21,6 +21,7 @@ public:
 
 	// Add an alien to be tracked by the Invader
 	void AddAlien(std::shared_ptr<Alien> alienP);
+	void RemoveAllAliens();
 
 private:
 	// Updates the position of one alien at a time
