@@ -27,6 +27,7 @@ Alien::Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoo
 	if (m_CollisionBoxComponent)
 	{
 		m_CollisionBoxComponent->SetSize(m_size);
+		m_CollisionBoxComponent->SetPosition(m_position);
 	}
 }
 
@@ -74,7 +75,7 @@ void Alien::SetForDeletion(bool markedForDeletionP)
 			continue;
 		}
 
-		observerPtr->OnAlienDied(*this);
+		observerPtr->NotifyAlienDied(*this);
 		++it;
 	}
 }
@@ -100,7 +101,7 @@ void Alien::OnCollisionEvent(const Actor& otherActorP)
 			continue;
 		}
 	
-		observerPtr->OnAlienDied(*this);
+		observerPtr->NotifyAlienDied(*this);
 		++it;
 	}
 }

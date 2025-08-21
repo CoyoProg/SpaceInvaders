@@ -1,10 +1,9 @@
 #pragma once
-#include "../Interfaces/IGameStateObserver.h"
-
 #include <memory>
 #include "raylib.h"
 
 class GameManager;
+class GameState;
 class Alien;
 class Invader;
 
@@ -26,10 +25,10 @@ struct AlienGridConfig
 /*
  * @brief Represents the first level of the game
  */
-class Level1_SpaceInvaders : public IGameStateObserver
+class Level1_SpaceInvaders
 {
 public:
-	void InitializeLevel(GameManager& gameManagerP);
+	void InitializeLevel(GameManager& gameManagerP, GameState& gameStateP);
 
 private:
 	// Initialize the aliens on the grid

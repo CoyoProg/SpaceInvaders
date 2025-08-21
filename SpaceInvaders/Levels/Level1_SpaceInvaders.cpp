@@ -1,5 +1,6 @@
 #include "Level1_SpaceInvaders.h"
 #include "../Core/GameManager.h"
+#include "../Core/GameState.h"
 #include "../Actors/Player.h"
 #include "../Actors/Alien.h"
 #include "../Actors/Shield.h"
@@ -7,7 +8,7 @@
 
 // Retrospection Note: Ideally, we could use object pooling instead of creating new actors every level.
 // But because of the way the game manager removes dead actors, we will just create new ones for now.
-void Level1_SpaceInvaders::InitializeLevel(GameManager& gameManagerP)
+void Level1_SpaceInvaders::InitializeLevel(GameManager& gameManagerP, GameState& gameStateP)
 {
 	gameManagerP.AddActor(std::make_shared<Player>());
 	std::shared_ptr<Invader> invader = std::make_shared<Invader>();
@@ -15,6 +16,7 @@ void Level1_SpaceInvaders::InitializeLevel(GameManager& gameManagerP)
 	InitializeAliensGrid(gameManagerP, *invader);
 	InitializeShields(gameManagerP);
 
+	gameStateP.AddObserver(invader);
 	gameManagerP.AddObject(invader);
 }
 

@@ -7,8 +7,9 @@ class IGameStateObserver
 {
 public:
 	virtual ~IGameStateObserver() = default;
-	virtual void OnGameOver() {};
-	virtual void OnScoreUpdate(int scoreP) {};
-	virtual void OnLivesUpdate(int newLivesP) {};
+	virtual void NotifyGameOver() {};
+	virtual void NotifyScoreUpdate(int scoreP) {};
+	virtual void NotifyPlayerDied(int newLivesP) {};
+	virtual void NotifyPlayerRespawn() {};
 };
 

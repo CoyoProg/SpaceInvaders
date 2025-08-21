@@ -30,12 +30,12 @@ void HUDWidget::Draw()
 	m_livesWidget.Draw();
 }
 
-void HUDWidget::OnScoreUpdate(int scoreP)
+void HUDWidget::NotifyScoreUpdate(int scoreP)
 {
 	m_scoreWidget.SetScore(scoreP);
 }
 
-void HUDWidget::OnLivesUpdate(int newLivesP)
+void HUDWidget::NotifyPlayerDied(int newLivesP)
 {
 	m_livesWidget.SetLives(newLivesP);
 }

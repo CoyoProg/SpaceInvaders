@@ -11,15 +11,25 @@ Invader::Invader(int spaceBetweenRowsP)
 
 void Invader::Update(float deltaSecP)
 {
-	if (m_aliens.empty()) return;
+	if (m_aliens.empty() || m_freezeMovement) return;
 
 	UpdateAlienPosition(deltaSecP);
 	UpdateShootProbability(deltaSecP);
 }
 
-void Invader::OnAlienDied(Alien& alienP)
+void Invader::NotifyAlienDied(Alien& alienP)
 {
 	CleanupAliens();
+}
+
+void Invader::NotifyPlayerDied(int newLivesP)
+{
+	m_freezeMovement = true;
+}
+
+void Invader::NotifyPlayerRespawn()
+{
+	m_freezeMovement = false;
 }
 
 void Invader::CleanupAliens()

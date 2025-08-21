@@ -24,6 +24,5 @@ private:
 	static constexpr int m_maxLaserCount{ 0 };
 	static constexpr float m_shootCooldown{ 1.0f };
 	double m_shootTimer{ -1.0 };
-	bool doOnce{ false };
 };
 

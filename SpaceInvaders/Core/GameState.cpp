@@ -1,6 +1,65 @@
 #include "GameState.h"
-#include "../Interfaces/IGameStateObserver.h"
 #include "GameManager.h"
+#include "UIManager.h"
+#include "../Interfaces/IGameStateObserver.h"
+#include "../Levels/Level1_SpaceInvaders.h"
+#include "../Widgets/StartMenuWidget.h"
+#include "../Widgets/HUDWidget.h"
+#include "../Actors/Player.h"
+
+// Needed to be able to forward decalre unique ptr
+GameState::GameState() = default;
+GameState::~GameState() = default;
+
+void GameState::Update(float deltaSecP)
+{
+	if (m_freezeMovement)
+	{
+		m_freezeMovementTimer += deltaSecP;
+		if (m_freezeMovementTimer < m_freezeMovementDuration)
+		{
+			return;
+		}
+
+		m_freezeMovement = false;
+		m_freezeMovementTimer = 0.0f;
+		OnPlayerRespawned();
+	}
+}
+
+void GameState::LoadStartMenu()
+{
+	GameManager::GetInstance().AddWidget(std::move(std::make_unique<StartMenuWidget>()));
+}
+
+void GameState::StartLevel()
+{
+	GameManager::GetInstance().ResetAllWidgets();
+
+	m_currentLevel = std::make_shared<Level1_SpaceInvaders>();
+	m_currentLevel->InitializeLevel(GameManager::GetInstance(), *this);
+	m_uiManager = std::make_unique<UIManager>(GameManager::GetInstance(), *this);
+
+	GameManager::GetInstance().SetPauseGame(true);
+}
+
+void GameState::OnGameOver()
+{
+	GameManager::GetInstance().SetPauseGame(true);
+}
+
+void GameState::OnCounterFinished()
+{
+	GameManager::GetInstance().SetPauseGame(false);
+}
+
+void GameState::ResetLevel()
+{
+	GameManager::GetInstance().ResetAllActors();
+	m_currentLevel->InitializeLevel(GameManager::GetInstance(), *this);
+
+	GameManager::GetInstance().SetPauseGame(true);
+}
 
 void GameState::AddScore(int scoreP)
 {
@@ -17,7 +76,7 @@ void GameState::AddScore(int scoreP)
 			continue;
 		}
 
-		observerPtr->OnScoreUpdate(m_score);
+		observerPtr->NotifyScoreUpdate(m_score);
 		++it;
 	}
 }
@@ -25,6 +84,7 @@ void GameState::AddScore(int scoreP)
 void GameState::OnPlayerDied()
 {
 	m_lives--;
+	m_freezeMovement = true;
 
 	// Notify all observers about the lives update
 	for (auto it = m_observers.begin(); it != m_observers.end(); )
@@ -37,21 +97,42 @@ void GameState::OnPlayerDied()
 			continue;
 		}
 
-		observerPtr->OnLivesUpdate(m_lives);
+		observerPtr->NotifyPlayerDied(m_lives);
 		++it;
 	}
 
 	if (m_lives <= 5)
 	{
-		m_isGameOver = true;
+		//m_isGameOver = true;
 
-		//GameManager::GetInstance().ResetLevel();
+		//ResetLevel();
 		//for (const std::shared_ptr<IGameStateObserver>& observer : m_observers)
 		//{
-		//	observer->OnGameOver();
+		//	observer->NotifyGameOver();
 		//}
 	}
 }
+
+void GameState::OnPlayerRespawned()
+{
+	GameManager::GetInstance().AddActor(std::make_shared<Player>());
+
+	// Notify all observers that the player has respawned
+	for (auto it = m_observers.begin(); it != m_observers.end(); )
+	{
+		// Check if the observer is still valid and erase it if not
+		std::shared_ptr<IGameStateObserver>  observerPtr = it->lock();
+		if (!observerPtr)
+		{
+			it = m_observers.erase(it);
+			continue;
+		}
+
+		observerPtr->NotifyPlayerRespawn();
+		++it;
+	}
+}
+
 
 void GameState::AddObserver(const std::weak_ptr<IGameStateObserver> observerP)
 {

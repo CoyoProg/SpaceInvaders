@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClCompile Include="Actors\Actor.cpp" />
     <ClCompile Include="Actors\Alien.cpp" />
+    <ClCompile Include="Widgets\CounterWidget.cpp" />
     <ClCompile Include="Widgets\Buttons\StartButtonWidget.cpp" />
     <ClCompile Include="Widgets\BackgroundWidget.cpp" />
     <ClCompile Include="Components\CollisionBoxComponent.cpp" />
@@ -150,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="Actors\Actor.h" />
     <ClInclude Include="Actors\Alien.h" />
+    <ClInclude Include="Widgets\CounterWidget.h" />
     <ClInclude Include="Widgets\Buttons\StartButtonWidget.h" />
     <ClInclude Include="Widgets\BackgroundWidget.h" />
     <ClInclude Include="Components\CollisionBoxComponent.h" />

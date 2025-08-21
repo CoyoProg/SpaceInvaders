@@ -25,6 +25,7 @@ void Player::Update(float deltaTimeP)
 
 void Player::OnCollisionEvent(const Actor& otherActorP)
 {
+	SetForDeletion(true);
 	GameState::GetInstance().OnPlayerDied();
 }
 

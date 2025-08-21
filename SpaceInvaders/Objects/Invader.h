@@ -2,6 +2,7 @@
 #include "../Objects/Object.h"
 #include "../Interfaces/IUpdatable.h"
 #include "../Interfaces/IAlienObserver.h"
+#include "../Interfaces/IGameStateObserver.h"
 #include <vector>
 #include <memory>
 
@@ -11,13 +12,15 @@ class Alien;
  * @brief Invader class manages all the aliens in the game.
  * It handles their movement and when an alien shoot.
  */
-class Invader : public Object, public IAlienObserver, public std::enable_shared_from_this<Invader>
+class Invader : public Object, public IAlienObserver, public IGameStateObserver, public std::enable_shared_from_this<Invader>
 {
 public:
 	Invader(int spaceBetweenRowsP = 30);
 
 	virtual void Update(float deltaSecP) override;
-	virtual void OnAlienDied(Alien& alienP) override;
+	virtual void NotifyAlienDied(Alien& alienP) override;
+	virtual void NotifyPlayerDied(int newLivesP) override;
+	virtual void NotifyPlayerRespawn() override;
 
 	// Add an alien to be tracked by the Invader
 	void AddAlien(std::shared_ptr<Alien> alienP);
@@ -45,6 +48,7 @@ private:
 	int m_direction{ 1 };
 	bool m_shouldChangeDirection{ false };
 
+
 	// How many pixels the aliens move per step
 	static constexpr int m_distancePerStep{ 5 };
 	int m_spaceBetweenRows{ 30 };
@@ -54,6 +58,7 @@ private:
 	// This is also used to speed up the movement of the aliens
 	float m_movementDelay{ 0.014f };
 	float m_delayMovementTimer{ 0.0f };
+	bool m_freezeMovement{ false };
 
 	// Probability of an alien shooting per second
 	static constexpr float m_shootCooldown{ 0.5f };

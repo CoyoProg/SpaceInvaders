@@ -1,5 +1,6 @@
 #include "StartButtonWidget.h"
 #include "../../Core/GameManager.h"
+#include "../../Core/GameState.h"
 
 StartButtonWidget::StartButtonWidget() :
 	m_spriteAnimationComponent(
@@ -30,7 +31,7 @@ void StartButtonWidget::Update(float deltaTimeP)
 	m_startLevelTimer += deltaTimeP;
 	if (m_startLevelTimer > m_startLevelDelay)
 	{
-		GameManager::GetInstance().StartLevel();
+		GameState::GetInstance().StartLevel();
 	}
 }
 

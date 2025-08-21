@@ -7,11 +7,11 @@
 #include "raylib.h"
 
 class GameState;
-class UIManager;
+
 class Actor;
 class Object;
 class Widget;
-class Level1_SpaceInvaders;
+
 
 constexpr int SCREEN_WIDTH = 900;
 constexpr int PLAYGROUND_OFFSET = 60;
@@ -61,18 +61,10 @@ public:
 		static GameManager instance;
 		return instance;
 	}
-	~GameManager();
 
 	// Load all the textures needed for the game
 	void LoadRessources();
 	void UnloadTextures();
-
-	// Load the start menu
-	void LoadStartMenu();
-	// Load the first level
-	void StartLevel();
-	void ResetLevel();
-	void OnGameOver();
 
 	// Delete copy and move constructors and assignment operators to prevent copying
 	GameManager(const GameManager& other) = delete;
@@ -91,6 +83,10 @@ public:
 	// Flush all pending lists at the end of the frame
 	void FlushPendingLists();
 
+	void SetPauseGame(bool isGamePausedP) { m_isGamePaused = isGamePausedP; }
+	void ResetAllActors();
+	void ResetAllWidgets();
+	
 	// Add actor to the list of pending actors
 	void AddActor(std::shared_ptr<Actor> actorP);
 	// Add object to the list of pending objects
@@ -99,11 +95,10 @@ public:
 	void AddWidget(std::shared_ptr<Widget> WidgetP);
 
 	Texture2D GetTexture(const std::string& textureName) const;
-	Level1_SpaceInvaders& GetCurrentLevel() const { return *m_currentLevel; }
 
 private:
 	// Private constructor for singleton pattern
-	GameManager();
+	GameManager() = default;
 
 	// Flush new actors that have been added since the last update
 	void FlushNewActors();
@@ -113,9 +108,6 @@ private:
 	void FlushNewWidgets();
 
 private:
-	std::shared_ptr<Level1_SpaceInvaders> m_currentLevel;
-	std::unique_ptr<UIManager> m_uiManager;
-
 	std::vector<std::shared_ptr<Object>> m_objects;
 	std::vector<std::shared_ptr<Object>> m_pendingObjects;
 	std::vector<std::shared_ptr<Widget>> m_widgets;

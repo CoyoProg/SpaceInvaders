@@ -1,59 +1,9 @@
 #include "GameManager.h"
 #include "GameState.h"
-#include "UIManager.h"
 #include "../Actors/Actor.h"
 #include "../Objects/Object.h"
 #include "../Widgets/Widget.h"
-#include "../Levels/Level1_SpaceInvaders.h"
 #include "../Components/CollisionBoxComponent.h"
-#include "../Interfaces/IGameStateObserver.h"
-#include "../Widgets/HUDWidget.h"
-#include "../Widgets/StartMenuWidget.h"
-
-GameManager::GameManager() = default;
-
-// We need to define the destructor to forward declare the unique_ptr
-GameManager::~GameManager() = default;
-
-void GameManager::LoadStartMenu()
-{
-	AddWidget(std::move(std::make_unique<StartMenuWidget>()));
-}
-
-void GameManager::StartLevel()
-{
-	// ##
-	// TO DO: Implement and Move to Reset current Level
-	m_widgets.clear();
-	// ##
-
-	m_currentLevel = std::make_shared<Level1_SpaceInvaders>();
-	m_currentLevel->InitializeLevel(*this);
-	m_uiManager = std::make_unique<UIManager>(*this);
-
-	// Initialize the GameState singleton
-	GameState::GetInstance().AddObserver(m_uiManager->GetHUD());
-	GameState::GetInstance().AddObserver(m_currentLevel);
-
-	// Force the game to flush all pending lists so we can see the actors on screen
-	//FlushPendingLists();
-	//m_isGamePaused = true;
-}
-
-void GameManager::OnGameOver()
-{
-	m_isGamePaused = true;
-}
-
-void GameManager::ResetLevel()
-{
-	for(const std::shared_ptr<Actor>& actor : m_actors)
-	{
-		if (actor) actor->SetForDeletion();
-	}
-
-	m_currentLevel->InitializeLevel(*this);
-}
 
 void GameManager::LoadRessources()
 {
@@ -78,6 +28,15 @@ void GameManager::UnloadTextures()
 
 void GameManager::Update(float deltaTimeP)
 {
+	// Update widgets if tick is enabled
+	for (const std::shared_ptr<Widget>& widget : m_widgets)
+	{
+		if (widget->m_IsUpdateEnabled)
+		{
+			widget->Update(deltaTimeP);
+		}
+	}
+
 	if (m_isGamePaused) return;
 
 	// Update all actors
@@ -90,15 +49,6 @@ void GameManager::Update(float deltaTimeP)
 	for (const std::shared_ptr<IUpdatable>& objects : m_objects)
 	{
 		if (objects) objects->Update(deltaTimeP);
-	}
-
-	// Update widgets if tick is enabled
-	for (const std::shared_ptr<Widget>& widget : m_widgets)
-	{
-		if (widget->m_IsUpdateEnabled)
-		{
-			widget->Update(deltaTimeP);
-		}
 	}
 }
 
@@ -119,6 +69,8 @@ void GameManager::Draw()
 
 void GameManager::CollisionCheck()
 {
+	if (m_isGamePaused) return;
+
 	size_t actorsCount = m_actors.size();
 
 	// Iterate through each actors and check for collisions with every other actor
@@ -157,6 +109,19 @@ void GameManager::FlushPendingLists()
 	FlushNewActors();
 	FlushNewObjects();
 	FlushNewWidgets();
+}
+
+void GameManager::ResetAllActors()
+{
+	for (const std::shared_ptr<Actor>& actor : m_actors)
+	{
+		if (actor) actor->SetForDeletion();
+	}
+}
+
+void GameManager::ResetAllWidgets()
+{
+	m_widgets.clear();
 }
 
 void GameManager::FlushNewActors()

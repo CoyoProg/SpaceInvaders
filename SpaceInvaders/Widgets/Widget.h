@@ -3,6 +3,12 @@
 #include "../Interfaces/IUpdatable.h"
 #include "raylib.h"
 
+enum class WidgetVisibilty
+{
+	Visible,
+	Hidden
+};
+
 /*
  * @brief Widget class that serves as a base class for all UI elements.
  */
@@ -16,6 +22,7 @@ public:
 	bool m_IsUpdateEnabled{ false };
 
 protected:
+	WidgetVisibilty m_visibility{ WidgetVisibilty::Visible };
 	Vector2 m_position{ 0,0 };
 };
 

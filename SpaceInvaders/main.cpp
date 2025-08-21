@@ -1,14 +1,16 @@
 #include "Core/GameManager.h"
+#include "Core/GameState.h"
 #include "Widgets/BackgroundWidget.h"
 
 int main(void)
 {
 	GameManager& gameManager = GameManager::GetInstance();
+	GameState& gameState = GameState::GetInstance();
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Space Invaders");
 
     gameManager.LoadRessources();
-    gameManager.LoadStartMenu();
+    gameState.LoadStartMenu();
 
     // The background widget is persistent across all levels
     // And needs to be draw first
@@ -23,6 +25,7 @@ int main(void)
 
         m_backgroundWidget.Update(deltaTime);
         gameManager.Update(deltaTime);
+        gameState.Update(deltaTime);
         gameManager.CollisionCheck();
         gameManager.CleanupActors();
         gameManager.FlushPendingLists();

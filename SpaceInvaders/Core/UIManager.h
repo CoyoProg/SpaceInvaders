@@ -2,7 +2,9 @@
 #include <memory>
 
 class HUDWidget;
+class CounterWidget;
 class GameManager;
+class GameState;
 
 /*
  * @brief UIManager manages the UI components of the game when the level and the player are loaded
@@ -10,11 +12,10 @@ class GameManager;
 class UIManager
 {
 public:
-	UIManager(GameManager& gameManagerP);
-	
-	const std::shared_ptr<HUDWidget>& GetHUD() const { return m_hud; }
+	UIManager(GameManager& gameManagerP, GameState& gameStateP);
 
 private:
-	std::shared_ptr<HUDWidget> m_hud;
+	std::weak_ptr<HUDWidget> m_hud;
+	std::weak_ptr<CounterWidget> m_counterWidget;
 };
 

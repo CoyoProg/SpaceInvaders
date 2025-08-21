@@ -9,6 +9,6 @@ class IAlienObserver
 {
 public:
 	virtual ~IAlienObserver() = default;
-	virtual void OnAlienDied(Alien& alienP) = 0;
+	virtual void NotifyAlienDied(Alien& alienP) = 0;
 };
 
