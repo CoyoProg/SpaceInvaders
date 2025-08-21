@@ -22,7 +22,7 @@ void Invader::NotifyAlienDied(Alien& alienP)
 	CleanupAliens();
 }
 
-void Invader::NotifyPlayerDied(int newLivesP)
+void Invader::NotifyPlayerDied()
 {
 	m_freezeMovement = true;
 }

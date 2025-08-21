@@ -1,4 +1,6 @@
 #include "ScoreWidget.h"
+#include "../Core/GameManager.h"
+
 #include "raylib.h"
 
 ScoreWidget::ScoreWidget(Vector2 positionP, int fontSizeP) :
@@ -16,5 +18,14 @@ void ScoreWidget::Draw()
 		static_cast<int>(m_position.y),
 		m_fontSize,
 		GREEN
+	);
+
+	// Draw the high score
+	DrawText(TextFormat(
+		"High Score: %01i", m_highScore),
+		SCREEN_WIDTH - MeasureText("High Score: 0000", m_fontSize) - static_cast<int>(m_position.x),
+		static_cast<int>(m_position.y),
+		m_fontSize,
+		RED
 	);
 }

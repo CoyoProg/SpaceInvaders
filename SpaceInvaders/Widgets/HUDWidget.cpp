@@ -35,9 +35,13 @@ void HUDWidget::NotifyScoreUpdate(int scoreP)
 	m_scoreWidget.SetScore(scoreP);
 }
 
-void HUDWidget::NotifyPlayerDied(int newLivesP)
+void HUDWidget::NotifyHighScoreUpdate(int highScoreP)
+{
+	m_scoreWidget.SetHighScore(highScoreP);
+}
+
+void HUDWidget::NotifyPlayerLifeUpdate(int newLivesP)
 {
 	m_livesWidget.SetLives(newLivesP);
 }
-
 

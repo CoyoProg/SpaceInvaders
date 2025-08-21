@@ -28,6 +28,7 @@ public:
 
 	// Allow us to update the game state indenpendently of the game manager
 	virtual void Update(float deltaSecP) override;
+	void HandleTransitionTimer(float deltaSecP);
 
 	// Load the start menu
 	void LoadStartMenu();
@@ -35,7 +36,7 @@ public:
 	void StartLevel();
 	void ResetLevel();
 	void OnGameOver();
-	void OnCounterFinished();
+	void OnCountdownFinished();
 
 	// The score is updated everytime the player destroys an enemy
 	void AddScore(int scoreP);
@@ -54,6 +55,7 @@ private:
 	std::unique_ptr<UIManager> m_uiManager;
 
 	int m_score{ 0 };
+	int m_highestScore{ 0 };
 	int m_lives{ 3 };
 	bool m_isGameOver{ false };
 	bool m_freezeMovement{ false };

@@ -11,9 +11,11 @@ public:
 	virtual void Draw() override;
 
 	void SetScore(int scoreP) { m_score = scoreP; }
+	void SetHighScore(int highScoreP) { m_highScore = highScoreP; }
 
 private:
 	const int m_fontSize{ 20 };
+	int m_highScore{ 0 };
 	int m_score{ 0 };
 };
 

@@ -2,7 +2,7 @@
 #include <memory>
 
 class HUDWidget;
-class CounterWidget;
+class GameMessageWidget;
 class GameManager;
 class GameState;
 
@@ -16,6 +16,6 @@ public:
 
 private:
 	std::weak_ptr<HUDWidget> m_hud;
-	std::weak_ptr<CounterWidget> m_counterWidget;
+	std::weak_ptr<GameMessageWidget> m_gameMessageWidget;
 };
 

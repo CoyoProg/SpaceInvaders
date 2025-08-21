@@ -19,7 +19,7 @@ public:
 
 	virtual void Update(float deltaSecP) override;
 	virtual void NotifyAlienDied(Alien& alienP) override;
-	virtual void NotifyPlayerDied(int newLivesP) override;
+	virtual void NotifyPlayerDied() override;
 	virtual void NotifyPlayerRespawn() override;
 
 	// Add an alien to be tracked by the Invader

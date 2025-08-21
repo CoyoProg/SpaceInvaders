@@ -15,12 +15,30 @@ void GameState::Update(float deltaSecP)
 {
 	if (m_freezeMovement)
 	{
-		m_freezeMovementTimer += deltaSecP;
-		if (m_freezeMovementTimer < m_freezeMovementDuration)
-		{
-			return;
-		}
+		HandleTransitionTimer(deltaSecP);
+	}
+}
 
+void GameState::HandleTransitionTimer(float deltaSecP)
+{
+	m_freezeMovementTimer += deltaSecP;
+	if (m_freezeMovementTimer < m_freezeMovementDuration)
+	{
+		return;
+	}
+
+	if (m_isGameOver)
+	{
+		GameManager::GetInstance().ResetAllActors();
+		if (IsKeyPressed(KEY_SPACE))
+		{
+			ResetLevel();
+			m_isGameOver = false;
+			m_freezeMovement = false;
+		}
+	}
+	else
+	{
 		m_freezeMovement = false;
 		m_freezeMovementTimer = 0.0f;
 		OnPlayerRespawned();
@@ -41,24 +59,74 @@ void GameState::StartLevel()
 	m_uiManager = std::make_unique<UIManager>(GameManager::GetInstance(), *this);
 
 	GameManager::GetInstance().SetPauseGame(true);
+
+	// Notify all observers about the score update
+	for (auto it = m_observers.begin(); it != m_observers.end(); )
+	{
+		// Check if the observer is still valid and erase it if not
+		std::shared_ptr<IGameStateObserver>  observerPtr = it->lock();
+		if (!observerPtr)
+		{
+			it = m_observers.erase(it);
+			continue;
+		}
+
+		observerPtr->NotifyLevelStart();
+		++it;
+	}
 }
 
 void GameState::OnGameOver()
 {
 	GameManager::GetInstance().SetPauseGame(true);
+	m_highestScore = m_score > m_highestScore ? m_score : m_highestScore;
+
+	// Notify all observers about the score update
+	for (auto it = m_observers.begin(); it != m_observers.end(); )
+	{
+		// Check if the observer is still valid and erase it if not
+		std::shared_ptr<IGameStateObserver>  observerPtr = it->lock();
+		if (!observerPtr)
+		{
+			it = m_observers.erase(it);
+			continue;
+		}
+
+		observerPtr->NotifyGameOver();
+		observerPtr->NotifyHighScoreUpdate(m_highestScore);
+		++it;
+	}
 }
 
-void GameState::OnCounterFinished()
+void GameState::OnCountdownFinished()
 {
 	GameManager::GetInstance().SetPauseGame(false);
 }
 
 void GameState::ResetLevel()
 {
-	GameManager::GetInstance().ResetAllActors();
 	m_currentLevel->InitializeLevel(GameManager::GetInstance(), *this);
 
 	GameManager::GetInstance().SetPauseGame(true);
+	m_lives = 3;
+	m_score = 0;
+
+	// Notify all observers about the score update
+	for (auto it = m_observers.begin(); it != m_observers.end(); )
+	{
+		// Check if the observer is still valid and erase it if not
+		std::shared_ptr<IGameStateObserver>  observerPtr = it->lock();
+		if (!observerPtr)
+		{
+			it = m_observers.erase(it);
+			continue;
+		}
+
+		observerPtr->NotifyLevelStart();
+		observerPtr->NotifyPlayerLifeUpdate(m_lives);
+		observerPtr->NotifyScoreUpdate(m_score);
+		++it;
+	}
 }
 
 void GameState::AddScore(int scoreP)
@@ -86,6 +154,20 @@ void GameState::OnPlayerDied()
 	m_lives--;
 	m_freezeMovement = true;
 
+	if (m_lives <= 5)
+	{
+		OnGameOver();
+
+		m_isGameOver = true;
+		//ResetLevel();
+		//for (const std::shared_ptr<IGameStateObserver>& observer : m_observers)
+		//{
+		//	observer->NotifyGameOver();
+		//}
+
+		return;
+	}
+
 	// Notify all observers about the lives update
 	for (auto it = m_observers.begin(); it != m_observers.end(); )
 	{
@@ -97,19 +179,9 @@ void GameState::OnPlayerDied()
 			continue;
 		}
 
-		observerPtr->NotifyPlayerDied(m_lives);
+		observerPtr->NotifyPlayerLifeUpdate(m_lives);
+		observerPtr->NotifyPlayerDied();
 		++it;
-	}
-
-	if (m_lives <= 5)
-	{
-		//m_isGameOver = true;
-
-		//ResetLevel();
-		//for (const std::shared_ptr<IGameStateObserver>& observer : m_observers)
-		//{
-		//	observer->NotifyGameOver();
-		//}
 	}
 }
 

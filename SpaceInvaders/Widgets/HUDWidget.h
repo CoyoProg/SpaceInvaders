@@ -14,7 +14,8 @@ public:
 
 	virtual void Draw() override;
 	virtual void NotifyScoreUpdate(int scoreP) override;
-	virtual void NotifyPlayerDied(int newLivesP) override;
+	virtual void NotifyHighScoreUpdate(int highScoreP) override;
+	virtual void NotifyPlayerLifeUpdate(int newLivesP) override;
 
 private:
 	ScoreWidget m_scoreWidget;
