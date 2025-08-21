@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
+#include <string>
 #include "raylib.h"
 
 class GameState;
@@ -71,6 +72,7 @@ public:
 	// Load the first level
 	void StartLevel();
 	void ResetLevel();
+	void OnGameOver();
 
 	// Delete copy and move constructors and assignment operators to prevent copying
 	GameManager(const GameManager& other) = delete;
@@ -122,5 +124,7 @@ private:
 	std::vector<std::shared_ptr<Actor>> m_pendingActors;
 
 	std::unordered_map<std::string, Texture2D> m_textures;
+
+	bool m_isGamePaused{ false };
 };
 

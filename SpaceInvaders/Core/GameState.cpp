@@ -43,7 +43,8 @@ void GameState::OnPlayerDied()
 
 	if (m_lives <= 5)
 	{
-		//m_isGameOver = true;
+		m_isGameOver = true;
+
 		//GameManager::GetInstance().ResetLevel();
 		//for (const std::shared_ptr<IGameStateObserver>& observer : m_observers)
 		//{

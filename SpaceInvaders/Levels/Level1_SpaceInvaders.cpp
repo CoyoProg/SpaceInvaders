@@ -5,7 +5,9 @@
 #include "../Actors/Shield.h"
 #include "../Objects/Invader.h"
 
-Level1_SpaceInvaders::Level1_SpaceInvaders(GameManager& gameManagerP)
+// Retrospection Note: Ideally, we could use object pooling instead of creating new actors every level.
+// But because of the way the game manager removes dead actors, we will just create new ones for now.
+void Level1_SpaceInvaders::InitializeLevel(GameManager& gameManagerP)
 {
 	gameManagerP.AddActor(std::make_shared<Player>());
 	std::shared_ptr<Invader> invader = std::make_shared<Invader>();
@@ -13,12 +15,7 @@ Level1_SpaceInvaders::Level1_SpaceInvaders(GameManager& gameManagerP)
 	InitializeAliensGrid(gameManagerP, *invader);
 	InitializeShields(gameManagerP);
 
-	// Move the Invader ownership to the GameManager when the level is fully initialized
 	gameManagerP.AddObject(invader);
-}
-
-void Level1_SpaceInvaders::OnGameOver()
-{
 }
 
 void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP, Invader& invaderP)

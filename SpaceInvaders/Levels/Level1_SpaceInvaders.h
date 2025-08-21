@@ -29,8 +29,7 @@ struct AlienGridConfig
 class Level1_SpaceInvaders : public IGameStateObserver
 {
 public:
-	Level1_SpaceInvaders(GameManager& gameManagerP);
-	virtual void OnGameOver() override;
+	void InitializeLevel(GameManager& gameManagerP);
 
 private:
 	// Initialize the aliens on the grid

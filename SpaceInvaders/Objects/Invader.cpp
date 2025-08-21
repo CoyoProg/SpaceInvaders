@@ -3,7 +3,7 @@
 #include "../Core/GameManager.h"
 
 #include <unordered_map>
-#include <iostream>
+
 Invader::Invader(int spaceBetweenRowsP)
 {
 	m_spaceBetweenRows = spaceBetweenRowsP;

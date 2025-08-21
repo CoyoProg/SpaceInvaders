@@ -27,12 +27,22 @@ void GameManager::StartLevel()
 	m_widgets.clear();
 	// ##
 
-	m_currentLevel = std::make_shared<Level1_SpaceInvaders>(*this);
+	m_currentLevel = std::make_shared<Level1_SpaceInvaders>();
+	m_currentLevel->InitializeLevel(*this);
 	m_uiManager = std::make_unique<UIManager>(*this);
 
 	// Initialize the GameState singleton
 	GameState::GetInstance().AddObserver(m_uiManager->GetHUD());
 	GameState::GetInstance().AddObserver(m_currentLevel);
+
+	// Force the game to flush all pending lists so we can see the actors on screen
+	//FlushPendingLists();
+	//m_isGamePaused = true;
+}
+
+void GameManager::OnGameOver()
+{
+	m_isGamePaused = true;
 }
 
 void GameManager::ResetLevel()
@@ -41,6 +51,8 @@ void GameManager::ResetLevel()
 	{
 		if (actor) actor->SetForDeletion();
 	}
+
+	m_currentLevel->InitializeLevel(*this);
 }
 
 void GameManager::LoadRessources()
@@ -66,6 +78,8 @@ void GameManager::UnloadTextures()
 
 void GameManager::Update(float deltaTimeP)
 {
+	if (m_isGamePaused) return;
+
 	// Update all actors
 	for (const std::shared_ptr<IUpdatable>& actor : m_actors)
 	{

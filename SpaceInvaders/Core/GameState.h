@@ -38,6 +38,5 @@ private:
 	int m_score{ 0 };
 	int m_lives{ 3 };
 	bool m_isGameOver{ false };
-	bool m_isGamePaused{ false };
 };
 
