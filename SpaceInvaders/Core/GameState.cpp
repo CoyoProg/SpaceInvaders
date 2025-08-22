@@ -74,6 +74,7 @@ void GameState::LoadStartMenu()
 
 void GameState::StartLevel(PlayerData playerDataP)
 {
+
 	// Clear the Start menu widgets
 	GameManager::GetInstance().ClearAllWidgets();
 
@@ -139,6 +140,8 @@ void GameState::NextLevel()
 void GameState::OnGameOver()
 {
 	m_isGameOver = true;
+
+	PlaySound(GameManager::GetInstance().GetSound("gameOver"));
 	GameManager::GetInstance().SetPauseGame(true);
 
 	// Update the highest score

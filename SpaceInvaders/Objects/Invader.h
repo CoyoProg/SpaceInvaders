@@ -7,7 +7,7 @@
 #include <memory>
 
 class Alien;
-
+class Ovni;
 /*
  * @brief Invader class manages all the aliens in the game.
  * It handles their movement and when an alien shoot.
@@ -44,6 +44,7 @@ private:
 
 private:
 	std::vector<std::weak_ptr<Alien>> m_aliens;
+	std::weak_ptr<Ovni> m_ovni;
 	int m_alienToMoveIndex{ 0 };
 
 	// 1 for right, -1 for left

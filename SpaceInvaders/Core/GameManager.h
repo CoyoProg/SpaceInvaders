@@ -62,7 +62,10 @@ public:
 
 	// Load all the textures needed for the game
 	void LoadRessources();
+	void LoadTextures();
+	void LoadSounds();
 	void UnloadTextures();
+	void UnloadSounds();
 
 	// Delete copy and move constructors and assignment operators to prevent copying
 	GameManager(const GameManager& other) = delete;
@@ -93,7 +96,9 @@ public:
 	// Add widget to the list of pending widgets
 	void AddWidget(std::shared_ptr<Widget> WidgetP);
 
-	Texture2D GetTexture(const std::string& textureName) const;
+	Texture2D GetTexture(const std::string& textureNameP) const;
+	Sound GetSound(const std::string& soundNameP) const;
+
 	int GetActorCount() const { return static_cast<int>(m_actors.size()); }
 
 private:
@@ -116,6 +121,7 @@ private:
 	std::vector<std::shared_ptr<Actor>> m_pendingActors;
 
 	std::unordered_map<std::string, Texture2D> m_textures;
+	std::unordered_map<std::string, Sound> m_sounds;
 
 	bool m_isGamePaused{ false };
 };

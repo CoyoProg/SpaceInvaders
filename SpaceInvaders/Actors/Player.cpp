@@ -72,6 +72,8 @@ void Player::OnCollisionEvent(const Actor& otherActorP)
 
 void Player::Death()
 {
+	PlaySound(GameManager::GetInstance().GetSound("playerDeath"));
+
 	Vector2 explosionPosition = { m_position.x + m_size.x / 2, m_position.y + m_size.y / 2 };
 	std::shared_ptr<ParticlesEffect> explosion = std::make_shared<ParticlesEffect>(explosionPosition, GameManager::GetInstance().GetTexture("explosionA"));
 	GameManager::GetInstance().AddActor(explosion);
@@ -107,6 +109,7 @@ void Player::HandleShoot()
 		break;
 	}
 
+	PlaySound(GameManager::GetInstance().GetSound("laserShoot"));
 }
 
 void Player::Move(int directionP, float deltaTimeP)

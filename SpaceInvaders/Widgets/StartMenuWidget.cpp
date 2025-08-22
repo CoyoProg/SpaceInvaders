@@ -158,6 +158,11 @@ void StartMenuWidget::HandleMouseInput()
 			button->OnLooseFocus();
 		}
 	}
+
+	if (IsMouseButtonUp(MOUSE_BUTTON_LEFT) && m_LBPressed)
+	{
+		m_LBPressed = false;
+	}
 }
 
 void StartMenuWidget::SelectNextBase()
@@ -293,7 +298,7 @@ void StartMenuWidget::SelectPreviousCanon()
 		m_currentCanonIndex = 2;
 		m_finalData.canonTexture = GameManager::GetInstance().GetTexture("canonC");
 		m_finalData.canonLaserOffset = 5;
-		m_finalData.maxLasers = -1;
+		m_finalData.maxLasers = 10;
 		m_finalData.laserPerShot = 2;
 		m_finalData.laserSpeed = 800;
 		m_finalData.shootCooldown = 1.5f;
@@ -314,11 +319,11 @@ void StartMenuWidget::SelectPreviousCanon()
 	{
 		m_currentCanonIndex = 1;
 		m_finalData.canonTexture = GameManager::GetInstance().GetTexture("canonB");
-		m_finalData.canonLaserOffset = 10;
-		m_finalData.maxLasers = -1;
+		m_finalData.maxLasers = 10;
 		m_finalData.laserPerShot = 2;
-		m_finalData.laserSpeed = 800;
-		m_finalData.shootCooldown = 1.5f;
+		m_finalData.laserSpeed = 700;
+		m_finalData.canonLaserOffset = 10;
+		m_finalData.shootCooldown = 1.25f;
 		break;
 	}
 	}
@@ -366,25 +371,25 @@ void StartMenuWidget::SelectPreviousColor()
 	case 0:
 	{
 		m_currentColorIndex = 3;
-		m_finalData.playerColor = GREEN;
+		m_finalData.playerColor = RED;
 		break;
 	}
 	case 1:
 	{
 		m_currentColorIndex = 0;
-		m_finalData.playerColor = SKYBLUE;
+		m_finalData.playerColor = GREEN;
 		break;
 	}
 	case 2:
 	{
 		m_currentColorIndex = 1;
-		m_finalData.playerColor = PURPLE;
+		m_finalData.playerColor = SKYBLUE;
 		break;
 	}
 	case 3:
 	{
 		m_currentColorIndex = 2;
-		m_finalData.playerColor = RED;
+		m_finalData.playerColor = PURPLE;
 		break;
 	}
 	}

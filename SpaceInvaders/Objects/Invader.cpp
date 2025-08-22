@@ -1,8 +1,8 @@
 #include "Invader.h"
 #include "../Actors/Alien.h"
+#include "../Actors/Ovni.h"
 #include "../Core/GameManager.h"
 #include "../Core/GameState.h"
-
 #include <unordered_map>
 
 Invader::Invader(int spaceBetweenRowsP)
@@ -21,6 +21,14 @@ void Invader::Update(float deltaSecP)
 	if (m_aliens.empty() || m_freezeMovement)
 	{
 		return;
+	}
+
+	int ovniRoll = rand() % 1000;
+	if (ovniRoll < 3 && m_ovni.expired())
+	{
+		std::shared_ptr<Ovni> ovni = std::make_shared<Ovni>(1);
+		m_ovni = ovni;
+		GameManager::GetInstance().AddActor(ovni);
 	}
 
 	UpdateAlienPosition(deltaSecP);

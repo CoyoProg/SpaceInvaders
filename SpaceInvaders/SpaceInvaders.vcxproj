@@ -129,6 +129,7 @@
     <ClCompile Include="Actors\Actor.cpp" />
     <ClCompile Include="Actors\Alien.cpp" />
     <ClCompile Include="Actors\ParticlesEffect.cpp" />
+    <ClCompile Include="Actors\Ovni.cpp" />
     <ClCompile Include="Widgets\PlayerCustomizationWidget.cpp" />
     <ClCompile Include="Widgets\GameMessageWidget.cpp" />
     <ClCompile Include="Widgets\Buttons\ButtonWidget.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Interfaces\IButtonObserver.h" />
     <ClInclude Include="Data\PlayerData.h" />
     <ClInclude Include="Actors\ParticlesEffect.h" />
+    <ClInclude Include="Actors\Ovni.h" />
     <ClInclude Include="Widgets\PlayerCustomizationWidget.h" />
     <ClInclude Include="Widgets\GameMessageWidget.h" />
     <ClInclude Include="Widgets\Buttons\ButtonWidget.h" />

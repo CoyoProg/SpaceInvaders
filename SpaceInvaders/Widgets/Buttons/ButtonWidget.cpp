@@ -71,6 +71,8 @@ void ButtonWidget::OnPress()
 		return;
 	}
 
+	PlaySound(GameManager::GetInstance().GetSound("buttonClick"));
+
 	m_buttonState = ButtonState::Pressed;
 	m_spriteAnimationComponent.SetFrame(2);
 }

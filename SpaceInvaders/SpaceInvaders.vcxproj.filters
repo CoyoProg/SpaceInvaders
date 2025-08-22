@@ -84,6 +84,9 @@
     <ClCompile Include="Actors\ParticlesEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Actors\Ovni.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actors\Actor.h">
@@ -177,6 +180,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Actors\ParticlesEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actors\Ovni.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

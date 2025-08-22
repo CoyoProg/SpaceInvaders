@@ -15,7 +15,10 @@ void GameMessageWidget::Draw()
 		return;
 	}
 
+	// ##
+	// Code from: https://www.raylib.com/examples/text/loader.html?name=text_writing_anim
 	// Draw the message with a typewriter effect
+	// ##
 	DrawText(
 		TextSubtext(m_message.c_str(), 0, m_framesCounter / m_framesSpeed),
 		static_cast<int>(m_position.x) - MeasureText(m_message.c_str(), m_fontSize) / 2,
