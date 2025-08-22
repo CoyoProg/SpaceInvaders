@@ -1,8 +1,8 @@
 #include "HUDWidget.h"
 #include "../Core/GameManager.h"
 
-HUDWidget::HUDWidget() : 
-	m_scoreWidget(Vector2{25.0f,25.0f}, 20),
+HUDWidget::HUDWidget() :
+	m_scoreWidget(Vector2{ 25.0f,25.0f }, 20),
 	m_livesWidget(Vector2{ 25.0f,895.0f }, Vector2{ 50.0f,20.0f }, 3)
 {
 }
@@ -10,21 +10,8 @@ HUDWidget::HUDWidget() :
 void HUDWidget::Draw()
 {
 	// Draw the playground boundaries
-	DrawLine(
-		PLAYGROUND_OFFSET,
-		SCREEN_HEIGHT - 55,
-		PLAYGROUND_OFFSET,
-		SCREEN_HEIGHT - 45,
-		GREEN
-	);
-
-	DrawLine(
-		SCREEN_WIDTH - PLAYGROUND_OFFSET,
-		SCREEN_HEIGHT - 55,
-		SCREEN_WIDTH - PLAYGROUND_OFFSET,
-		SCREEN_HEIGHT - 45,
-		GREEN
-	);
+	DrawLine(PLAYGROUND_OFFSET, SCREEN_HEIGHT - 55, PLAYGROUND_OFFSET, SCREEN_HEIGHT - 45, GREEN);
+	DrawLine(SCREEN_WIDTH - PLAYGROUND_OFFSET, SCREEN_HEIGHT - 55, SCREEN_WIDTH - PLAYGROUND_OFFSET, SCREEN_HEIGHT - 45, GREEN);
 
 	// DEBUG: Display the number of actors currently in the game
 	//DrawText(
@@ -56,8 +43,4 @@ void HUDWidget::NotifyPlayerLifeUpdate(int newLivesP)
 void HUDWidget::NotifyLevelStart(int levelIndexP)
 {
 	m_scoreWidget.SetLevel(levelIndexP);
-}
-
-void HUDWidget::SetLivesTextures(Texture2D baseTextureP, Texture2D canonTextureP)
-{
 }

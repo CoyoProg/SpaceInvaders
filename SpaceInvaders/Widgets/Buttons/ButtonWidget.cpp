@@ -25,7 +25,10 @@ void ButtonWidget::AddObserver(const std::weak_ptr<IButtonObserver> observerP)
 
 void ButtonWidget::RemoveObserver(const std::weak_ptr<IButtonObserver> observerP)
 {
-	if (observerP.expired()) return;
+	if (observerP.expired())
+	{
+		return;
+	}
 	std::shared_ptr<IButtonObserver> observerPtr = observerP.lock();
 
 	m_observers.erase(
@@ -52,7 +55,10 @@ Rectangle ButtonWidget::GetBoundingBox() const
 
 void ButtonWidget::OnHover()
 {
-	if (m_buttonState != ButtonState::Idle || m_buttonState == ButtonState::Disabled) return;
+	if (m_buttonState != ButtonState::Idle || m_buttonState == ButtonState::Disabled)
+	{
+		return;
+	}
 
 	m_buttonState = ButtonState::Hovered;
 	m_spriteAnimationComponent.SetFrame(1);
@@ -60,7 +66,10 @@ void ButtonWidget::OnHover()
 
 void ButtonWidget::OnPress()
 {
-	if (m_buttonState != ButtonState::Hovered || m_buttonState == ButtonState::Disabled) return;
+	if (m_buttonState != ButtonState::Hovered || m_buttonState == ButtonState::Disabled)
+	{
+		return;
+	}
 
 	m_buttonState = ButtonState::Pressed;
 	m_spriteAnimationComponent.SetFrame(2);
@@ -68,14 +77,16 @@ void ButtonWidget::OnPress()
 
 void ButtonWidget::OnRelease()
 {
-	if (m_buttonState != ButtonState::Pressed || m_buttonState == ButtonState::Disabled) return;
+	if (m_buttonState != ButtonState::Pressed || m_buttonState == ButtonState::Disabled)
+	{
+		return;
+	}
 	m_buttonState = ButtonState::Hovered;
 	m_spriteAnimationComponent.SetFrame(1);
 
-	// Notify all observers about the score update
+	// Notify the StartMenuWidget that the button was pressed
 	for (auto it = m_observers.begin(); it != m_observers.end(); )
 	{
-		// Check if the observer is still valid and erase it if not
 		std::shared_ptr<IButtonObserver>  observerPtr = it->lock();
 		if (!observerPtr)
 		{
@@ -90,7 +101,10 @@ void ButtonWidget::OnRelease()
 
 void ButtonWidget::OnLooseFocus()
 {
-	if (m_buttonState == ButtonState::Disabled) return;
+	if (m_buttonState == ButtonState::Disabled)
+	{
+		return;
+	}
 
 	m_buttonState = ButtonState::Idle;
 	m_spriteAnimationComponent.SetFrame(0);

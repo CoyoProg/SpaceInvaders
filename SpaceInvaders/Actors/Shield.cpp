@@ -263,14 +263,6 @@ void Shield::OnCollisionEvent(const Actor& otherActorP)
 
 void Shield::ExplodeCell(Vector2 hitPositionP)
 {
-	// ##
-	// TO DO: Refactor
-	// Random pattern cell explosion (different patterns of different sizes)
-	// Random outer radius cell explosion (break the pattern on the edges)
-	// Random outer radius jitter explosion
-	// Reverse pattern depending on the hit direction
-	// ##
-
 	Vector2 gridPos = { hitPositionP.y, hitPositionP.x };
 
 	// Pick a random mask

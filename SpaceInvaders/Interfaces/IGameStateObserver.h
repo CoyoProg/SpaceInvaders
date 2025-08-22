@@ -7,6 +7,7 @@ class IGameStateObserver
 {
 public:
 	virtual ~IGameStateObserver() = default;
+
 	virtual void NotifyLevelStart(int levelIndexP) {};
 	virtual void NotifyGameOver() {};
 	virtual void NotifyScoreUpdate(int scoreP) {};

@@ -4,7 +4,7 @@
 #include "../Interfaces/IButtonObserver.h"
 #include "PlayerCustomizationWidget.h"
 #include "Buttons/ButtonWidget.h"
-
+#include <string>
 #include <raylib.h>
 
 /*
@@ -16,6 +16,8 @@ public:
 	StartMenuWidget();
 	~StartMenuWidget();
 
+	void AddButton(AnimatedSpriteID spriteIDP, const std::string& textureName, Vector2 positionP, ButtonAction buttonActionP);
+	// Subscribe to button pressed events
 	void SetupWidgetBindings();
 
 	void SelectNextBase();
@@ -29,6 +31,7 @@ public:
 	virtual void Update(float deltaTimeP) override;
 	virtual void OnButtonPressed(ButtonAction buttonActionP) override;
 
+	// Check if any button is hovered or pressed
 	void HandleMouseInput();
 
 private:

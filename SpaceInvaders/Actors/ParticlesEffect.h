@@ -2,6 +2,9 @@
 #include "Actor.h"
 #include "../Components/SpriteAnimationComponent.h"
 
+/*
+ * @brief ParticlesEffect is spawned in the world and dies after a short time.
+ */
 class ParticlesEffect : public Actor
 {
 public:

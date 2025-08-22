@@ -2,72 +2,34 @@
 #include "../Core/GameManager.h"
 #include "../Core/GameState.h"
 
-#include <iostream>
 StartMenuWidget::StartMenuWidget()
 {
-	std::unique_ptr<ButtonWidget> startButtonPtr = std::make_unique<ButtonWidget>();
-	startButtonPtr->SetupButton(
-		AnimatedSpriteID::StartButton,
-		GameManager::GetInstance().GetTexture("startButtonSheet"),
-		Vector2{ SCREEN_WIDTH / 2 - SPRITE_PROPERTIES.at(AnimatedSpriteID::StartButton).width / 2.0f, SCREEN_HEIGHT * 0.8f - SPRITE_PROPERTIES.at(AnimatedSpriteID::StartButton).height / 2.0f },
-		ButtonAction::PlayGame
-	);
+	// Setup all buttons widgets and their actions
+	float posX = SCREEN_WIDTH / 2.0f - SPRITE_PROPERTIES.at(AnimatedSpriteID::StartButton).width / 2.0f;
+	float posY = SCREEN_HEIGHT * 0.8f - SPRITE_PROPERTIES.at(AnimatedSpriteID::StartButton).height / 2.0f;
 
-	std::unique_ptr<ButtonWidget> baseLB = std::make_unique<ButtonWidget>();
-	baseLB->SetupButton(
-		AnimatedSpriteID::LeftSelectionButton,
-		GameManager::GetInstance().GetTexture("selectionButtonSheet"),
-		Vector2{ SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2.0f + 125 },
-		ButtonAction::PreviousBase
-	);
+	// Start Button
+	AddButton(AnimatedSpriteID::StartButton, "startButtonSheet", Vector2{ posX, posY }, ButtonAction::PlayGame);
 
-	std::unique_ptr<ButtonWidget> baseRB = std::make_unique<ButtonWidget>();
-	baseRB->SetupButton(
-		AnimatedSpriteID::RightSelectionButton,
-		GameManager::GetInstance().GetTexture("selectionButtonSheet"),
-		Vector2{ SCREEN_WIDTH / 2 + 150 - SPRITE_PROPERTIES.at(AnimatedSpriteID::LeftSelectionButton).width, SCREEN_HEIGHT / 2.0f + 125 },
-		ButtonAction::NextBase
-	);
+	posX = SCREEN_WIDTH / 2.0f;
+	posY = SCREEN_HEIGHT / 2.0f;
+	int offsetX = 150;
+	int offsetY = 125;
+	const std::string& textureName = "selectionButtonSheet";
 
-	std::unique_ptr<ButtonWidget> canonLB = std::make_unique<ButtonWidget>();
-	canonLB->SetupButton(
-		AnimatedSpriteID::LeftSelectionButton,
-		GameManager::GetInstance().GetTexture("selectionButtonSheet"),
-		Vector2{ SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2.0f + 70 },
-		ButtonAction::PreviousCanon
-	);
+	// Base Selection Buttons
+	AddButton(AnimatedSpriteID::LeftSelectionButton, textureName, Vector2{ posX - offsetX, posY + offsetY }, ButtonAction::PreviousBase);
+	AddButton(AnimatedSpriteID::RightSelectionButton, textureName, Vector2{ posX + offsetX - SPRITE_PROPERTIES.at(AnimatedSpriteID::LeftSelectionButton).width, posY + offsetY }, ButtonAction::NextBase);
 
-	std::unique_ptr<ButtonWidget> canonRB = std::make_unique<ButtonWidget>();
-	canonRB->SetupButton(
-		AnimatedSpriteID::RightSelectionButton,
-		GameManager::GetInstance().GetTexture("selectionButtonSheet"),
-		Vector2{ SCREEN_WIDTH / 2 + 150 - SPRITE_PROPERTIES.at(AnimatedSpriteID::LeftSelectionButton).width, SCREEN_HEIGHT / 2.0f + 70 },
-		ButtonAction::NextCanon
-	);
+	offsetY = 70;
+	// Canon Selection Buttons
+	AddButton(AnimatedSpriteID::LeftSelectionButton, textureName, Vector2{ posX - offsetX, posY + offsetY }, ButtonAction::PreviousCanon);
+	AddButton(AnimatedSpriteID::RightSelectionButton, textureName, Vector2{ posX + offsetX - SPRITE_PROPERTIES.at(AnimatedSpriteID::LeftSelectionButton).width, posY + offsetY }, ButtonAction::NextCanon);
 
-	std::unique_ptr<ButtonWidget> colorLB = std::make_unique<ButtonWidget>();
-	colorLB->SetupButton(
-		AnimatedSpriteID::LeftSelectionButton,
-		GameManager::GetInstance().GetTexture("selectionButtonSheet"),
-		Vector2{ SCREEN_WIDTH / 2 - 75, SCREEN_HEIGHT / 2.0f },
-		ButtonAction::PreviousColor
-	);
-
-	std::unique_ptr<ButtonWidget> colorRB = std::make_unique<ButtonWidget>();
-	colorRB->SetupButton(
-		AnimatedSpriteID::RightSelectionButton,
-		GameManager::GetInstance().GetTexture("selectionButtonSheet"),
-		Vector2{ SCREEN_WIDTH / 2 + 75 - SPRITE_PROPERTIES.at(AnimatedSpriteID::LeftSelectionButton).width, SCREEN_HEIGHT / 2.0f },
-		ButtonAction::NextColor
-	);
-
-	m_buttons.emplace_back(std::move(startButtonPtr));
-	m_buttons.emplace_back(std::move(baseLB));
-	m_buttons.emplace_back(std::move(baseRB));
-	m_buttons.emplace_back(std::move(canonLB));
-	m_buttons.emplace_back(std::move(canonRB));
-	m_buttons.emplace_back(std::move(colorLB));
-	m_buttons.emplace_back(std::move(colorRB));
+	offsetX = 75;
+	// Color Selection Buttons
+	AddButton(AnimatedSpriteID::LeftSelectionButton, textureName, Vector2{ posX - offsetX, posY }, ButtonAction::PreviousColor);
+	AddButton(AnimatedSpriteID::RightSelectionButton, textureName, Vector2{ posX + offsetX - SPRITE_PROPERTIES.at(AnimatedSpriteID::LeftSelectionButton).width, posY }, ButtonAction::NextColor);
 
 	m_titleTexture = GameManager::GetInstance().GetTexture("title");
 	m_finalData.baseTexture = GameManager::GetInstance().GetTexture("baseD");
@@ -79,11 +41,122 @@ StartMenuWidget::~StartMenuWidget()
 {
 }
 
+void StartMenuWidget::AddButton(AnimatedSpriteID spriteIDP, const std::string& textureName, Vector2 positionP, ButtonAction buttonActionP)
+{
+	Texture2D texture = GameManager::GetInstance().GetTexture(textureName);
+	std::unique_ptr<ButtonWidget> button = std::make_unique<ButtonWidget>();
+	button->SetupButton(spriteIDP, texture, positionP, buttonActionP);
+	m_buttons.emplace_back(std::move(button));
+}
+
 void StartMenuWidget::SetupWidgetBindings()
 {
 	for (auto& button : m_buttons)
 	{
 		button->AddObserver(shared_from_this());
+	}
+}
+
+void StartMenuWidget::Draw()
+{
+	for (auto& button : m_buttons)
+	{
+		button->Draw();
+	}
+
+	m_playerCustomizationWidget.Draw();
+
+	// Draw the title
+	// Add an offsetX to the title because the texture isn't centered properly
+	int offsetX = 10;
+	DrawTextureV(m_titleTexture, Vector2{ SCREEN_WIDTH / 2 - m_titleTexture.width / 2.0f + offsetX, SCREEN_HEIGHT / 4.0f - m_titleTexture.height / 2.0f }, WHITE);
+}
+
+void StartMenuWidget::Update(float deltaTimeP)
+{
+	HandleMouseInput();
+
+	if (m_shouldStartGame)
+	{
+		// Start the game after a short delay (mainly to see the button being released)
+		m_startLevelTimer += deltaTimeP;
+		if (m_startLevelTimer > m_startLevelDelay)
+		{
+			GameState::GetInstance().StartLevel(m_finalData);
+		}
+	}
+}
+
+void StartMenuWidget::OnButtonPressed(ButtonAction buttonActionP)
+{
+	switch (buttonActionP)
+	{
+	case ButtonAction::PlayGame:
+		m_shouldStartGame = true;
+		for (auto& button : m_buttons) button->DisableButton();
+		break;
+	case ButtonAction::NextBase:
+	{
+		SelectNextBase();
+		break;
+	}
+	case ButtonAction::PreviousBase:
+	{
+		SelectPreviousBase();
+		break;
+	}
+	case ButtonAction::NextCanon:
+	{
+		SelectNextCanon();
+		break;
+	}
+	case ButtonAction::PreviousCanon:
+	{
+		SelectPreviousCanon();
+		break;
+	}
+	case ButtonAction::NextColor:
+	{
+		SelectNextColor();
+		break;
+	}
+	case ButtonAction::PreviousColor:
+	{
+		SelectPreviousColor();
+		break;
+	}
+	}
+}
+
+void StartMenuWidget::HandleMouseInput()
+{
+	m_mousePosition = GetMousePosition();
+
+	// Check if the mouse collides with any button
+	for (auto& button : m_buttons)
+	{
+		if (CheckCollisionPointRec(m_mousePosition, button->GetBoundingBox()))
+		{
+			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+			{
+				m_LBPressed = true;
+				button->OnPress();
+			}
+			else if ((IsMouseButtonDown(MOUSE_BUTTON_LEFT) && m_LBPressed) || (IsMouseButtonUp(MOUSE_BUTTON_LEFT) && !m_LBPressed))
+			{
+				button->OnHover();
+			}
+			else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && m_LBPressed)
+			{
+				m_LBPressed = false;
+				button->OnRelease();
+			}
+			else if (!m_LBPressed) button->OnHover();
+		}
+		else
+		{
+			button->OnLooseFocus();
+		}
 	}
 }
 
@@ -317,116 +390,4 @@ void StartMenuWidget::SelectPreviousColor()
 	}
 
 	m_playerCustomizationWidget.SetColor(m_finalData.playerColor);
-}
-
-void StartMenuWidget::Update(float deltaTimeP)
-{
-	HandleMouseInput();
-
-	if (m_shouldStartGame)
-	{
-		// Start the game after a short delay for transition effect
-		m_startLevelTimer += deltaTimeP;
-		if (m_startLevelTimer > m_startLevelDelay)
-		{
-			GameState::GetInstance().StartLevel(m_finalData);
-		}
-	}
-}
-
-void StartMenuWidget::OnButtonPressed(ButtonAction buttonActionP)
-{
-	switch (buttonActionP)
-	{
-	case ButtonAction::PlayGame:
-		m_shouldStartGame = true;
-		for (auto& button : m_buttons) button->DisableButton();
-		break;
-	case ButtonAction::NextBase:
-	{
-		SelectNextBase();
-		break;
-	}
-	case ButtonAction::PreviousBase:
-	{
-		SelectPreviousBase();
-		break;
-	}
-	case ButtonAction::NextCanon:
-	{
-		SelectNextCanon();
-		break;
-	}
-	case ButtonAction::PreviousCanon:
-	{
-		SelectPreviousCanon();
-		break;
-	}
-	case ButtonAction::NextColor:
-	{
-		SelectNextColor();
-		break;
-	}
-	case ButtonAction::PreviousColor:
-	{
-		SelectPreviousColor();
-		break;
-	}
-	}
-}
-
-void StartMenuWidget::HandleMouseInput()
-{
-	m_mousePosition = GetMousePosition();
-
-	for (auto& button : m_buttons)
-	{
-		if (CheckCollisionPointRec(m_mousePosition, button->GetBoundingBox()))
-		{
-			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-			{
-				button->OnPress();
-				m_LBPressed = true;
-			}
-
-			if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-			{
-				button->OnHover();
-			}
-
-			if (IsMouseButtonUp(MOUSE_BUTTON_LEFT) && m_LBPressed)
-			{
-				button->OnRelease();
-			}
-			else if (!m_LBPressed) button->OnHover();
-		}
-		else
-		{
-			button->OnLooseFocus();
-		}
-	}
-
-	if (IsMouseButtonUp(MOUSE_BUTTON_LEFT) && m_LBPressed)
-	{
-		m_LBPressed = false;
-	}
-}
-
-void StartMenuWidget::Draw()
-{
-	for (auto& button : m_buttons)
-	{
-		button->Draw();
-	}
-
-	m_playerCustomizationWidget.Draw();
-
-	// Draw the title
-	// We need to add this offset because the texture isn't centered properly
-	int offsetX = 10;
-	DrawTextureV(
-		m_titleTexture,
-		Vector2{ SCREEN_WIDTH / 2 - m_titleTexture.width / 2.0f + offsetX, SCREEN_HEIGHT / 4.0f - m_titleTexture.height / 2.0f },
-		WHITE
-	);
 }

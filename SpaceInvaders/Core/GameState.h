@@ -46,6 +46,9 @@ public:
 	void StartLevel(PlayerData playerDataP);
 	void NextLevel();
 	void ResetLevel();
+
+	void OnPlayerDied();
+	void OnPlayerRespawned();
 	void OnGameOver();
 	void OnCountdownFinished();
 
@@ -54,9 +57,6 @@ public:
 
 	void AddObserver(const std::weak_ptr<IGameStateObserver> observerP);
 	void RemoveObserver(const std::weak_ptr<IGameStateObserver> observerP);
-
-	void OnPlayerDied();
-	void OnPlayerRespawned();
 
 	PlayerCanonConfig GetPlayerCanonConfig() const { return m_playerCanonConfig; }
 

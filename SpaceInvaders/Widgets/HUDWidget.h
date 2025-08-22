@@ -13,12 +13,11 @@ public:
 	HUDWidget();
 
 	virtual void Draw() override;
+
 	virtual void NotifyScoreUpdate(int scoreP) override;
 	virtual void NotifyHighScoreUpdate(int highScoreP) override;
 	virtual void NotifyPlayerLifeUpdate(int newLivesP) override;
 	virtual void NotifyLevelStart(int levelIndexP) override;
-
-	void SetLivesTextures(Texture2D baseTextureP, Texture2D canonTextureP);
 
 private:
 	ScoreWidget m_scoreWidget;

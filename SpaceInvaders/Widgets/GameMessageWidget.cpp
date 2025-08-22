@@ -2,9 +2,6 @@
 #include "../Core/GameState.h"
 #include "../Core/GameManager.h"
 
-
-int framesCounter = 10;
-
 GameMessageWidget::GameMessageWidget(Vector2 positionP, int fontSizeP) :
 	m_fontSize(fontSizeP)
 {
@@ -18,14 +15,16 @@ void GameMessageWidget::Draw()
 		return;
 	}
 
+	// Draw the message with a typewriter effect
 	DrawText(
-		TextSubtext(m_message.c_str(), 0, framesCounter / 15),
+		TextSubtext(m_message.c_str(), 0, m_framesCounter / m_framesSpeed),
 		static_cast<int>(m_position.x) - MeasureText(m_message.c_str(), m_fontSize) / 2,
 		static_cast<int>(m_position.y) - m_fontSize / 2,
 		m_fontSize,
 		m_color
 	);
 
+	// If it's game over, show the restart and return to menu messages after a short delay
 	if (m_showRestartMessage)
 	{
 		DrawText(
@@ -56,6 +55,7 @@ void GameMessageWidget::Update(float deltaTimeP)
 	{
 		m_message = std::to_string(static_cast<int>(m_countdown));
 
+		// When the countdown reaches 1, notify the game state that the countdown is finished to start the level
 		if (m_countdown <= 1)
 		{
 			GameState::GetInstance().OnCountdownFinished();
@@ -68,11 +68,11 @@ void GameMessageWidget::Update(float deltaTimeP)
 
 		break;
 	}
-
 	case MessageType::GameOver:
 	{
-		framesCounter++;
+		m_framesCounter++;
 
+		// When the countdown reaches 1, show the Game Over messages
 		if (m_countdown <= 1)
 		{
 			m_showRestartMessage = true;
@@ -84,12 +84,11 @@ void GameMessageWidget::Update(float deltaTimeP)
 		break;
 	}
 	}
-
 }
 
 void GameMessageWidget::NotifyGameOver()
 {
-	framesCounter = 0;
+	m_framesCounter = 0;
 	m_messageType = MessageType::GameOver;
 	m_position.y = SCREEN_HEIGHT / 8.0f;
 	m_message = "GAME OVER";
@@ -100,7 +99,7 @@ void GameMessageWidget::NotifyGameOver()
 
 void GameMessageWidget::NotifyLevelStart(int levelIndexP)
 {
-	framesCounter = 100;
+	m_framesCounter = 100;
 	m_messageType = MessageType::Countdown;
 	m_showRestartMessage = false;
 	m_message = "3";

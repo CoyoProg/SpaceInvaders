@@ -18,7 +18,10 @@ void Invader::SetInvaderSettings(float movementDelayP, int shootProbabilityP)
 
 void Invader::Update(float deltaSecP)
 {
-	if (m_aliens.empty() || m_freezeMovement) return;
+	if (m_aliens.empty() || m_freezeMovement)
+	{
+		return;
+	}
 
 	UpdateAlienPosition(deltaSecP);
 	UpdateShootProbability(deltaSecP);
@@ -154,7 +157,10 @@ void Invader::UpdateShootProbability(float deltaSecP)
 
 std::shared_ptr<Alien> Invader::GetRandomBottomAlien() const
 {
-	if (m_aliens.empty()) return nullptr;
+	if (m_aliens.empty())
+	{
+		return nullptr;
+	}
 
 	// An alien is added to the list only if it has a laser available
 	if (m_aliens.size() == 1)
@@ -195,7 +201,10 @@ std::shared_ptr<Alien> Invader::GetRandomBottomAlien() const
 		it = bottomsAliens.erase(it);
 	}
 
-	if (bottomsAliens.empty()) return nullptr;
+	if (bottomsAliens.empty())
+	{
+		return nullptr;
+	}
 
 	// Update the count of bottom aliens
 	m_bottomAliensCount = static_cast<int>(bottomsAliens.size());

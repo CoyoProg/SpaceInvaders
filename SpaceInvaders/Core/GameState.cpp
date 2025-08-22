@@ -74,20 +74,26 @@ void GameState::LoadStartMenu()
 
 void GameState::StartLevel(PlayerData playerDataP)
 {
+	// Clear the Start menu widgets
 	GameManager::GetInstance().ClearAllWidgets();
+
+	// Set the player data
 	m_maxLives = playerDataP.lives;
 	m_lives = m_maxLives;
 	m_playerCanonConfig = PlayerCanonConfig{ playerDataP.baseTexture, playerDataP.canonTexture };
 
+	// Initialize the first level
 	m_currentLevel = std::make_shared<Level1_SpaceInvaders>();
 	m_currentLevel->SetPlayerData(playerDataP);
-
 	m_currentLevel->InitializeLevel(GameManager::GetInstance(), *this);
+
+	// Initialize the HUD
 	m_uiManager = std::make_unique<UIManager>(GameManager::GetInstance(), *this);
 
+	// Pause the game until the countdown is finished
 	GameManager::GetInstance().SetPauseGame(true);
 
-	// Notify all observers about the score update
+	// Notify all observers that the level has started
 	for (auto it = m_observers.begin(); it != m_observers.end(); )
 	{
 		// Check if the observer is still valid and erase it if not
@@ -106,13 +112,15 @@ void GameState::StartLevel(PlayerData playerDataP)
 
 void GameState::NextLevel()
 {
+	// Clear all projectiles from the previous level
 	GameManager::GetInstance().ClearAllProjectiles();
 	GameManager::GetInstance().SetPauseGame(true);
 
+	// Initialize the next level with increased difficulty
 	m_currentLevelIndex++;
 	m_currentLevel->InitializeLevel(GameManager::GetInstance(), *this, m_currentLevelIndex);
 
-	// Notify all observers about the score update
+	// Notify all observers that the level has started
 	for (auto it = m_observers.begin(); it != m_observers.end(); )
 	{
 		// Check if the observer is still valid and erase it if not
@@ -132,9 +140,11 @@ void GameState::OnGameOver()
 {
 	m_isGameOver = true;
 	GameManager::GetInstance().SetPauseGame(true);
+
+	// Update the highest score
 	m_highestScore = m_score > m_highestScore ? m_score : m_highestScore;
 
-	// Notify all observers about the score update
+	// Notify all observers about the game over and high score update
 	for (auto it = m_observers.begin(); it != m_observers.end(); )
 	{
 		// Check if the observer is still valid and erase it if not
@@ -158,17 +168,18 @@ void GameState::OnCountdownFinished()
 
 void GameState::ResetLevel()
 {
+	// Reset to level 1
 	m_currentLevel->InitializeLevel(GameManager::GetInstance(), *this);
 
 	GameManager::GetInstance().SetPauseGame(true);
+
+	// Reset player stats
 	m_lives = m_maxLives;
 	m_score = 0;
 	m_currentLevelIndex = 1;
 
-	// Notify all observers about the score update
 	for (auto it = m_observers.begin(); it != m_observers.end(); )
 	{
-		// Check if the observer is still valid and erase it if not
 		std::shared_ptr<IGameStateObserver>  observerPtr = it->lock();
 		if (!observerPtr)
 		{
@@ -229,7 +240,7 @@ void GameState::OnPlayerDied()
 		return;
 	}
 
-	// Notify all observers about the lives update
+	// Notify all observers that the player has died
 	for (auto it = m_observers.begin(); it != m_observers.end(); )
 	{
 		// Check if the observer is still valid and erase it if not
@@ -265,7 +276,6 @@ void GameState::OnPlayerRespawned()
 	}
 }
 
-
 void GameState::AddObserver(const std::weak_ptr<IGameStateObserver> observerP)
 {
 	m_observers.push_back(observerP);
@@ -273,7 +283,11 @@ void GameState::AddObserver(const std::weak_ptr<IGameStateObserver> observerP)
 
 void GameState::RemoveObserver(const std::weak_ptr<IGameStateObserver> observerP)
 {
-	if (observerP.expired()) return;
+	if (observerP.expired())
+	{
+		return;
+	}
+
 	std::shared_ptr<IGameStateObserver> observerPtr = observerP.lock();
 
 	m_observers.erase(

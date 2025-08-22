@@ -11,29 +11,7 @@ ScoreWidget::ScoreWidget(Vector2 positionP, int fontSizeP) :
 
 void ScoreWidget::Draw()
 {
-	// Draw the score
-	DrawText(TextFormat(
-		"Score: %01i", m_score),
-		static_cast<int>(m_position.x),
-		static_cast<int>(m_position.y),
-		m_fontSize,
-		GREEN
-	);
-
-	DrawText(TextFormat(
-		"Level %01i", m_level),
-		SCREEN_WIDTH / 2 - MeasureText("Level 0", m_fontSize) / 2,
-		static_cast<int>(m_position.y),
-		m_fontSize,
-		GREEN
-	);
-
-	// Draw the high score
-	DrawText(TextFormat(
-		"High Score: %01i", m_highScore),
-		SCREEN_WIDTH - MeasureText("High Score: 0000", m_fontSize) - static_cast<int>(m_position.x),
-		static_cast<int>(m_position.y),
-		m_fontSize,
-		RED
-	);
+	DrawText(TextFormat("Score: %01i", m_score), static_cast<int>(m_position.x), static_cast<int>(m_position.y), m_fontSize, GREEN);
+	DrawText(TextFormat("Level %01i", m_level), SCREEN_WIDTH / 2 - MeasureText("Level 0", m_fontSize) / 2, static_cast<int>(m_position.y), m_fontSize, GREEN);
+	DrawText(TextFormat("High Score: %01i", m_highScore), SCREEN_WIDTH - MeasureText("High Score: 0000", m_fontSize) - static_cast<int>(m_position.x), static_cast<int>(m_position.y), m_fontSize, RED);
 }

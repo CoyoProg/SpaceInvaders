@@ -19,6 +19,7 @@ public:
 	void SetInvaderSettings(float movementDelayP, int shootProbabilityP);
 
 	virtual void Update(float deltaSecP) override;
+
 	virtual void NotifyAlienDied(Alien& alienP) override;
 	virtual void NotifyPlayerDied() override;
 	virtual void NotifyPlayerRespawn() override;

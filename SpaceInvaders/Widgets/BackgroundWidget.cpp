@@ -55,7 +55,10 @@ void BackgroundWidget::Draw()
 	{
 		for (int j = 0; j < m_starsTable[i].size(); ++j)
 		{
-			if (m_starsTable[i][j].isSleeping) continue;
+			if (m_starsTable[i][j].isSleeping)
+			{
+				continue;
+			}
 
 			Rectangle sourceRec = {
 				10.0f + m_starsTable[i][j].currentFrameIndex * (10.0f + SPRITE_PROPERTIES.at(AnimatedSpriteID::Star).width),
@@ -85,7 +88,11 @@ void BackgroundWidget::Update(float deltaTimeP)
 	m_toggleStarTimer += deltaTimeP;
 
 	// We don't want to wake up stars too frequently or exceed the animation list limit
-	if (m_toggleStarTimer < m_toggleStarCooldownTime || m_animatedStarsList.size() >= m_animationListLimit) return;
+	if (m_toggleStarTimer < m_toggleStarCooldownTime || m_animatedStarsList.size() >= m_animationListLimit)
+	{
+		return;
+	}
+
 	m_toggleStarTimer = 0;
 
 	// 50% chance to toggle a star's sleeping state
@@ -104,7 +111,10 @@ void BackgroundWidget::Update(float deltaTimeP)
 
 void BackgroundWidget::UpdateStarAnimation(float deltaTimeP)
 {
-	if (m_animatedStarsList.empty()) return;
+	if (m_animatedStarsList.empty())
+	{
+		return;
+	}
 
 	// Update all the stars animations and remove the ones that are done animating
 	int currentIndex = static_cast<int>(m_animatedStarsList.size()) - 1;

@@ -177,8 +177,14 @@ Color Level1_SpaceInvaders::ComputeAlienRadialColor(float rowP, float colP)
 	// ##
 
 	// Clamp the column to ensure it is within the grid bounds
-	if (colP < 0) colP = 0;
-	if (colP >= AlienGridConfig::COLUMN_NUMBER - 1) colP = AlienGridConfig::COLUMN_NUMBER - 1;
+	if (colP < 0)
+	{
+		colP = 0;
+	}
+	else if (colP >= AlienGridConfig::COLUMN_NUMBER - 1)
+	{
+		colP = AlienGridConfig::COLUMN_NUMBER - 1;
+	}
 
 	// Normalize the column and row indices to a range of 0 to 1
 	float normalizeX = colP / (AlienGridConfig::COLUMN_NUMBER - 1);
@@ -194,16 +200,7 @@ Color Level1_SpaceInvaders::ComputeAlienRadialColor(float rowP, float colP)
 	float distFromCenter = static_cast<float>(sqrt(dx * dx + dy * dy));
 	distFromCenter /= maxDistanceFromCenter;
 
-	//Color paletteColor = LEVEL_PALETTES[1];
-	//Color result;
-	//result.r = static_cast<unsigned char>(paletteColor.r);
-	//result.g = static_cast<unsigned char>(paletteColor.g * (1.0f - distFromCenter));
-	//result.b = static_cast<unsigned char>(paletteColor.b * (1.0f - distFromCenter));
-	//result.a = 255;
-	//
-	//return result;
-
-	// Pick palette based on level (loop if needed)
+	// Pick palette based on level
 	const GradientPalette& palette = LEVEL_PALETTES[(m_currentLevel - 1) % PALETTE_COUNT];
 
 	// Interpolate from center to edge
@@ -215,15 +212,21 @@ void Level1_SpaceInvaders::AssignAlienType(AlienInfo& alienInfoP, int row)
 	switch (row)
 	{
 	case 0:
+	{
 		alienInfoP = { AnimatedSpriteID::AlienSmall,10 };
 		break;
+	}
 	case 1:
 	case 2:
+	{
 		alienInfoP = { AnimatedSpriteID::AlienMedium, 20 };
 		break;
+	}
 	case 3:
 	case 4:
+	{
 		alienInfoP = { AnimatedSpriteID::AlienLarge, 10 };
 		break;
+	}
 	}
 }

@@ -11,11 +11,12 @@ public:
 	virtual void Draw() override;
 
 	void SetLives(int livesP) { m_lives = livesP; }
-	void SetTextures(Texture2D baseTextureP, Texture2D canonTextureP);
 
 private:
 	Texture2D m_baseTexture{};
 	Texture2D m_canonTexture{};
+	Rectangle m_sourceBase{};
+	Rectangle m_sourceCanon{};
 
 	Vector2 m_size{ 100.0f, 30.0f };
 	int m_lives{ 3 };
