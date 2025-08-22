@@ -8,16 +8,7 @@ Alien::Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoo
 	Actor(ActorAffiliation::Enemy),
 	m_initialCoordsX(initialCoordX),
 	m_initialCoordsY(initialCoordY),
-	m_scoreValue(scoreValueP),
-	m_SpriteAnimationComponent(
-		GameManager::GetInstance().GetTexture("alienSheet"),
-		SPRITE_PROPERTIES.at(spriteTypeP).width,
-		SPRITE_PROPERTIES.at(spriteTypeP).height,
-		SPRITE_PROPERTIES.at(spriteTypeP).spriteOffset,
-		10.0f,
-		SPRITE_PROPERTIES.at(spriteTypeP).maxFrameIndex,
-		2.7f
-	)
+	m_scoreValue(scoreValueP)
 {
 	m_position.x = positionP.x;
 	m_position.y = positionP.y;
@@ -29,6 +20,16 @@ Alien::Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoo
 		m_CollisionBoxComponent->SetSize(m_size);
 		m_CollisionBoxComponent->SetPosition(m_position);
 	}
+
+	m_SpriteAnimationComponent.SetupSpriteAnimation(
+		GameManager::GetInstance().GetTexture("alienSheet"),
+		SPRITE_PROPERTIES.at(spriteTypeP).width,
+		SPRITE_PROPERTIES.at(spriteTypeP).height,
+		SPRITE_PROPERTIES.at(spriteTypeP).spriteOffset,
+		10.0f,
+		SPRITE_PROPERTIES.at(spriteTypeP).maxFrameIndex,
+		2.7f
+	);
 }
 
 void Alien::AddObserver(const std::weak_ptr<IAlienObserver> observerP)

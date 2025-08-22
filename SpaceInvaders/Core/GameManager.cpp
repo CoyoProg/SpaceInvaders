@@ -11,12 +11,9 @@ void GameManager::LoadRessources()
 	m_textures["alienSheet"] = LoadTexture("../Resources/invadersSpriteSheet.png");
 	m_textures["buttonSheet"] = LoadTexture("../Resources/startButtonSpriteSheet.png");
 	m_textures["starSheet"] = LoadTexture("../Resources/starSpriteSheet.png");
-
-	Image title = LoadImage("../Resources/spaceInvadersTitle.png");
-	ImageResize(&title, static_cast<int>(title.width * 0.5f), static_cast<int>(title.height * 0.5f));
-	m_textures["title"] = LoadTextureFromImage(title);
-
-	UnloadImage(title);
+	m_textures["title"] = LoadTexture("../Resources/spaceInvadersTitle.png");
+	m_textures["playerBase"] = LoadTexture("../Resources/Base_C.png");
+	m_textures["playerCanon"] = LoadTexture("../Resources/Canon_C.png");
 }
 
 void GameManager::UnloadTextures()

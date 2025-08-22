@@ -128,8 +128,9 @@
   <ItemGroup>
     <ClCompile Include="Actors\Actor.cpp" />
     <ClCompile Include="Actors\Alien.cpp" />
+    <ClCompile Include="Widgets\PlayerCustomizationWidget.cpp" />
     <ClCompile Include="Widgets\GameMessageWidget.cpp" />
-    <ClCompile Include="Widgets\Buttons\StartButtonWidget.cpp" />
+    <ClCompile Include="Widgets\Buttons\ButtonWidget.cpp" />
     <ClCompile Include="Widgets\BackgroundWidget.cpp" />
     <ClCompile Include="Components\CollisionBoxComponent.cpp" />
     <ClCompile Include="Core\GameManager.cpp" />
@@ -151,8 +152,10 @@
   <ItemGroup>
     <ClInclude Include="Actors\Actor.h" />
     <ClInclude Include="Actors\Alien.h" />
+    <ClInclude Include="Interfaces\IButtonObserver.h" />
+    <ClInclude Include="Widgets\PlayerCustomizationWidget.h" />
     <ClInclude Include="Widgets\GameMessageWidget.h" />
-    <ClInclude Include="Widgets\Buttons\StartButtonWidget.h" />
+    <ClInclude Include="Widgets\Buttons\ButtonWidget.h" />
     <ClInclude Include="Widgets\BackgroundWidget.h" />
     <ClInclude Include="Components\CollisionBoxComponent.h" />
     <ClInclude Include="Components\Component.h" />

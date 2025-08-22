@@ -72,10 +72,13 @@
     <ClCompile Include="Widgets\BackgroundWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Widgets\Buttons\StartButtonWidget.cpp">
+    <ClCompile Include="Widgets\Buttons\ButtonWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Widgets\GameMessageWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Widgets\PlayerCustomizationWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -155,10 +158,16 @@
     <ClInclude Include="Widgets\BackgroundWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Widgets\Buttons\StartButtonWidget.h">
+    <ClInclude Include="Widgets\Buttons\ButtonWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Widgets\GameMessageWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Widgets\PlayerCustomizationWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\IButtonObserver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

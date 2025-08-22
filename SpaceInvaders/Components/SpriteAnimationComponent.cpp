@@ -1,6 +1,6 @@
 #include "SpriteAnimationComponent.h"
 
-SpriteAnimationComponent::SpriteAnimationComponent(Texture2D spriteSheetP, float spriteWidthP, float spriteHeightP, float spriteOffsetP, float spritePaddingP, int maxFramesP, float scaleFactorP)
+void SpriteAnimationComponent::SetupSpriteAnimation(Texture2D spriteSheetP, float spriteWidthP, float spriteHeightP, float spriteOffsetP, float spritePaddingP, int maxFramesP, float scaleFactorP)
 {
 	m_spriteSheet = spriteSheetP;
 	m_spriteWidth = spriteWidthP;

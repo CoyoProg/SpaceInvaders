@@ -48,7 +48,9 @@ void GameState::HandleTransitionTimer(float deltaSecP)
 
 void GameState::LoadStartMenu()
 {
-	GameManager::GetInstance().AddWidget(std::move(std::make_unique<StartMenuWidget>()));
+	std::shared_ptr<StartMenuWidget> startMenuWidget = std::make_shared<StartMenuWidget>();
+	startMenuWidget->SetupWidgetBindings();
+	GameManager::GetInstance().AddWidget(startMenuWidget);
 }
 
 void GameState::StartLevel()

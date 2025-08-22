@@ -8,14 +8,13 @@
 class SpriteAnimationComponent : public Component
 {
 public:
-	SpriteAnimationComponent(Texture2D spriteSheetP,
+	void SetupSpriteAnimation(Texture2D spriteSheetP,
 		float spriteWidthP,
 		float spriteHeightP = 84.0f,
 		float spriteOffsetP = 0.0f,
 		float spritePaddingP = 10.0f,
 		int maxFramesP = 1,
 		float scaleFactorP = 1);
-
 	void Draw(Vector2 positionP, Color colorP);
 
 	// Set the animation to the next frame
