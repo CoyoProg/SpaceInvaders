@@ -51,9 +51,11 @@ public:
 	void OnLooseFocus();
 
 private:
+	SpriteID m_spriteID;
 	ButtonAction m_buttonAction{ ButtonAction::PlayGame };
-	std::vector<std::weak_ptr<IButtonObserver>> m_observers;
 	ButtonState m_buttonState{ ButtonState::Idle };
+
 	SpriteAnimationComponent m_spriteAnimationComponent;
+	std::vector<std::weak_ptr<IButtonObserver>> m_observers;
 };
 

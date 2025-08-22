@@ -15,7 +15,7 @@
 class Shield : public Actor
 {
 public:
-	Shield(Vector2 positionP, Vector2 sizeP);
+	Shield(Vector2 positionP, Vector2 sizeP, Color colorP);
 
 	virtual void Draw() override;
 

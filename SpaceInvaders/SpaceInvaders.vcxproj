@@ -153,6 +153,7 @@
     <ClInclude Include="Actors\Actor.h" />
     <ClInclude Include="Actors\Alien.h" />
     <ClInclude Include="Interfaces\IButtonObserver.h" />
+    <ClInclude Include="Data\PlayerData.h" />
     <ClInclude Include="Widgets\PlayerCustomizationWidget.h" />
     <ClInclude Include="Widgets\GameMessageWidget.h" />
     <ClInclude Include="Widgets\Buttons\ButtonWidget.h" />

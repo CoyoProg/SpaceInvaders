@@ -170,5 +170,8 @@
     <ClInclude Include="Interfaces\IButtonObserver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Data\PlayerData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,8 +1,8 @@
 #pragma once
+#include "../Data/PlayerData.h"
 #include <memory>
 #include <vector>
 #include <unordered_map>
-#include "raylib.h"
 
 class GameManager;
 class GameState;
@@ -49,6 +49,7 @@ public:
 	void InitializeLevel(GameManager& gameManagerP, GameState& gameStateP, int levelIndexP = 1);
 	void SpawnPlayer(GameManager& gameManagerP);
 	void SpawnInvader(GameManager& gameManagerP, GameState& gameStateP);
+	void SetPlayerData(PlayerData playerDataP);
 
 private:
 	// Initialize the aliens on the grid
@@ -64,6 +65,7 @@ private:
 	void AssignAlienType(AlienInfo& alienInfoP, int row);
 
 private:
+	PlayerData m_playerData{};
 	std::weak_ptr<Player> m_player;
 	std::weak_ptr<Invader> m_invader;
 	std::vector<std::weak_ptr<Shield>> m_shields;

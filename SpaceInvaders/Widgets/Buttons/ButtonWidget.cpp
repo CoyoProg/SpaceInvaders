@@ -6,12 +6,13 @@ void ButtonWidget::SetupButton(SpriteID spriteIDP, Texture2D textureP, Vector2 p
 {
 	m_position = positionP;
 	m_buttonAction = buttonActionP;
+	m_spriteID = spriteIDP;
 
 	m_spriteAnimationComponent.SetupSpriteAnimation(
 		textureP,
 		SPRITE_PROPERTIES.at(spriteIDP).width,
 		SPRITE_PROPERTIES.at(spriteIDP).height,
-		0.0f,
+		SPRITE_PROPERTIES.at(spriteIDP).spriteOffset,
 		SPRITE_SHEET_PADDING,
 		SPRITE_PROPERTIES.at(spriteIDP).maxFrameIndex
 	);
@@ -46,7 +47,7 @@ void ButtonWidget::Draw()
 
 Rectangle ButtonWidget::GetBoundingBox() const
 {
-	return Rectangle{ m_position.x, m_position.y, SPRITE_PROPERTIES.at(SpriteID::StartButton).width, SPRITE_PROPERTIES.at(SpriteID::StartButton).height };
+	return Rectangle{ m_position.x, m_position.y, SPRITE_PROPERTIES.at(m_spriteID).width, SPRITE_PROPERTIES.at(m_spriteID).height};
 }
 
 void ButtonWidget::OnHover()

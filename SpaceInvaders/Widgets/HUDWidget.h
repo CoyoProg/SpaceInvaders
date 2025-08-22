@@ -18,6 +18,8 @@ public:
 	virtual void NotifyPlayerLifeUpdate(int newLivesP) override;
 	virtual void NotifyLevelStart(int levelIndexP) override;
 
+	void SetLivesTextures(Texture2D baseTextureP, Texture2D canonTextureP);
+
 private:
 	ScoreWidget m_scoreWidget;
 	LivesWidget m_livesWidget;

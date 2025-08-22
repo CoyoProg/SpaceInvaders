@@ -1,5 +1,6 @@
 #pragma once
 #include "Widget.h"
+#include "../Data/PlayerData.h"
 #include "../Interfaces/IButtonObserver.h"
 #include "PlayerCustomizationWidget.h"
 #include "Buttons/ButtonWidget.h"
@@ -17,6 +18,13 @@ public:
 
 	void SetupWidgetBindings();
 
+	void SelectNextBase();
+	void SelectPreviousBase();
+	void SelectNextCanon();
+	void SelectPreviousCanon();
+	void SelectNextColor();
+	void SelectPreviousColor();
+
 	virtual void Draw() override;
 	virtual void Update(float deltaTimeP) override;
 	virtual void OnButtonPressed(ButtonAction buttonActionP) override;
@@ -24,16 +32,20 @@ public:
 	void HandleMouseInput();
 
 private:
-	std::vector<std::unique_ptr<ButtonWidget>> m_buttons;
-	bool m_LBPressed{ false };
-
-	PlayerCustomizationWidget m_playerCustomizationWidget;
-	Vector2 m_mousePosition{};
-
 	Texture2D m_titleTexture{};
+	PlayerCustomizationWidget m_playerCustomizationWidget;
+	std::vector<std::unique_ptr<ButtonWidget>> m_buttons;
 
+	PlayerData m_finalData{};
+	int m_currentBaseIndex{ 0 };
+	int m_currentCanonIndex{ 0 };
+	int m_currentColorIndex{ 0 };
+
+	Vector2 m_mousePosition{};
+	bool m_LBPressed{ false };
 	bool m_shouldStartGame{ false };
 	const float m_startLevelDelay{ 0.25f };
 	float m_startLevelTimer{ 0.0f };
+
 };
 

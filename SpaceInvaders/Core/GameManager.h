@@ -27,7 +27,8 @@ enum class SpriteID
 	Laser,
 	Star,
 	StartButton,
-	Player
+	LeftSelectionButton,
+	RightSelectionButton
 };
 
 struct SpriteProperties
@@ -47,7 +48,8 @@ static const std::unordered_map<SpriteID, SpriteProperties> SPRITE_PROPERTIES
 	{ SpriteID::Laser, { 10.0f, 30.0f, 1 } },
 	{ SpriteID::Star, { 76.0f, 76.0f, 3 } },
 	{ SpriteID::StartButton, { 220.0f, 120.0f, 2 } },
-	{ SpriteID::Player, { 50.0f, 50.0f, 1 } }
+	{ SpriteID::LeftSelectionButton, { 28.0f, 42.0f, 2} },
+	{ SpriteID::RightSelectionButton, { 28.0f, 42.0f, 2, 114} }
 };
 
 /*
@@ -87,7 +89,7 @@ public:
 	void ClearLevel();
 	void ClearAllProjectiles();
 	void ClearAllWidgets();
-	
+
 	// Add actor to the list of pending actors
 	void AddActor(std::shared_ptr<Actor> actorP);
 	// Add object to the list of pending objects

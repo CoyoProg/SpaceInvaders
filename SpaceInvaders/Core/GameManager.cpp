@@ -9,11 +9,17 @@
 void GameManager::LoadRessources()
 {
 	m_textures["alienSheet"] = LoadTexture("../Resources/invadersSpriteSheet.png");
-	m_textures["buttonSheet"] = LoadTexture("../Resources/startButtonSpriteSheet.png");
+	m_textures["startButtonSheet"] = LoadTexture("../Resources/startButtonSpriteSheet.png");
+	m_textures["selectionButtonSheet"] = LoadTexture("../Resources/selectionButtonSpriteSheet.png");
 	m_textures["starSheet"] = LoadTexture("../Resources/starSpriteSheet.png");
 	m_textures["title"] = LoadTexture("../Resources/spaceInvadersTitle.png");
-	m_textures["playerBase"] = LoadTexture("../Resources/Base_C.png");
-	m_textures["playerCanon"] = LoadTexture("../Resources/Canon_C.png");
+	m_textures["baseA"] = LoadTexture("../Resources/Base_A.png");
+	m_textures["baseB"] = LoadTexture("../Resources/Base_B.png");
+	m_textures["baseC"] = LoadTexture("../Resources/Base_C.png");
+	m_textures["baseD"] = LoadTexture("../Resources/Base_D.png");
+	m_textures["canonA"] = LoadTexture("../Resources/Canon_A.png");
+	m_textures["canonB"] = LoadTexture("../Resources/Canon_B.png");
+	m_textures["canonC"] = LoadTexture("../Resources/Canon_C.png");
 }
 
 void GameManager::UnloadTextures()

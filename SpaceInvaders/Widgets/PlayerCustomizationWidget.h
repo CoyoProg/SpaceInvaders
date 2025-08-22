@@ -1,33 +1,26 @@
 #pragma once
 #include "Widget.h"
 
-enum class PlayerColor
-{
-	PCW_GREEN,
-	PCW_BLUE,
-	PCW_RED,
-	PCW_YELLOW,
-	PCW_WHITE,
-	PCW_PURPLE,
-	PCW_ORANGE,
-	PCW_CYAN,
-	PCW_MAX_COLORS
-};
-
 class PlayerCustomizationWidget : public Widget
 {
 public:
 	PlayerCustomizationWidget();
+	void SetBaseTexture(Texture2D baseTextureP);
+	void SetCanonTexture(Texture2D canonTextureP);
+	void SetColor(Color colorP) { m_playerColor = colorP; }
 
 	virtual void Draw() override;
-	void SelectNextColor();
-	void SelectPreviousColor();
+	void DrawCanon();
+	void DrawBase();
 
 private:
+	float screenOffsetY = 100.0f;
+	int spritePadding = 1;
+	int scaleFactor = 3;
+
+	Color m_playerColor{ GREEN };
 	Vector2 m_basePosition;
 	Vector2 m_canonPosition;
-	PlayerColor m_enum{ PlayerColor::PCW_GREEN };
-	Color m_playerColor{ GREEN };
 	Texture2D m_baseTexture{};
 	Texture2D m_canonTexture{};
 };

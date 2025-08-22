@@ -58,3 +58,6 @@ void HUDWidget::NotifyLevelStart(int levelIndexP)
 	m_scoreWidget.SetLevel(levelIndexP);
 }
 
+void HUDWidget::SetLivesTextures(Texture2D baseTextureP, Texture2D canonTextureP)
+{
+}

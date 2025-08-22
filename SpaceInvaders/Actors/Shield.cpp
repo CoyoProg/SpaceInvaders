@@ -43,10 +43,11 @@ constexpr int EXPLOSION_MASKS[EXPLOSION_MASKS_COUNT][EXPLOSION_SIZE][EXPLOSION_S
 	}
 };
 
-Shield::Shield(Vector2 positionP, Vector2 sizeP) : Actor(ActorAffiliation::Neutral)
+Shield::Shield(Vector2 positionP, Vector2 sizeP, Color colorP) : Actor(ActorAffiliation::Neutral)
 {
 	m_position = positionP;
 	m_size =sizeP;
+	m_color = colorP;
 
 	m_cellSize.x = m_size.x / static_cast<float>(UPSCALED_WIDTH);
 	m_cellSize.y = m_size.y / static_cast<float>(UPSCALED_HEIGHT);
@@ -186,14 +187,14 @@ void Shield::Draw()
 					static_cast<int>(drawY),
 					static_cast<int>(m_cellSize.x),
 					static_cast<int>(m_cellSize.y),
-					GREEN);
+					m_color);
 				break;
 			case 2:
 				DrawTriangle(
 					{ drawX, drawY + m_cellSize.y },
 					{ drawX + m_cellSize.x, drawY + m_cellSize.y },
 					{ drawX + m_cellSize.x, drawY },
-					GREEN
+					m_color
 				);
 				break;
 			case 3:
@@ -201,7 +202,7 @@ void Shield::Draw()
 					{ drawX, drawY },
 					{ drawX, drawY + m_cellSize.y },
 					{ drawX + m_cellSize.x, drawY },
-					GREEN
+					m_color
 				);
 				break;
 			case 4:
@@ -209,7 +210,7 @@ void Shield::Draw()
 					{ drawX, drawY + m_cellSize.y },
 					{ drawX + m_cellSize.x, drawY + m_cellSize.y },
 					{ drawX, drawY },
-					GREEN
+					m_color
 				);
 				break;
 
@@ -218,7 +219,7 @@ void Shield::Draw()
 					{ drawX + m_cellSize.x, drawY + m_cellSize.y },
 					{ drawX + m_cellSize.x, drawY },
 					{ drawX, drawY },
-					GREEN
+					m_color
 				);
 				break;
 			}

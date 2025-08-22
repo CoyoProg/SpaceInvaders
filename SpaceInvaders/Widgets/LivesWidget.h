@@ -11,9 +11,13 @@ public:
 	virtual void Draw() override;
 
 	void SetLives(int livesP) { m_lives = livesP; }
+	void SetTextures(Texture2D baseTextureP, Texture2D canonTextureP);
 
 private:
-	const Vector2 m_size{ 100.0f, 30.0f };
+	Texture2D m_baseTexture{};
+	Texture2D m_canonTexture{};
+
+	Vector2 m_size{ 100.0f, 30.0f };
 	int m_lives{ 3 };
 	int m_livesOffset{ 5 };
 };

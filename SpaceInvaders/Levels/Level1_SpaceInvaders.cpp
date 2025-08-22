@@ -70,7 +70,7 @@ void Level1_SpaceInvaders::SpawnPlayer(GameManager& gameManagerP)
 {
 	if (m_player.expired())
 	{
-		std::shared_ptr<Player> player = std::make_shared<Player>();
+		std::shared_ptr<Player> player = std::make_shared<Player>(m_playerData);
 		m_player = player;
 		gameManagerP.AddActor(player);
 	}
@@ -93,6 +93,11 @@ void Level1_SpaceInvaders::SpawnInvader(GameManager& gameManagerP, GameState& ga
 		std::shared_ptr<Invader> invader = m_invader.lock();
 		invader->SetInvaderSettings(LEVEL_CONFIG.at(clampedLevel).alienMovementDelay, LEVEL_CONFIG.at(clampedLevel).alienShootProbability);
 	}
+}
+
+void Level1_SpaceInvaders::SetPlayerData(PlayerData playerDataP)
+{
+	m_playerData = playerDataP;
 }
 
 void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP, Invader& invaderP)
@@ -126,8 +131,7 @@ void Level1_SpaceInvaders::InitializeShields(GameManager& gameManagerP)
 		float posX = static_cast<float>((i + 1) * (SCREEN_WIDTH / (shieldNumber + 1)) - shieldSize.x / 2);
 		float posY = static_cast<float>(SCREEN_HEIGHT - bottomOffset);
 
-		std::shared_ptr<Shield> shield = std::make_shared<Shield>(Vector2{ posX ,posY }, shieldSize);
-		shield->SetColor(GREEN);
+		std::shared_ptr<Shield> shield = std::make_shared<Shield>(Vector2{ posX ,posY }, shieldSize, m_playerData.playerColor);
 		gameManagerP.AddActor(shield);
 		m_shields.emplace_back(shield);
 	}
