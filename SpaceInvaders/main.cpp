@@ -12,7 +12,7 @@ int main(void)
 
     gameManager.LoadRessources();
     gameState.LoadStartMenu();
-    Music music = LoadMusicStream("../Resources/Sounds/musicInvaders.wav");
+    Music music = LoadMusicStream("Resources/Sounds/musicInvaders.wav");
     music.looping = true;
 
     PlayMusicStream(music);

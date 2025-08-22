@@ -15,26 +15,26 @@ void GameManager::LoadRessources()
 
 void GameManager::LoadTextures()
 {
-	m_textures["alienSheet"] = LoadTexture("../Resources/Textures/invadersSpriteSheet.png");
-	m_textures["startButtonSheet"] = LoadTexture("../Resources/Textures/startButtonSpriteSheet.png");
-	m_textures["selectionButtonSheet"] = LoadTexture("../Resources/Textures/selectionButtonSpriteSheet.png");
-	m_textures["starSheet"] = LoadTexture("../Resources/Textures/starSpriteSheet.png");
+	m_textures["alienSheet"] = LoadTexture("Resources/Textures/invadersSpriteSheet.png");
+	m_textures["startButtonSheet"] = LoadTexture("Resources/Textures/startButtonSpriteSheet.png");
+	m_textures["selectionButtonSheet"] = LoadTexture("Resources/Textures/selectionButtonSpriteSheet.png");
+	m_textures["starSheet"] = LoadTexture("Resources/Textures/starSpriteSheet.png");
 
-	Image image = LoadImage("../Resources/Textures/ovni.png");
+	Image image = LoadImage("Resources/Textures/ovni.png");
 	ImageResize(&image, image.width / 2, image.height / 2);
 	m_textures["ovni"] = LoadTextureFromImage(image);
 	UnloadImage(image);
 
-	m_textures["title"] = LoadTexture("../Resources/Textures/spaceInvadersTitle.png");
-	m_textures["baseA"] = LoadTexture("../Resources/Textures/Base_A.png");
-	m_textures["baseB"] = LoadTexture("../Resources/Textures/Base_B.png");
-	m_textures["baseC"] = LoadTexture("../Resources/Textures/Base_C.png");
-	m_textures["baseD"] = LoadTexture("../Resources/Textures/Base_D.png");
-	m_textures["canonA"] = LoadTexture("../Resources/Textures/Canon_A.png");
-	m_textures["canonB"] = LoadTexture("../Resources/Textures/Canon_B.png");
-	m_textures["canonC"] = LoadTexture("../Resources/Textures/Canon_C.png");
-	m_textures["explosionA"] = LoadTexture("../Resources/Textures/explosion_A.png");
-	m_textures["explosionB"] = LoadTexture("../Resources/Textures/explosion_B.png");
+	m_textures["title"] = LoadTexture("Resources/Textures/spaceInvadersTitle.png");
+	m_textures["baseA"] = LoadTexture("Resources/Textures/Base_A.png");
+	m_textures["baseB"] = LoadTexture("Resources/Textures/Base_B.png");
+	m_textures["baseC"] = LoadTexture("Resources/Textures/Base_C.png");
+	m_textures["baseD"] = LoadTexture("Resources/Textures/Base_D.png");
+	m_textures["canonA"] = LoadTexture("Resources/Textures/Canon_A.png");
+	m_textures["canonB"] = LoadTexture("Resources/Textures/Canon_B.png");
+	m_textures["canonC"] = LoadTexture("Resources/Textures/Canon_C.png");
+	m_textures["explosionA"] = LoadTexture("Resources/Textures/explosion_A.png");
+	m_textures["explosionB"] = LoadTexture("Resources/Textures/explosion_B.png");
 }
 
 void GameManager::LoadSounds()
@@ -42,12 +42,12 @@ void GameManager::LoadSounds()
 	// ##
 	// Bank sound from: https://classicgaming.cc/classics/space-invaders/sounds
 	// ##
-	m_sounds["gameOver"] = LoadSound("../Resources/Sounds/gameOverSoundB.wav");
-	m_sounds["playerDeath"] = LoadSound("../Resources/Sounds/playerDeathSound.wav");
-	m_sounds["alienDeath"] = LoadSound("../Resources/Sounds/alienDeathSound.wav");
-	m_sounds["laserShoot"] = LoadSound("../Resources/Sounds/laserShootSound.wav");
-	m_sounds["buttonClick"] = LoadSound("../Resources/Sounds/buttonClickSound.wav");
-	m_sounds["ovni"] = LoadSound("../Resources/Sounds/ovniSound.wav");
+	m_sounds["gameOver"] = LoadSound("Resources/Sounds/gameOverSoundB.wav");
+	m_sounds["playerDeath"] = LoadSound("Resources/Sounds/playerDeathSound.wav");
+	m_sounds["alienDeath"] = LoadSound("Resources/Sounds/alienDeathSound.wav");
+	m_sounds["laserShoot"] = LoadSound("Resources/Sounds/laserShootSound.wav");
+	m_sounds["buttonClick"] = LoadSound("Resources/Sounds/buttonClickSound.wav");
+	m_sounds["ovni"] = LoadSound("Resources/Sounds/ovniSound.wav");
 }
 
 void GameManager::UnloadTextures()
