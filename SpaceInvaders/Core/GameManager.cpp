@@ -39,6 +39,9 @@ void GameManager::LoadTextures()
 
 void GameManager::LoadSounds()
 {
+	// ##
+	// Bank sound from: https://classicgaming.cc/classics/space-invaders/sounds
+	// ##
 	m_sounds["gameOver"] = LoadSound("../Resources/Sounds/gameOverSoundB.wav");
 	m_sounds["playerDeath"] = LoadSound("../Resources/Sounds/playerDeathSound.wav");
 	m_sounds["alienDeath"] = LoadSound("../Resources/Sounds/alienDeathSound.wav");
@@ -170,6 +173,8 @@ void GameManager::ClearAllProjectiles()
 			actor->SetForDeletion();
 		}
 	}
+
+	m_pendingActors.clear();
 }
 
 void GameManager::ClearAllWidgets()

@@ -68,5 +68,10 @@ private:
 	int m_shootProbability{ 70 };
 	float m_shootTimer{ 0.0f };
 	mutable int m_bottomAliensCount{ 11 };
+
+	// Probability of an ovni spawning per second
+	static constexpr float m_ovniSpawnCooldown{ 10.0f };
+	float m_ovniSpawnTimer{ 0.0f };
+	int m_ovniProbability{ 3 };
 };
 

@@ -23,13 +23,20 @@ void Invader::Update(float deltaSecP)
 		return;
 	}
 
-	int ovniRoll = rand() % 1000;
-	if (ovniRoll < 3 && m_ovni.expired())
+	m_ovniSpawnTimer += deltaSecP;
+	if(m_ovniSpawnTimer >= m_ovniSpawnCooldown)
 	{
-		std::shared_ptr<Ovni> ovni = std::make_shared<Ovni>(1);
-		m_ovni = ovni;
-		GameManager::GetInstance().AddActor(ovni);
+		m_ovniSpawnTimer = 0.0;
+
+		int ovniRoll = rand() % 100;
+		if (ovniRoll < m_ovniProbability && m_ovni.expired())
+		{
+			std::shared_ptr<Ovni> ovni = std::make_shared<Ovni>(1);
+			m_ovni = ovni;
+			GameManager::GetInstance().AddActor(ovni);
+		}
 	}
+
 
 	UpdateAlienPosition(deltaSecP);
 	UpdateShootProbability(deltaSecP);

@@ -26,6 +26,7 @@ void Ovni::Update(float deltaTimeP)
 	m_position.x += 100.f * deltaTimeP * m_direction;
 	if (m_position.x < 0 - m_size.x || m_position.x > SCREEN_WIDTH + m_size.x)
 	{
+		StopSound(GameManager::GetInstance().GetSound("ovni"));
 		SetForDeletion(true);
 	}
 
@@ -45,6 +46,7 @@ void Ovni::OnCollisionEvent(const Actor& otherActorP)
 
 void Ovni::Death()
 {
+	StopSound(GameManager::GetInstance().GetSound("ovni"));
 	PlaySound(GameManager::GetInstance().GetSound("alienDeath"));
 
 	Vector2 explosionPosition = { m_position.x + m_size.x / 2, m_position.y + m_size.y / 2 };
