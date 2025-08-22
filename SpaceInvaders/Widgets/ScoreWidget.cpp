@@ -20,6 +20,14 @@ void ScoreWidget::Draw()
 		GREEN
 	);
 
+	DrawText(TextFormat(
+		"Level %01i", m_level),
+		SCREEN_WIDTH / 2 - MeasureText("Level 0", m_fontSize) / 2,
+		static_cast<int>(m_position.y),
+		m_fontSize,
+		GREEN
+	);
+
 	// Draw the high score
 	DrawText(TextFormat(
 		"High Score: %01i", m_highScore),

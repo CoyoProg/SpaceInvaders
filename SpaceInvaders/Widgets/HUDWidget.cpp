@@ -26,6 +26,14 @@ void HUDWidget::Draw()
 		GREEN
 	);
 
+	// DEBUG: Display the number of actors currently in the game
+	//DrawText(
+	//	TextFormat("Actor Count: %01i",GameManager::GetInstance().GetActorCount()),
+	//	SCREEN_WIDTH - MeasureText("Actor Count: 00", 20) - 25,
+	//	870,
+	//	20,
+	//	GREEN);
+
 	m_scoreWidget.Draw();
 	m_livesWidget.Draw();
 }
@@ -43,5 +51,10 @@ void HUDWidget::NotifyHighScoreUpdate(int highScoreP)
 void HUDWidget::NotifyPlayerLifeUpdate(int newLivesP)
 {
 	m_livesWidget.SetLives(newLivesP);
+}
+
+void HUDWidget::NotifyLevelStart(int levelIndexP)
+{
+	m_scoreWidget.SetLevel(levelIndexP);
 }
 

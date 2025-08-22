@@ -16,6 +16,7 @@ class Invader : public Object, public IAlienObserver, public IGameStateObserver,
 {
 public:
 	Invader(int spaceBetweenRowsP = 30);
+	void SetInvaderSettings(float movementDelayP, int shootProbabilityP);
 
 	virtual void Update(float deltaSecP) override;
 	virtual void NotifyAlienDied(Alien& alienP) override;
@@ -62,6 +63,7 @@ private:
 
 	// Probability of an alien shooting per second
 	static constexpr float m_shootCooldown{ 0.5f };
+	int m_shootProbability{ 70 };
 	float m_shootTimer{ 0.0f };
 	mutable int m_bottomAliensCount{ 11 };
 };

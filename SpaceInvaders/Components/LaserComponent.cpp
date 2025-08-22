@@ -1,7 +1,6 @@
 #include "LaserComponent.h"
 #include "../Actors/LaserProjectile.h"
 #include "../Core/GameManager.h"
-#include <iostream>
 
 void LaserComponent::Shoot(int directionP, Vector2 positionP, ActorAffiliation ownerP, int movementSpeedP)
 {

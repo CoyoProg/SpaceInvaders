@@ -12,9 +12,11 @@ public:
 
 	void SetScore(int scoreP) { m_score = scoreP; }
 	void SetHighScore(int highScoreP) { m_highScore = highScoreP; }
+	void SetLevel(int levelP) { m_level = levelP; };
 
 private:
 	const int m_fontSize{ 20 };
+	int m_level{ 1 };
 	int m_highScore{ 0 };
 	int m_score{ 0 };
 };

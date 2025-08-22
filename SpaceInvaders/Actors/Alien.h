@@ -22,6 +22,8 @@ public:
 	void AddObserver(const std::weak_ptr<IAlienObserver> observerP);
 	void RemoveObserver(const std::weak_ptr<IAlienObserver> observerP);
 
+	void SetLaserSpeed(int speedP) { m_laserSpeed = speedP; }
+	
 	int GetCoordX() const { return m_initialCoordsX; }
 	int GetCoordY() const { return m_initialCoordsY; }
 
@@ -37,6 +39,7 @@ private:
 	std::vector<std::weak_ptr<IAlienObserver>> m_observers;
 
 	static constexpr int m_maxLaserCount{ 1 };
+	int m_laserSpeed{ 350 };
 	const int m_scoreValue{ 50 };
 	int m_initialCoordsX{ 0 };
 	int m_initialCoordsY{ 0 };

@@ -16,8 +16,8 @@ void GameMessageWidget::Draw()
 	}
 
 	DrawText(
-		m_message,
-		static_cast<int>(m_position.x) - MeasureText(m_message, m_fontSize) / 2,
+		m_message.c_str(),
+		static_cast<int>(m_position.x) - MeasureText(m_message.c_str(), m_fontSize) / 2,
 		static_cast<int>(m_position.y) - m_fontSize / 2,
 		m_fontSize,
 		m_color
@@ -43,7 +43,7 @@ void GameMessageWidget::Update(float deltaTimeP)
 	{
 	case MessageType::Countdown:
 	{
-		m_message = TextFormat("%01i", static_cast<int>(m_countdown));
+		m_message = std::to_string(static_cast<int>(m_countdown));
 
 		if (m_countdown <= 1)
 		{
@@ -84,7 +84,7 @@ void GameMessageWidget::NotifyGameOver()
 	m_IsUpdateEnabled = true;
 }
 
-void GameMessageWidget::NotifyLevelStart()
+void GameMessageWidget::NotifyLevelStart(int levelIndexP)
 {
 	m_messageType = MessageType::Countdown;
 	m_showRestartMessage = false;

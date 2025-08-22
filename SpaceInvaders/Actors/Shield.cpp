@@ -1,7 +1,7 @@
 #include "Shield.h"
 #include "../Components/CollisionBoxComponent.h"
 
-#include <iostream>
+#include <cmath>
 #include <raymath.h>
 
 // Small pattern for the shield: 1 = alive, 0 = empty

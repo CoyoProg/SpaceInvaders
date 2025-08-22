@@ -16,6 +16,7 @@ public:
 	virtual void NotifyScoreUpdate(int scoreP) override;
 	virtual void NotifyHighScoreUpdate(int highScoreP) override;
 	virtual void NotifyPlayerLifeUpdate(int newLivesP) override;
+	virtual void NotifyLevelStart(int levelIndexP) override;
 
 private:
 	ScoreWidget m_scoreWidget;

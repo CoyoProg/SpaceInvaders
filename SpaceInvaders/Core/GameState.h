@@ -55,6 +55,7 @@ private:
 	std::shared_ptr<Level1_SpaceInvaders> m_currentLevel;
 	std::unique_ptr<UIManager> m_uiManager;
 
+	int m_currentLevelIndex{ 1 };
 	int m_score{ 0 };
 	int m_highestScore{ 0 };
 	int m_lives{ 3 };

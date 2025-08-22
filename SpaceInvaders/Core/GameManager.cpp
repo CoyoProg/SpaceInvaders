@@ -4,6 +4,7 @@
 #include "../Objects/Object.h"
 #include "../Widgets/Widget.h"
 #include "../Components/CollisionBoxComponent.h"
+#include "../Actors/LaserProjectile.h"
 
 void GameManager::LoadRessources()
 {
@@ -111,15 +112,28 @@ void GameManager::FlushPendingLists()
 	FlushNewWidgets();
 }
 
-void GameManager::ResetAllActors()
+void GameManager::ClearLevel()
 {
+	m_objects.clear();
+
 	for (const std::shared_ptr<Actor>& actor : m_actors)
 	{
 		if (actor) actor->SetForDeletion();
 	}
 }
 
-void GameManager::ResetAllWidgets()
+void GameManager::ClearAllProjectiles()
+{
+	for (const std::shared_ptr<Actor>& actor : m_actors)
+	{
+		if (actor && dynamic_cast<LaserProjectile*>(actor.get()))
+		{
+			actor->SetForDeletion();
+		}
+	}
+}
+
+void GameManager::ClearAllWidgets()
 {
 	m_widgets.clear();
 }

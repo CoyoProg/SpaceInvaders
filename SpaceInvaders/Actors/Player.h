@@ -21,7 +21,7 @@ private:
 	LaserComponent m_laserComponent;
 
 	static constexpr int m_movementSpeed{ 200 };
-	static constexpr int m_maxLaserCount{ 0 };
+	static constexpr int m_maxLaserCount{ 1 };
 	static constexpr float m_shootCooldown{ 1.0f };
 	double m_shootTimer{ -1.0 };
 };

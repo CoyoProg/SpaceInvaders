@@ -6,18 +6,93 @@
 #include "../Actors/Shield.h"
 #include "../Objects/Invader.h"
 
+struct GradientPalette {
+	Color center;
+	Color edge;
+};
+
+static constexpr int PALETTE_COUNT = 8;
+static constexpr GradientPalette LEVEL_PALETTES[] = {
+	// Level 0
+	{ Color{255, 192, 64, 255}, Color{255, 0, 0, 255} },
+	// Level 1
+	{ Color{255, 128, 128, 255}, Color{128, 64, 192, 255} },
+	// Level 2
+	{ Color{255, 255, 128, 255}, Color{192, 64, 64, 255} },
+	// Level 3
+	{ Color{255, 96, 96, 255}, Color{128, 0, 0, 255} },
+	// Level 4
+	{ Color{192, 128, 255, 255}, Color{64, 0, 128, 255} },
+	// Level 5
+	{ Color{128, 255, 224, 255}, Color{0, 128, 128, 255} },
+	// Level 6
+	{ Color{255, 224, 128, 255}, Color{128, 64, 0, 255} },
+	// Level 7
+	{ Color{255, 160, 192, 255}, Color{128, 0, 64, 255} },
+};
+
+Color LerpColor(const Color& colorAP, const Color& colorB, float distanceFromCenterP) {
+	Color result;
+	result.r = static_cast<unsigned char>(colorAP.r + (colorB.r - colorAP.r) * distanceFromCenterP);
+	result.g = static_cast<unsigned char>(colorAP.g + (colorB.g - colorAP.g) * distanceFromCenterP);
+	result.b = static_cast<unsigned char>(colorAP.b + (colorB.b - colorAP.b) * distanceFromCenterP);
+	result.a = static_cast<unsigned char>(colorAP.a + (colorB.a - colorAP.a) * distanceFromCenterP);
+	return result;
+}
+
 // Retrospection Note: Ideally, we could use object pooling instead of creating new actors every level.
 // But because of the way the game manager removes dead actors, we will just create new ones for now.
-void Level1_SpaceInvaders::InitializeLevel(GameManager& gameManagerP, GameState& gameStateP)
+void Level1_SpaceInvaders::InitializeLevel(GameManager& gameManagerP, GameState& gameStateP, int levelIndexP)
 {
-	gameManagerP.AddActor(std::make_shared<Player>());
-	std::shared_ptr<Invader> invader = std::make_shared<Invader>();
+	m_currentLevel = levelIndexP;
 
-	InitializeAliensGrid(gameManagerP, *invader);
-	InitializeShields(gameManagerP);
+	SpawnPlayer(gameManagerP);
+	SpawnInvader(gameManagerP, gameStateP);
 
-	gameStateP.AddObserver(invader);
-	gameManagerP.AddObject(invader);
+	// Reset the shields to have full one only for level 1 and 2
+	if (m_currentLevel < 3)
+	{
+		for (std::weak_ptr<Shield>& shieldWeakPtr : m_shields)
+		{
+			if (std::shared_ptr<Shield> shield = shieldWeakPtr.lock())
+			{
+				shield->SetForDeletion(true);
+			}
+		}
+		m_shields.clear();
+		InitializeShields(gameManagerP);
+	}
+
+	InitializeAliensGrid(gameManagerP, *m_invader.lock());
+}
+
+void Level1_SpaceInvaders::SpawnPlayer(GameManager& gameManagerP)
+{
+	if (m_player.expired())
+	{
+		std::shared_ptr<Player> player = std::make_shared<Player>();
+		m_player = player;
+		gameManagerP.AddActor(player);
+	}
+}
+
+void Level1_SpaceInvaders::SpawnInvader(GameManager& gameManagerP, GameState& gameStateP)
+{
+	int clampedLevel = static_cast<int>(m_currentLevel > LEVEL_CONFIG.size() ? LEVEL_CONFIG.size() : m_currentLevel);
+
+	if (m_invader.expired())
+	{
+		std::shared_ptr<Invader> invader = std::make_shared<Invader>();
+		invader->SetInvaderSettings(LEVEL_CONFIG.at(clampedLevel).alienMovementDelay, LEVEL_CONFIG.at(clampedLevel).alienShootProbability);
+		m_invader = invader;
+		gameManagerP.AddObject(invader);
+		gameStateP.AddObserver(invader);
+	}
+	else
+	{
+		std::shared_ptr<Invader> invader = m_invader.lock();
+		invader->SetInvaderSettings(LEVEL_CONFIG.at(clampedLevel).alienMovementDelay, LEVEL_CONFIG.at(clampedLevel).alienShootProbability);
+	}
 }
 
 void Level1_SpaceInvaders::InitializeAliensGrid(GameManager& gameManagerP, Invader& invaderP)
@@ -54,6 +129,7 @@ void Level1_SpaceInvaders::InitializeShields(GameManager& gameManagerP)
 		std::shared_ptr<Shield> shield = std::make_shared<Shield>(Vector2{ posX ,posY }, shieldSize);
 		shield->SetColor(GREEN);
 		gameManagerP.AddActor(shield);
+		m_shields.emplace_back(shield);
 	}
 }
 
@@ -81,6 +157,9 @@ std::shared_ptr<Alien> Level1_SpaceInvaders::CreateAlien(int rowP, int colP, int
 
 	Color alienColor = ComputeAlienRadialColor(static_cast<float>(rowP), static_cast<float>(colP));
 	std::shared_ptr<Alien> alien = std::make_shared<Alien>(position, size, colP, rowP, alienInfo.type, alienColor, alienInfo.score);
+
+	int clampedLevel = static_cast<int>(m_currentLevel > LEVEL_CONFIG.size() ? LEVEL_CONFIG.size() : m_currentLevel);
+	alien->SetLaserSpeed(LEVEL_CONFIG.at(clampedLevel).alienProjectileSpeed);
 
 	return alien;
 }
@@ -111,13 +190,20 @@ Color Level1_SpaceInvaders::ComputeAlienRadialColor(float rowP, float colP)
 	float distFromCenter = static_cast<float>(sqrt(dx * dx + dy * dy));
 	distFromCenter /= maxDistanceFromCenter;
 
-	Color result;
-	result.r = static_cast<unsigned char>(255);
-	result.g = static_cast<unsigned char>(192 * (1.0f - distFromCenter));
-	result.b = static_cast<unsigned char>(64 * (1.0f - distFromCenter));
-	result.a = 255;
+	//Color paletteColor = LEVEL_PALETTES[1];
+	//Color result;
+	//result.r = static_cast<unsigned char>(paletteColor.r);
+	//result.g = static_cast<unsigned char>(paletteColor.g * (1.0f - distFromCenter));
+	//result.b = static_cast<unsigned char>(paletteColor.b * (1.0f - distFromCenter));
+	//result.a = 255;
+	//
+	//return result;
 
-	return result;
+	// Pick palette based on level (loop if needed)
+	const GradientPalette& palette = LEVEL_PALETTES[(m_currentLevel - 1) % PALETTE_COUNT];
+
+	// Interpolate from center to edge
+	return LerpColor(palette.center, palette.edge, distFromCenter);
 }
 
 void Level1_SpaceInvaders::AssignAlienType(AlienInfo& alienInfoP, int row)

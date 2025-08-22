@@ -1,12 +1,19 @@
 #include "Invader.h"
 #include "../Actors/Alien.h"
 #include "../Core/GameManager.h"
+#include "../Core/GameState.h"
 
 #include <unordered_map>
 
 Invader::Invader(int spaceBetweenRowsP)
 {
 	m_spaceBetweenRows = spaceBetweenRowsP;
+}
+
+void Invader::SetInvaderSettings(float movementDelayP, int shootProbabilityP)
+{
+	m_movementDelay = movementDelayP;
+	m_shootProbability = shootProbabilityP;
 }
 
 void Invader::Update(float deltaSecP)
@@ -59,6 +66,12 @@ void Invader::CleanupAliens()
 	if (m_alienToMoveIndex < 0 && !m_aliens.empty())
 	{
 		m_alienToMoveIndex = static_cast<int>(m_aliens.size() - 1);
+	}
+
+	if(m_aliens.empty())
+	{
+		// All aliens are dead, notify the game state
+		GameState::GetInstance().NextLevel();
 	}
 }
 
@@ -128,7 +141,7 @@ void Invader::UpdateShootProbability(float deltaSecP)
 		// 70% chance of an alien shooting every m_shootCooldown
 		// The chance increases when there are fewer aliens left
 		int chanceRoll = rand() % 100;
-		if (chanceRoll <= 70 + (11 - m_bottomAliensCount))
+		if (chanceRoll <= m_shootProbability + (11 - m_bottomAliensCount))
 		{
 			std::shared_ptr<Alien> alien = GetRandomBottomAlien();
 			if (alien)

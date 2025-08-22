@@ -84,8 +84,9 @@ public:
 	void FlushPendingLists();
 
 	void SetPauseGame(bool isGamePausedP) { m_isGamePaused = isGamePausedP; }
-	void ResetAllActors();
-	void ResetAllWidgets();
+	void ClearLevel();
+	void ClearAllProjectiles();
+	void ClearAllWidgets();
 	
 	// Add actor to the list of pending actors
 	void AddActor(std::shared_ptr<Actor> actorP);
@@ -95,6 +96,7 @@ public:
 	void AddWidget(std::shared_ptr<Widget> WidgetP);
 
 	Texture2D GetTexture(const std::string& textureName) const;
+	int GetActorCount() const { return static_cast<int>(m_actors.size()); }
 
 private:
 	// Private constructor for singleton pattern

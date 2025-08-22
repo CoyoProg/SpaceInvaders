@@ -1,11 +1,15 @@
 #pragma once
 #include <memory>
+#include <vector>
+#include <unordered_map>
 #include "raylib.h"
 
 class GameManager;
 class GameState;
 class Alien;
 class Invader;
+class Player;
+class Shield;
 
 struct AlienInfo {
 	enum class SpriteID type;
@@ -22,13 +26,29 @@ struct AlienGridConfig
 	static constexpr int TOP_OFFSET{ 150 };
 };
 
+struct LevelConfig
+{
+	float alienMovementDelay = 0.014f;
+	int alienShootProbability = 70;
+	int alienProjectileSpeed = 350;
+};
+
+static const std::unordered_map<int, LevelConfig> LEVEL_CONFIG
+{
+	{ 1, LevelConfig{} },
+	{ 2, {0.010f, 80, 450} },
+	{ 3, {0.005f, 90, 600} }
+};
+
 /*
  * @brief Represents the first level of the game
  */
 class Level1_SpaceInvaders
 {
 public:
-	void InitializeLevel(GameManager& gameManagerP, GameState& gameStateP);
+	void InitializeLevel(GameManager& gameManagerP, GameState& gameStateP, int levelIndexP = 1);
+	void SpawnPlayer(GameManager& gameManagerP);
+	void SpawnInvader(GameManager& gameManagerP, GameState& gameStateP);
 
 private:
 	// Initialize the aliens on the grid
@@ -42,5 +62,11 @@ private:
 	Color ComputeAlienRadialColor(float rowP, float colP);
 	// Assign the alien type and score based on its row
 	void AssignAlienType(AlienInfo& alienInfoP, int row);
+
+private:
+	std::weak_ptr<Player> m_player;
+	std::weak_ptr<Invader> m_invader;
+	std::vector<std::weak_ptr<Shield>> m_shields;
+	int m_currentLevel{ 1 };
 };
 

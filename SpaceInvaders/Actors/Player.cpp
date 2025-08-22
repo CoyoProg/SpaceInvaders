@@ -34,7 +34,7 @@ void Player::ProcessInput(float deltaTimeP)
 	// Process input for movement
 	if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) Move(-1, deltaTimeP);
 	if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) Move(1, deltaTimeP);
-	if (IsKeyPressed(KEY_SPACE))
+	if (IsKeyDown(KEY_SPACE))
 	{
 		if (m_laserComponent.GetLaserCount() > m_maxLaserCount || GetTime() - m_shootTimer < m_shootCooldown) return;
 		m_shootTimer = GetTime();

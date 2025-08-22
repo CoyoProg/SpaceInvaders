@@ -100,7 +100,7 @@ void Alien::OnCollisionEvent(const Actor& otherActorP)
 			it = m_observers.erase(it);
 			continue;
 		}
-	
+
 		observerPtr->NotifyAlienDied(*this);
 		++it;
 	}
@@ -108,7 +108,7 @@ void Alien::OnCollisionEvent(const Actor& otherActorP)
 
 void Alien::ShootLaser()
 {
-	m_laserComponent.Shoot(1, Vector2{ m_position.x + m_size.x / 2, m_position.y + m_size.y + 10.f }, m_actorAffiliation);
+	m_laserComponent.Shoot(1, Vector2{ m_position.x + m_size.x / 2, m_position.y + m_size.y }, m_actorAffiliation, m_laserSpeed);
 }
 
 bool Alien::IsLaserAvailable() const

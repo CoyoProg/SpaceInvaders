@@ -1,7 +1,7 @@
 #pragma once
 #include "Widget.h"
 #include "../Interfaces/IGameStateObserver.h"
-
+#include <string>
 enum class MessageType
 {
 	Countdown,
@@ -16,12 +16,12 @@ public:
 	virtual void Draw() override;
 	virtual void Update(float deltaTimeP) override;
 	virtual void NotifyGameOver() override;
-	virtual void NotifyLevelStart() override;
+	virtual void NotifyLevelStart(int levelIndexP) override;
 
 private:
 	MessageType m_messageType{ MessageType::Countdown };
 	bool m_showRestartMessage{ false };
-	const char* m_message{ "" };
+	std::string m_message{ "" };
 	const int m_fontSize{ 20 };
 	Color m_color{ GREEN };
 	float m_countdown{ 4.0f };

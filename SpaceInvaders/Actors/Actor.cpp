@@ -1,8 +1,6 @@
 #include "Actor.h"
 #include "../Components/CollisionBoxComponent.h"
 
-#include <iostream>
-
 Actor::Actor(ActorAffiliation ownerP, Color colorP) :
 	m_actorAffiliation(ownerP),
 	m_color(colorP)

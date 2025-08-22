@@ -29,7 +29,7 @@ void GameState::HandleTransitionTimer(float deltaSecP)
 
 	if (m_isGameOver)
 	{
-		GameManager::GetInstance().ResetAllActors();
+		GameManager::GetInstance().ClearLevel();
 		if (IsKeyPressed(KEY_SPACE))
 		{
 			ResetLevel();
@@ -53,7 +53,7 @@ void GameState::LoadStartMenu()
 
 void GameState::StartLevel()
 {
-	GameManager::GetInstance().ResetAllWidgets();
+	GameManager::GetInstance().ClearAllWidgets();
 
 	m_currentLevel = std::make_shared<Level1_SpaceInvaders>();
 	m_currentLevel->InitializeLevel(GameManager::GetInstance(), *this);
@@ -72,22 +72,18 @@ void GameState::StartLevel()
 			continue;
 		}
 
-		observerPtr->NotifyLevelStart();
+		observerPtr->NotifyLevelStart(m_currentLevelIndex);
 		++it;
 	}
 }
 
 void GameState::NextLevel()
 {
-	GameManager::GetInstance().ResetAllActors();
+	GameManager::GetInstance().ClearAllProjectiles();
+	GameManager::GetInstance().SetPauseGame(true);
 
-	m_currentLevel->InitializeLevel(GameManager::GetInstance(), *this);
-	// Setup Alien movement speed
-	// Setup Alien shoot probability
-	// Setup Alien projectile speed
-
-	// Level 3: do not reset the shields
-
+	m_currentLevelIndex++;
+	m_currentLevel->InitializeLevel(GameManager::GetInstance(), *this, m_currentLevelIndex);
 
 	// Notify all observers about the score update
 	for (auto it = m_observers.begin(); it != m_observers.end(); )
@@ -100,7 +96,7 @@ void GameState::NextLevel()
 			continue;
 		}
 
-		observerPtr->NotifyLevelStart();
+		observerPtr->NotifyLevelStart(m_currentLevelIndex);
 		++it;
 	}
 }
@@ -140,6 +136,7 @@ void GameState::ResetLevel()
 	GameManager::GetInstance().SetPauseGame(true);
 	m_lives = 3;
 	m_score = 0;
+	m_currentLevelIndex = 1;
 
 	// Notify all observers about the score update
 	for (auto it = m_observers.begin(); it != m_observers.end(); )
@@ -152,7 +149,7 @@ void GameState::ResetLevel()
 			continue;
 		}
 
-		observerPtr->NotifyLevelStart();
+		observerPtr->NotifyLevelStart(m_currentLevelIndex);
 		observerPtr->NotifyPlayerLifeUpdate(m_lives);
 		observerPtr->NotifyScoreUpdate(m_score);
 		++it;
@@ -184,7 +181,7 @@ void GameState::OnPlayerDied()
 	m_lives--;
 	m_freezeMovement = true;
 
-	if (m_lives <= 5)
+	if (m_lives <= 0)
 	{
 		OnGameOver();
 		return;
@@ -209,7 +206,7 @@ void GameState::OnPlayerDied()
 
 void GameState::OnPlayerRespawned()
 {
-	GameManager::GetInstance().AddActor(std::make_shared<Player>());
+	m_currentLevel->SpawnPlayer(GameManager::GetInstance());
 
 	// Notify all observers that the player has respawned
 	for (auto it = m_observers.begin(); it != m_observers.end(); )
