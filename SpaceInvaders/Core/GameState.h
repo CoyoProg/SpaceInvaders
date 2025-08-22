@@ -3,6 +3,7 @@
 #include "../Data/PlayerData.h"
 #include <memory>
 #include <vector>
+#include <functional>
 
 class IGameStateObserver;
 class UIManager;
@@ -37,6 +38,8 @@ public:
 	virtual void Update(float deltaSecP) override;
 	void HandleTransitionTimer(float deltaSecP);
 
+	void ReturnToMainMenu();
+
 	// Load the start menu
 	void LoadStartMenu();
 	// Load the first level
@@ -48,6 +51,7 @@ public:
 
 	// The score is updated everytime the player destroys an enemy
 	void AddScore(int scoreP);
+
 	void AddObserver(const std::weak_ptr<IGameStateObserver> observerP);
 	void RemoveObserver(const std::weak_ptr<IGameStateObserver> observerP);
 
@@ -72,7 +76,7 @@ private:
 	int m_lives{ 3 };
 	bool m_isGameOver{ false };
 	bool m_freezeMovement{ false };
-	float m_freezeMovementDuration{ 3.0f };
+	float m_freezeMovementDuration{ 1.75f };
 	float m_freezeMovementTimer{ 0.0f };
 };
 

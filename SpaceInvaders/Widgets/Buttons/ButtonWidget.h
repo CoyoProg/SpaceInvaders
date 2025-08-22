@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 
-enum class SpriteID;
+enum class AnimatedSpriteID;
 class IButtonObserver;
 
 enum class ButtonState
@@ -34,7 +34,7 @@ enum class ButtonAction
 class ButtonWidget : public Widget
 {
 public:
-	void SetupButton(SpriteID spriteIDP, Texture2D textureP, Vector2 positionP, ButtonAction buttonActionP);
+	void SetupButton(AnimatedSpriteID spriteIDP, Texture2D textureP, Vector2 positionP, ButtonAction buttonActionP);
 	virtual void Draw() override;
 
 	void AddObserver(const std::weak_ptr<IButtonObserver> observerP);
@@ -51,7 +51,7 @@ public:
 	void OnLooseFocus();
 
 private:
-	SpriteID m_spriteID;
+	AnimatedSpriteID m_spriteID;
 	ButtonAction m_buttonAction{ ButtonAction::PlayGame };
 	ButtonState m_buttonState{ ButtonState::Idle };
 

@@ -7,15 +7,15 @@ StartMenuWidget::StartMenuWidget()
 {
 	std::unique_ptr<ButtonWidget> startButtonPtr = std::make_unique<ButtonWidget>();
 	startButtonPtr->SetupButton(
-		SpriteID::StartButton,
+		AnimatedSpriteID::StartButton,
 		GameManager::GetInstance().GetTexture("startButtonSheet"),
-		Vector2{ SCREEN_WIDTH / 2 - SPRITE_PROPERTIES.at(SpriteID::StartButton).width / 2.0f, SCREEN_HEIGHT * 0.8f - SPRITE_PROPERTIES.at(SpriteID::StartButton).height / 2.0f },
+		Vector2{ SCREEN_WIDTH / 2 - SPRITE_PROPERTIES.at(AnimatedSpriteID::StartButton).width / 2.0f, SCREEN_HEIGHT * 0.8f - SPRITE_PROPERTIES.at(AnimatedSpriteID::StartButton).height / 2.0f },
 		ButtonAction::PlayGame
 	);
 
 	std::unique_ptr<ButtonWidget> baseLB = std::make_unique<ButtonWidget>();
 	baseLB->SetupButton(
-		SpriteID::LeftSelectionButton,
+		AnimatedSpriteID::LeftSelectionButton,
 		GameManager::GetInstance().GetTexture("selectionButtonSheet"),
 		Vector2{ SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2.0f + 125 },
 		ButtonAction::PreviousBase
@@ -23,15 +23,15 @@ StartMenuWidget::StartMenuWidget()
 
 	std::unique_ptr<ButtonWidget> baseRB = std::make_unique<ButtonWidget>();
 	baseRB->SetupButton(
-		SpriteID::RightSelectionButton,
+		AnimatedSpriteID::RightSelectionButton,
 		GameManager::GetInstance().GetTexture("selectionButtonSheet"),
-		Vector2{ SCREEN_WIDTH / 2 + 150 - SPRITE_PROPERTIES.at(SpriteID::LeftSelectionButton).width, SCREEN_HEIGHT / 2.0f + 125 },
+		Vector2{ SCREEN_WIDTH / 2 + 150 - SPRITE_PROPERTIES.at(AnimatedSpriteID::LeftSelectionButton).width, SCREEN_HEIGHT / 2.0f + 125 },
 		ButtonAction::NextBase
 	);
 
 	std::unique_ptr<ButtonWidget> canonLB = std::make_unique<ButtonWidget>();
 	canonLB->SetupButton(
-		SpriteID::LeftSelectionButton,
+		AnimatedSpriteID::LeftSelectionButton,
 		GameManager::GetInstance().GetTexture("selectionButtonSheet"),
 		Vector2{ SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2.0f + 70 },
 		ButtonAction::PreviousCanon
@@ -39,15 +39,15 @@ StartMenuWidget::StartMenuWidget()
 
 	std::unique_ptr<ButtonWidget> canonRB = std::make_unique<ButtonWidget>();
 	canonRB->SetupButton(
-		SpriteID::RightSelectionButton,
+		AnimatedSpriteID::RightSelectionButton,
 		GameManager::GetInstance().GetTexture("selectionButtonSheet"),
-		Vector2{ SCREEN_WIDTH / 2 + 150 - SPRITE_PROPERTIES.at(SpriteID::LeftSelectionButton).width, SCREEN_HEIGHT / 2.0f + 70 },
+		Vector2{ SCREEN_WIDTH / 2 + 150 - SPRITE_PROPERTIES.at(AnimatedSpriteID::LeftSelectionButton).width, SCREEN_HEIGHT / 2.0f + 70 },
 		ButtonAction::NextCanon
 	);
 
 	std::unique_ptr<ButtonWidget> colorLB = std::make_unique<ButtonWidget>();
 	colorLB->SetupButton(
-		SpriteID::LeftSelectionButton,
+		AnimatedSpriteID::LeftSelectionButton,
 		GameManager::GetInstance().GetTexture("selectionButtonSheet"),
 		Vector2{ SCREEN_WIDTH / 2 - 75, SCREEN_HEIGHT / 2.0f },
 		ButtonAction::PreviousColor
@@ -55,9 +55,9 @@ StartMenuWidget::StartMenuWidget()
 
 	std::unique_ptr<ButtonWidget> colorRB = std::make_unique<ButtonWidget>();
 	colorRB->SetupButton(
-		SpriteID::RightSelectionButton,
+		AnimatedSpriteID::RightSelectionButton,
 		GameManager::GetInstance().GetTexture("selectionButtonSheet"),
-		Vector2{ SCREEN_WIDTH / 2 + 75 - SPRITE_PROPERTIES.at(SpriteID::LeftSelectionButton).width, SCREEN_HEIGHT / 2.0f },
+		Vector2{ SCREEN_WIDTH / 2 + 75 - SPRITE_PROPERTIES.at(AnimatedSpriteID::LeftSelectionButton).width, SCREEN_HEIGHT / 2.0f },
 		ButtonAction::NextColor
 	);
 

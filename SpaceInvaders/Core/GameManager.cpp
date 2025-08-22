@@ -20,6 +20,8 @@ void GameManager::LoadRessources()
 	m_textures["canonA"] = LoadTexture("../Resources/Canon_A.png");
 	m_textures["canonB"] = LoadTexture("../Resources/Canon_B.png");
 	m_textures["canonC"] = LoadTexture("../Resources/Canon_C.png");
+	m_textures["explosionA"] = LoadTexture("../Resources/explosion_A.png");
+	m_textures["explosionB"] = LoadTexture("../Resources/explosion_B.png");
 }
 
 void GameManager::UnloadTextures()

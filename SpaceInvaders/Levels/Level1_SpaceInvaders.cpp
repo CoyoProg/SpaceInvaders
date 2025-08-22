@@ -153,7 +153,7 @@ std::shared_ptr<Alien> Level1_SpaceInvaders::CreateAlien(int rowP, int colP, int
 		SPRITE_PROPERTIES.at(alienInfo.type).height / 2.7f
 	};
 
-	if (alienInfo.type == SpriteID::AlienSmall)
+	if (alienInfo.type == AnimatedSpriteID::AlienSmall)
 	{
 		// Slightly adjust the x position because there is some pixel missing in the sprite sheet
 		position.x += 3.0f;
@@ -215,15 +215,15 @@ void Level1_SpaceInvaders::AssignAlienType(AlienInfo& alienInfoP, int row)
 	switch (row)
 	{
 	case 0:
-		alienInfoP = { SpriteID::AlienSmall,10 };
+		alienInfoP = { AnimatedSpriteID::AlienSmall,10 };
 		break;
 	case 1:
 	case 2:
-		alienInfoP = { SpriteID::AlienMedium, 20 };
+		alienInfoP = { AnimatedSpriteID::AlienMedium, 20 };
 		break;
 	case 3:
 	case 4:
-		alienInfoP = { SpriteID::AlienLarge, 10 };
+		alienInfoP = { AnimatedSpriteID::AlienLarge, 10 };
 		break;
 	}
 }

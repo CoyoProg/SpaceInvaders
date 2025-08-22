@@ -32,6 +32,7 @@ public:
 
 	virtual void Draw() override;
 	virtual void Update(float deltaTimeP) override;
+	virtual void Death() {};
 
 	Vector2 GetPosition() const { return m_position; }
 	Vector2 GetSize() const { return m_size; }

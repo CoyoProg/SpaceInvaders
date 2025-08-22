@@ -14,8 +14,10 @@ public:
 	virtual void Draw() override;
 	void DrawBase();
 	void DrawCanon();
+
 	virtual void Update(float deltaTimeP) override;
 	virtual void OnCollisionEvent(const Actor& otherActorP) override;
+	virtual void Death() override;
 
 private:
 	void ProcessInput(float deltaTimeP);

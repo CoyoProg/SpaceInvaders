@@ -3,8 +3,9 @@
 #include "../Interfaces/IAlienObserver.h"
 #include "../Core/GameState.h"
 #include "../Core/GameManager.h"
+#include "ParticlesEffect.h"
 
-Alien::Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoordY, SpriteID spriteTypeP, Color colorP, int scoreValueP) :
+Alien::Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoordY, AnimatedSpriteID spriteTypeP, Color colorP, int scoreValueP) :
 	Actor(ActorAffiliation::Enemy),
 	m_initialCoordsX(initialCoordX),
 	m_initialCoordsY(initialCoordY),
@@ -81,14 +82,12 @@ void Alien::SetForDeletion(bool markedForDeletionP)
 	}
 }
 
-void Alien::OnAlienMoved()
+void Alien::Death()
 {
-	m_SpriteAnimationComponent.NextAnimationFrame();
-}
+	Vector2 explosionPosition = { m_position.x + m_size.x / 2, m_position.y + m_size.y / 2};
+	std::shared_ptr<ParticlesEffect> explosion = std::make_shared<ParticlesEffect>(explosionPosition, GameManager::GetInstance().GetTexture("explosionA"));
+	GameManager::GetInstance().AddActor(explosion);
 
-void Alien::OnCollisionEvent(const Actor& otherActorP)
-{
-	GameState::GetInstance().AddScore(m_scoreValue);
 	m_markedForDeletion = true;
 
 	// Notify all observers about the alien's death
@@ -105,6 +104,17 @@ void Alien::OnCollisionEvent(const Actor& otherActorP)
 		observerPtr->NotifyAlienDied(*this);
 		++it;
 	}
+}
+
+void Alien::OnAlienMoved()
+{
+	m_SpriteAnimationComponent.NextAnimationFrame();
+}
+
+void Alien::OnCollisionEvent(const Actor& otherActorP)
+{
+	GameState::GetInstance().AddScore(m_scoreValue);
+	Death();
 }
 
 void Alien::ShootLaser()

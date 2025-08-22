@@ -18,13 +18,11 @@ constexpr int PLAYGROUND_OFFSET = 60;
 constexpr int SCREEN_HEIGHT = 900;
 constexpr int SPRITE_SHEET_PADDING = 10;
 
-enum class SpriteID
+enum class AnimatedSpriteID
 {
 	AlienSmall,
 	AlienMedium,
 	AlienLarge,
-	Explosion,
-	Laser,
 	Star,
 	StartButton,
 	LeftSelectionButton,
@@ -39,17 +37,15 @@ struct SpriteProperties
 	float spriteOffset = 0.0f;
 };
 
-static const std::unordered_map<SpriteID, SpriteProperties> SPRITE_PROPERTIES
+static const std::unordered_map<AnimatedSpriteID, SpriteProperties> SPRITE_PROPERTIES
 {
-	{ SpriteID::AlienSmall, { 81.0f, 84.0f, 1, 244.0f } },
-	{ SpriteID::AlienMedium, { 112.0f, 84.0f, 1, 0.0f} },
-	{ SpriteID::AlienLarge, { 122.0f, 84.0f, 1, 426.0f} },
-	{ SpriteID::Explosion, { 64.0f, 64.0f, 16 } },
-	{ SpriteID::Laser, { 10.0f, 30.0f, 1 } },
-	{ SpriteID::Star, { 76.0f, 76.0f, 3 } },
-	{ SpriteID::StartButton, { 220.0f, 120.0f, 2 } },
-	{ SpriteID::LeftSelectionButton, { 28.0f, 42.0f, 2} },
-	{ SpriteID::RightSelectionButton, { 28.0f, 42.0f, 2, 114} }
+	{ AnimatedSpriteID::AlienSmall, { 81.0f, 84.0f, 1, 244.0f } },
+	{ AnimatedSpriteID::AlienMedium, { 112.0f, 84.0f, 1, 0.0f} },
+	{ AnimatedSpriteID::AlienLarge, { 122.0f, 84.0f, 1, 426.0f} },
+	{ AnimatedSpriteID::Star, { 76.0f, 76.0f, 3 } },
+	{ AnimatedSpriteID::StartButton, { 220.0f, 120.0f, 2 } },
+	{ AnimatedSpriteID::LeftSelectionButton, { 28.0f, 42.0f, 2} },
+	{ AnimatedSpriteID::RightSelectionButton, { 28.0f, 42.0f, 2, 114} }
 };
 
 /*

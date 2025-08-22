@@ -2,6 +2,9 @@
 #include "../Core/GameState.h"
 #include "../Core/GameManager.h"
 
+
+int framesCounter = 10;
+
 GameMessageWidget::GameMessageWidget(Vector2 positionP, int fontSizeP) :
 	m_fontSize(fontSizeP)
 {
@@ -16,7 +19,7 @@ void GameMessageWidget::Draw()
 	}
 
 	DrawText(
-		m_message.c_str(),
+		TextSubtext(m_message.c_str(), 0, framesCounter / 15),
 		static_cast<int>(m_position.x) - MeasureText(m_message.c_str(), m_fontSize) / 2,
 		static_cast<int>(m_position.y) - m_fontSize / 2,
 		m_fontSize,
@@ -26,9 +29,17 @@ void GameMessageWidget::Draw()
 	if (m_showRestartMessage)
 	{
 		DrawText(
-			"PRESS SPACE TO RESTART",
-			SCREEN_WIDTH / 2 - MeasureText("PRESS SPACE TO RESTAR", 40) / 2,
+			"PRESS [SPACE] TO RESTART",
+			SCREEN_WIDTH / 2 - MeasureText("PRESS [SPACE] TO RESTAR", 40) / 2,
 			static_cast<int>(SCREEN_HEIGHT / 1.5f - m_fontSize / 2.f),
+			40,
+			LIGHTGRAY
+		);
+
+		DrawText(
+			"PRESS [X] TO RETURN TO MENU",
+			SCREEN_WIDTH / 2 - MeasureText("PRESS [X] TO RETURN TO MENU", 40) / 2,
+			static_cast<int>(SCREEN_HEIGHT / 1.25f - m_fontSize / 2.f),
 			40,
 			LIGHTGRAY
 		);
@@ -60,6 +71,8 @@ void GameMessageWidget::Update(float deltaTimeP)
 
 	case MessageType::GameOver:
 	{
+		framesCounter++;
+
 		if (m_countdown <= 1)
 		{
 			m_showRestartMessage = true;
@@ -76,9 +89,10 @@ void GameMessageWidget::Update(float deltaTimeP)
 
 void GameMessageWidget::NotifyGameOver()
 {
+	framesCounter = 0;
 	m_messageType = MessageType::GameOver;
 	m_position.y = SCREEN_HEIGHT / 8.0f;
-	m_message = "Game Over!";
+	m_message = "GAME OVER";
 	m_color = RED;
 	m_visibility = WidgetVisibilty::Visible;
 	m_IsUpdateEnabled = true;
@@ -86,6 +100,7 @@ void GameMessageWidget::NotifyGameOver()
 
 void GameMessageWidget::NotifyLevelStart(int levelIndexP)
 {
+	framesCounter = 100;
 	m_messageType = MessageType::Countdown;
 	m_showRestartMessage = false;
 	m_message = "3";

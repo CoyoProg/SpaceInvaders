@@ -58,10 +58,10 @@ void BackgroundWidget::Draw()
 			if (m_starsTable[i][j].isSleeping) continue;
 
 			Rectangle sourceRec = {
-				10.0f + m_starsTable[i][j].currentFrameIndex * (10.0f + SPRITE_PROPERTIES.at(SpriteID::Star).width),
+				10.0f + m_starsTable[i][j].currentFrameIndex * (10.0f + SPRITE_PROPERTIES.at(AnimatedSpriteID::Star).width),
 				SPRITE_SHEET_PADDING,
-				SPRITE_PROPERTIES.at(SpriteID::Star).width,
-				SPRITE_PROPERTIES.at(SpriteID::Star).height
+				SPRITE_PROPERTIES.at(AnimatedSpriteID::Star).width,
+				SPRITE_PROPERTIES.at(AnimatedSpriteID::Star).height
 			};
 
 			// Adjust the scale of the sprite

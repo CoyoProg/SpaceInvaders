@@ -5,7 +5,7 @@
 
 #include <vector>
 
-enum class SpriteID;
+enum class AnimatedSpriteID;
 class IAlienObserver;
 
 /*
@@ -14,10 +14,11 @@ class IAlienObserver;
 class Alien : public Actor
 {
 public:
-	Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoordY, SpriteID spriteTypeP, Color colorP, int scoreValueP = 50);
+	Alien(Vector2 positionP, Vector2 sizeP, int initialCoordX, int initialCoordY, AnimatedSpriteID spriteTypeP, Color colorP, int scoreValueP = 50);
 
 	virtual void Draw() override;
 	virtual void SetForDeletion(bool markedForDeletionP = true) override;
+	virtual void Death() override;
 
 	void AddObserver(const std::weak_ptr<IAlienObserver> observerP);
 	void RemoveObserver(const std::weak_ptr<IAlienObserver> observerP);

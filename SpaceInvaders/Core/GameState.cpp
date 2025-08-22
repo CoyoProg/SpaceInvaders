@@ -7,6 +7,9 @@
 #include "../Widgets/HUDWidget.h"
 #include "../Actors/Player.h"
 
+// Retrospection Note: Having so many time the same block of code to notify observers, for different events, is annoying,
+// If I had more time I would have created a NotifyObservers method that takes a function as parameter
+
 // Needed to be able to forward decalre unique ptr
 GameState::GameState() = default;
 GameState::~GameState() = default;
@@ -30,12 +33,18 @@ void GameState::HandleTransitionTimer(float deltaSecP)
 	if (m_isGameOver)
 	{
 		GameManager::GetInstance().ClearLevel();
+
 		if (IsKeyPressed(KEY_SPACE))
 		{
 			ResetLevel();
 			m_isGameOver = false;
 			m_freezeMovement = false;
 			m_freezeMovementTimer = 0.0f;
+		}
+
+		if (IsKeyPressed(KEY_X))
+		{
+			ReturnToMainMenu();
 		}
 	}
 	else
@@ -44,6 +53,16 @@ void GameState::HandleTransitionTimer(float deltaSecP)
 		m_freezeMovementTimer = 0.0f;
 		OnPlayerRespawned();
 	}
+}
+
+void GameState::ReturnToMainMenu()
+{
+	GameManager::GetInstance().ClearLevel();
+	GameManager::GetInstance().ClearAllWidgets();
+	m_isGameOver = false;
+	m_freezeMovement = false;
+	m_freezeMovementTimer = 0.0f;
+	LoadStartMenu();
 }
 
 void GameState::LoadStartMenu()
@@ -189,6 +208,21 @@ void GameState::OnPlayerDied()
 	m_lives--;
 	m_freezeMovement = true;
 
+	// Notify all observers about the lives update
+	for (auto it = m_observers.begin(); it != m_observers.end(); )
+	{
+		// Check if the observer is still valid and erase it if not
+		std::shared_ptr<IGameStateObserver>  observerPtr = it->lock();
+		if (!observerPtr)
+		{
+			it = m_observers.erase(it);
+			continue;
+		}
+
+		observerPtr->NotifyPlayerLifeUpdate(m_lives);
+		++it;
+	}
+
 	if (m_lives <= 0)
 	{
 		OnGameOver();
@@ -206,7 +240,6 @@ void GameState::OnPlayerDied()
 			continue;
 		}
 
-		observerPtr->NotifyPlayerLifeUpdate(m_lives);
 		observerPtr->NotifyPlayerDied();
 		++it;
 	}

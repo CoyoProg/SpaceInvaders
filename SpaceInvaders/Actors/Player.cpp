@@ -2,7 +2,7 @@
 #include "../Core/GameManager.h"
 #include "../Core/GameState.h"
 #include "../Components/CollisionBoxComponent.h"
-
+#include "ParticlesEffect.h"
 
 Player::Player(PlayerData playerDataP) : Actor(ActorAffiliation::Player)
 {
@@ -67,6 +67,15 @@ void Player::Update(float deltaTimeP)
 
 void Player::OnCollisionEvent(const Actor& otherActorP)
 {
+	Death();
+}
+
+void Player::Death()
+{
+	Vector2 explosionPosition = { m_position.x + m_size.x / 2, m_position.y + m_size.y / 2 };
+	std::shared_ptr<ParticlesEffect> explosion = std::make_shared<ParticlesEffect>(explosionPosition, GameManager::GetInstance().GetTexture("explosionA"));
+	GameManager::GetInstance().AddActor(explosion);
+
 	SetForDeletion(true);
 	GameState::GetInstance().OnPlayerDied();
 }

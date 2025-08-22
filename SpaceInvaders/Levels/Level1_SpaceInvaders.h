@@ -12,7 +12,7 @@ class Player;
 class Shield;
 
 struct AlienInfo {
-	enum class SpriteID type;
+	enum class AnimatedSpriteID type;
 	int score;
 };
 

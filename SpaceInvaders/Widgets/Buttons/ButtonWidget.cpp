@@ -2,7 +2,7 @@
 #include "../../Core/GameManager.h"
 #include "../../Interfaces/IButtonObserver.h"
 
-void ButtonWidget::SetupButton(SpriteID spriteIDP, Texture2D textureP, Vector2 positionP, ButtonAction buttonActionP)
+void ButtonWidget::SetupButton(AnimatedSpriteID spriteIDP, Texture2D textureP, Vector2 positionP, ButtonAction buttonActionP)
 {
 	m_position = positionP;
 	m_buttonAction = buttonActionP;
