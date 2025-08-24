@@ -1,0 +1,30 @@
+﻿  Actor.cpp
+  Alien.cpp
+  ParticlesEffect.cpp
+  Ovni.cpp
+  PlayerCustomizationWidget.cpp
+  GameMessageWidget.cpp
+  ButtonWidget.cpp
+  BackgroundWidget.cpp
+  CollisionBoxComponent.cpp
+  GameManager.cpp
+  Player.cpp
+  LaserComponent.cpp
+  LaserProjectile.cpp
+  GameState.cpp
+  UIManager.cpp
+  SpriteAnimationComponent.cpp
+  StartMenuWidget.cpp
+  LivesWidget.cpp
+  ScoreWidget.cpp
+  HUDWidget.cpp
+  Compiling...
+  Invader.cpp
+  Level1_SpaceInvaders.cpp
+  main.cpp
+  Shield.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 2660 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  SpaceInvaders.vcxproj -> E:\Corentin\C++\LarianStudioTest\SpaceInvaders\x64\Release\SpaceInvaders.exe
