@@ -111,10 +111,18 @@ void Alien::Death()
 void Alien::OnAlienMoved()
 {
 	m_SpriteAnimationComponent.NextAnimationFrame();
+
+	// If the alien reaches the earth line, the game is over
+	if (m_position.y > SCREEN_HEIGHT - 45 - m_size.y*2)
+	{
+		GameState::GetInstance().OnGameOver();
+	}
 }
 
 void Alien::OnCollisionEvent(const Actor& otherActorP)
 {
+	if (otherActorP.GetActorAffiliation() != ActorAffiliation::Player) return;
+
 	GameState::GetInstance().AddScore(m_scoreValue);
 	Death();
 }

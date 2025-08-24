@@ -51,9 +51,9 @@ private:
 	int m_direction{ 1 };
 	bool m_shouldChangeDirection{ false };
 
-
 	// How many pixels the aliens move per step
 	static constexpr int m_distancePerStep{ 5 };
+	static constexpr float m_verticalStep{ 35.0f };
 	int m_spaceBetweenRows{ 30 };
 
 	// How long the aliens wait before moving again
@@ -70,8 +70,8 @@ private:
 	mutable int m_bottomAliensCount{ 11 };
 
 	// Probability of an ovni spawning per second
-	static constexpr float m_ovniSpawnCooldown{ 10.0f };
+	static constexpr float m_ovniSpawnCooldown{ 20.0f };
 	float m_ovniSpawnTimer{ 0.0f };
-	int m_ovniProbability{ 3 };
+	int m_ovniProbability{ 25 };
 };
 

@@ -74,7 +74,6 @@ void GameState::LoadStartMenu()
 
 void GameState::StartLevel(PlayerData playerDataP)
 {
-
 	// Clear the Start menu widgets
 	GameManager::GetInstance().ClearAllWidgets();
 
@@ -82,6 +81,10 @@ void GameState::StartLevel(PlayerData playerDataP)
 	m_maxLives = playerDataP.lives;
 	m_lives = m_maxLives;
 	m_playerCanonConfig = PlayerCanonConfig{ playerDataP.baseTexture, playerDataP.canonTexture };
+
+	// Reset game state variables
+	m_currentLevelIndex = 1;
+	m_score = 0;
 
 	// Initialize the first level
 	m_currentLevel = std::make_shared<Level1_SpaceInvaders>();
@@ -106,6 +109,7 @@ void GameState::StartLevel(PlayerData playerDataP)
 		}
 
 		observerPtr->NotifyLevelStart(m_currentLevelIndex);
+		observerPtr->NotifyHighScoreUpdate(m_highestScore);
 		observerPtr->NotifyPlayerLifeUpdate(m_lives);
 		++it;
 	}
@@ -139,6 +143,7 @@ void GameState::NextLevel()
 
 void GameState::OnGameOver()
 {
+	m_freezeMovement = true;
 	m_isGameOver = true;
 
 	PlaySound(GameManager::GetInstance().GetSound("gameOver"));

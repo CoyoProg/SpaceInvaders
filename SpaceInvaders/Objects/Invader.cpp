@@ -128,7 +128,7 @@ void Invader::UpdateAlienPosition(float deltaSecP)
 		}
 		else
 		{
-			newPosition.y += alienPtr->GetSize().y;
+			newPosition.y += m_verticalStep;
 		}
 
 		alienPtr->OnAlienMoved();

@@ -118,6 +118,7 @@ void GameManager::CollisionCheck()
 	{
 		for (size_t j = i + 1; j < actorsCount; ++j)
 		{
+			if (m_actors[i]->IsMarkedForDeletion() || m_actors[j]->IsMarkedForDeletion()) continue;
 			if (m_actors[i]->CollidesWith(*m_actors[j]))
 			{
 				m_actors[i]->OnCollisionEvent(*m_actors[j]);

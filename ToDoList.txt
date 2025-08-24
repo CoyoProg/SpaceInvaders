@@ -1,35 +1,35 @@
-1. CORE MECHANICS:
-- Player, Laser Canon
+1. Core Mechanics
+- Player / Laser Cannon
 Move left and right
 Shoot
-Collisions
+Handle collisions
 
 - Aliens
-Move horizontally (realy not smoothly) one after one from Bottom to top
-Move step by step, small at first but gets faster as more aliens are destroyed (and smoother)
-Shoot randomly (only if their is no alien in the line Under them)
+Move horizontally (not smoothly), one after another, from bottom to top
+Movement is step-by-step: slow at first, but gets faster and smoother as more aliens are destroyed
+Shoot randomly (only aliens at the bottom)
 
-- Shield or Fortress
-Collisions (pixel perfect collisions)
-Destroy the shield when an aliens collide with it ?
+- Shield / Fortress
+2D array collision detection
+The shield is destroyed when aliens collide with it?
 
 2. Scoring
 
 3. Lives and Game Over
 
-4. Start menu
+4. Start Menu
 
-5. Polish UI
+5. UI Polish
 Player
 Aliens
 Fortress
 Background
 Projectiles
 
-6. Add levels
+6. Add Levels
 
-== TO GO EVEN FURTHER ==
-7. Add extra features (RPG style ?)
-8. UI Animations
-9. Level Boss Fight
-10. Create a .exe of the game
+== To Go Even Further ==
+7. Add extra features (RPG-style?)
+8. UI animations
+9. Boss fights
+10. Create a .exe version of the game
